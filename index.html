@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="style.css">
@@ -13,12 +14,19 @@
 
         </div>
 
+        
+        <div id="flowchart-code-preview"></div>
+
         <script type="module">
             import {generateFlowchart} from './alakazam.js';
 
-            let mermaidContainer = document.getElementsByClassName('mermaid')[0];
-            console.log(mermaidContainer);
-            mermaidContainer.innerHTML = generateFlowchart();
+            const mermaidContainer = document.getElementsByClassName('mermaid')[0];
+            const previewContainer = document.getElementById('flowchart-code-preview');
+
+            const flowchartCode = generateFlowchart();
+            mermaidContainer.innerHTML = flowchartCode;
+            previewContainer.innerText = flowchartCode;
+
         </script>
        
     </body>
