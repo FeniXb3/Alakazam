@@ -38,15 +38,43 @@ export class Flowchart {
 
         const newNode = this.addNode(nodeDescription, nodeType);
 
+        this.reconnectNodes(currentNode, newNode, shouldReattachConnected, connectionDescription);
+        // if (shouldReattachConnected) {
+        //     currentNode.connections.forEach(c => {
+        //         newNode.connect(c.target, c.description);
+        //     });
+
+        //     currentNode.connections = [];
+        // }
+
+        // currentNode.connect(newNode, connectionDescription);
+    }
+
+    
+    reconnectNodes(currentNode, newNode, shouldReattachConnected, connectionDescription) {
         if (shouldReattachConnected) {
             currentNode.connections.forEach(c => {
-                newNode.connect(c.target, c.description);
+                if (c.target != currentNode && c.target != newNode) {
+                    newNode.connect(c.target, c.description);
+                }
             });
 
             currentNode.connections = [];
         }
 
-        currentNode.connect(newNode, connectionDescription);
+        currentNode.connect(newNode, connectionDescription)
+    }
+
+    connectNodes(startingMermaidId, finishingMermaidId, shouldReattachConnected, connectionDescription) {
+        const startingNode = this.findNodeByMermaidId(startingMermaidId);
+        const finishingNode = this.findNodeByMermaidId(finishingMermaidId);
+
+        if (!startingNode || !finishingNode) {
+            return;
+        }
+
+        startingNode.connect(finishingNode, connectionDescription);
+        //this.reconnectNodes(startingNode, finishingNode, shouldReattachConnected, connectionDescription);
     }
 
     findNodeByMermaidId(mermaidId) {

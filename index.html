@@ -40,20 +40,32 @@
                 output.innerHTML = '';
             });
 
-            output.addEventListener('click', (event) => {
+            let startingNodeElement;
+            let finishingNodeElement;
+            output.addEventListener('mousedown', (event) => {
                 console.log(event.target);
-                const shouldReattachConnected = event.getModifierState('Control');
+                const shouldReattachConnected = !event.getModifierState('Control');
                 // const altPressed = event.getModifierState('Alt');
                 // const shiftPressed = event.getModifierState('Shift');
 
-                const target = event.target.closest('.node');
-                if (!target) {
+                startingNodeElement = event.target.closest('.node');
+                if (!startingNodeElement || !startingNodeElement.classList.contains('node')) {
+                    return;
+                }
+            });
+            output.addEventListener('mouseup', (event) => {
+                console.log(event.target);
+                const shouldReattachConnected = !event.getModifierState('Control');
+                // const altPressed = event.getModifierState('Alt');
+                // const shiftPressed = event.getModifierState('Shift');
+
+                finishingNodeElement = event.target.closest('.node');
+                if (!finishingNodeElement || !startingNodeElement || !finishingNodeElement.classList.contains('node')) {
                     return;
                 }
 
-                console.log(target);
-                
-                if (target.classList.contains('node')) {
+                if (finishingNodeElement == startingNodeElement) {
+
                     const availableTypes = Object.keys(Node.typeSigns);
                     console.log(availableTypes);
                     const availableTypesText = availableTypes.reduce((prev, curr) => `${prev}/${curr}`);
@@ -63,11 +75,15 @@
                         nodeType = prompt(`Node type (${availableTypesText})`);
                     }
                     const connectionDescription = prompt("Connection description");
-                    flowchart.addNodeTo(target.id, shouldReattachConnected, nodeDescription, nodeType, connectionDescription);
+                    flowchart.addNodeTo(finishingNodeElement.id, shouldReattachConnected, nodeDescription, nodeType, connectionDescription);
+                }
+                else {
+                    const connectionDescription = prompt("Connection description");
+                    flowchart.connectNodes(startingNodeElement.id, finishingNodeElement.id, shouldReattachConnected, connectionDescription);
                 }
 
                 redrawButton.click();
-            })
+            });
 
             redrawButton.click();
             
