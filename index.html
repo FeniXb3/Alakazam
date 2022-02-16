@@ -10,13 +10,16 @@
 
         Here is one mermaid diagram:
         <div class="mermaid">
-            graph TD 
-            current[Client] --> B[Load Balancer] 
-            B --> C[Server1] 
-            B --> D[Server2]
+
         </div>
 
-        And here is another:
+        <script type="module">
+            import {generateFlowchart} from './alakazam.js';
+
+            let mermaidContainer = document.getElementsByClassName('mermaid')[0];
+            console.log(mermaidContainer);
+            mermaidContainer.innerHTML = generateFlowchart();
+        </script>
        
     </body>
 </html>
