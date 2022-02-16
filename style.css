@@ -1,5 +1,5 @@
-svg div {
-    color: white;
+svg div:hover {
+    color: blueviolet;
 }
 
 svg [id*=active-node] div {
