@@ -4,26 +4,20 @@ export class Flowchart {
         this.nodes = [];
     }
 
-    addNode(description) {
-        const newNode = new Node(description);
+    addNode(description, type) {
+        const newNode = new Node(description, type);
         this.nodes.push(newNode);
 
         return newNode;
     }
     
     prepare() {
-        const firstNode = this.addNode("First node");
-        const secondNode = this.addNode("Second node");
-        const thirdNode = this.addNode("Third node");
-        const fourthNode = this.addNode("Fourth node");
+        const firstNode = this.addNode("Start", "start");
+        const lastNode = this.addNode("Stop", "stop");
 
         this.entryNode = firstNode;
 
-        firstNode.connect(secondNode, "Description");
-        firstNode.connect(thirdNode);
-        secondNode.connect(thirdNode);
-        thirdNode.connect(fourthNode);
-        fourthNode.connect(firstNode);
+        firstNode.connect(lastNode);
     }
 
     generateCode() {
@@ -35,14 +29,14 @@ export class Flowchart {
         return code;
     }
 
-    addNodeTo(mermaidNodeId, shouldReattachConnected, nodeDescription, connectionDescription) {
+    addNodeTo(mermaidNodeId, shouldReattachConnected, nodeDescription, nodeType, connectionDescription) {
         const currentNode = this.findNodeByMermaidId(mermaidNodeId);
         console.log(currentNode);
         if (!currentNode) {
             return;
         }
 
-        const newNode = this.addNode(nodeDescription);
+        const newNode = this.addNode(nodeDescription, nodeType);
 
         if (shouldReattachConnected) {
             currentNode.connections.forEach(c => {
@@ -65,11 +59,38 @@ export class Flowchart {
     }
 }
 
-class Node {
+export class Node {
     static ids = [];
+    static typeSigns = {
+        "start": {
+            opening: "([",
+            closing: "])"
+        },
+        "stop": {
+            opening: "([",
+            closing: "])"
+        },
+        "operation":{
+            opening: "[",
+            closing: "]"
+        },
+        "input": {
+            opening: "[/",
+            closing: "/]"
+        },
+        "output": {
+            opening: "[\\",
+            closing: "\\]"
+        },
+        "decision": {
+            opening: "{",
+            closing: "}"
+        }
+    };
 
-    constructor(description) {
+    constructor(description, type) {
         this.dirty = false;
+        this.type = type;
         this.connections = [];
         this.description = description;
         this.id = 'a' + Node.ids.length;
@@ -85,7 +106,8 @@ class Node {
     }
 
     getNodeText() {
-        return `${this.id}[${this.description}]`;
+        const brackets = Node.typeSigns[this.type]
+        return `${this.id}${brackets.opening}${this.description}${brackets.closing}`;
     }
 
     getConnectionText() {

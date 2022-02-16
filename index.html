@@ -18,7 +18,7 @@
         <div id="flowchart-code-preview" rows="10" cols="60"></div>
 
         <script type="module">
-            import {Flowchart} from './alakazam.js';
+            import {Flowchart, Node} from './alakazam.js';
 
             const flowchart = new Flowchart();
             flowchart.prepare();
@@ -54,8 +54,16 @@
                 console.log(target);
                 
                 if (target.classList.contains('node')) {
-                    console.log(target.id);
-                    flowchart.addNodeTo(target.id, shouldReattachConnected, prompt("Node description"), prompt("Connection description"));
+                    const availableTypes = Object.keys(Node.typeSigns);
+                    console.log(availableTypes);
+                    const availableTypesText = availableTypes.reduce((prev, curr) => `${prev}/${curr}`);
+                    const nodeDescription = prompt("Node description");
+                    let nodeType; 
+                    while(!availableTypes.includes(nodeType)) {
+                        nodeType = prompt(`Node type (${availableTypesText})`);
+                    }
+                    const connectionDescription = prompt("Connection description");
+                    flowchart.addNodeTo(target.id, shouldReattachConnected, nodeDescription, nodeType, connectionDescription);
                 }
 
                 redrawButton.click();
