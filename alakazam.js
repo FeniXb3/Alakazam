@@ -1,24 +1,27 @@
-export function generateFlowchart() {
-    let firstNode = new Node("First node");
-    let secondNode = new Node("Second node");
-    let thirdNode = new Node("Third node");
-    let fourthNode = new Node("Fourth node");
+export class Flowchart {
+    constructor() {
+        this.entryNode = null;
+    }
+    
+    prepare() {
+        const firstNode = new Node("First node");
+        const secondNode = new Node("Second node");
+        const thirdNode = new Node("Third node");
+        const fourthNode = new Node("Fourth node");
 
-    firstNode.connect(secondNode);
-    firstNode.connect(thirdNode);
-    secondNode.connect(thirdNode);
-    thirdNode.connect(fourthNode);
-    fourthNode.connect(firstNode);
+        this.entryNode = firstNode;
 
-    return `graph TD
-    ${firstNode.getConnectionText()}`;
+        firstNode.connect(secondNode);
+        firstNode.connect(thirdNode);
+        secondNode.connect(thirdNode);
+        thirdNode.connect(fourthNode);
+        fourthNode.connect(firstNode);
+    }
 
-
-
-    // return `            graph TD 
-    // active-node-A[Client] --> B[Load Balancer] 
-    // B --> C-active-node[Server1] 
-    // B --> D[Server2]`;
+    generateCode() {
+        return `graph TD
+        ${this.entryNode.getConnectionText()}`;
+    }
 }
 
 class Node {

@@ -9,24 +9,40 @@
             mermaid.initialize({ startOnLoad: true });
         </script>
 
+        <button id="redraw">Redraw</button>
+        <button id="clear">Clear</button>
         Here is one mermaid diagram:
-        <div class="mermaid">
-
-        </div>
+        <div id="output"></div>
 
         
-        <div id="flowchart-code-preview"></div>
+        <textarea id="flowchart-code-preview"></textarea>
 
         <script type="module">
-            import {generateFlowchart} from './alakazam.js';
+            import {Flowchart} from './alakazam.js';
 
-            const mermaidContainer = document.getElementsByClassName('mermaid')[0];
+            const flowchart = new Flowchart();
+            flowchart.prepare();
+            const redrawButton = document.getElementById('redraw');
+            const clearButton = document.getElementById('clear');
+            const output = document.getElementById('output');
             const previewContainer = document.getElementById('flowchart-code-preview');
 
-            const flowchartCode = generateFlowchart();
-            mermaidContainer.innerHTML = flowchartCode;
-            previewContainer.innerText = flowchartCode;
+            redrawButton.addEventListener('click', () =>{
+                const flowchartCode = flowchart.generateCode();
+                mermaid.render('theGraph', flowchartCode, function(svgCode) {
+                    output.innerHTML = svgCode;
+                });
 
+                // output.innerHTML = flowchartCode;
+                previewContainer.innerText = flowchartCode;
+                mermaid.initialize({ startOnLoad: true });
+            });
+
+            clearButton.addEventListener('click', () =>{
+                output.innerHTML = '';
+               previewContainer.innerText = ''; 
+            });
+            
         </script>
        
     </body>
