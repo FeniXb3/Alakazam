@@ -5,3 +5,7 @@ svg div:hover {
 svg [id*=active-node] div {
     color:forestgreen;
 }
+
+textarea {
+    white-space: pre-wrap;
+}
