@@ -2,6 +2,6 @@ svg div {
     color: white;
 }
 
-svg #flowchart-current-6 div {
+svg [id*=active-node] div {
     color:forestgreen;
 }

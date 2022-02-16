@@ -1,6 +1,6 @@
 export function generateFlowchart() {
     return `            graph TD 
-    current[Client] --> B[Load Balancer] 
-    B --> C[Server1] 
+    active-node-A[Client] --> B[Load Balancer] 
+    B --> C-active-node[Server1] 
     B --> D[Server2]`
 }
