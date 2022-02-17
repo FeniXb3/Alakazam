@@ -72,20 +72,24 @@
                 // const shiftPressed = event.getModifierState('Shift');
 
                 finishingNodeElement = event.target.closest('.node');
-                if (!finishingNodeElement || !startingNodeElement || !finishingNodeElement.classList.contains('node')) {
+                if (!startingNodeElement) {
                     
                     const nodeType = Flowchart.getNodeType();
                     const nodeDescription = Flowchart.getNodeDescription();
                     flowchart.addNode(nodeDescription, nodeType);
                     
-                } else if (finishingNodeElement == startingNodeElement) {
+                } else if (finishingNodeElement == startingNodeElement || !finishingNodeElement ||!finishingNodeElement.classList.contains('node')) {
                     const nodeType = Flowchart.getNodeType();
                     const nodeDescription = Flowchart.getNodeDescription();
-                    const connectionDescription = Flowchart.getConnectionDescription();
-                    flowchart.addNodeTo(finishingNodeElement.id, shouldReattachConnected, nodeDescription, nodeType, connectionDescription);
+
+                    const startingNode = flowchart.findNodeByMermaidId(startingNodeElement.id);
+                    const connectionDescription = startingNode.type == 'decision' 
+                        ? Flowchart.getConnectionDescription()
+                        : '';
+                    flowchart.addNodeTo(startingNodeElement.id, shouldReattachConnected, nodeDescription, nodeType, connectionDescription);
                 }
                 else {
-                    const connectionDescription = Flowchart.getConnectionDescription();
+                    const connectionDescription = ''; //Flowchart.getConnectionDescription();
                     flowchart.connectNodes(startingNodeElement.id, finishingNodeElement.id, shouldReattachConnected, connectionDescription);
                 }
 
