@@ -94,7 +94,12 @@ export class Flowchart {
         const availableTypes = Object.keys(Node.typeSigns);
         const availableTypesText = availableTypes.reduce((accumulator, curr, index) => 
             `${accumulator}\n${index}: ${curr}`, '');
-        let nodeTypeIndex = parseInt(prompt(`Node type (default: operation)\n${availableTypesText}`));
+        const answer = prompt(`Node type (default: operation)\n${availableTypesText}`, '2');
+        if (answer == null) {
+            return null;
+        }
+
+        let nodeTypeIndex = parseInt(answer);
         let nodeType = 'operation';
         if(nodeTypeIndex != NaN && nodeTypeIndex >= 0 && nodeTypeIndex < availableTypes.length) {
             nodeType = availableTypes[nodeTypeIndex];
@@ -104,7 +109,7 @@ export class Flowchart {
     }
 
     static getNodeDescription() {
-        return prompt('Node description (default: Node)') || 'Node';
+        return prompt('Node description (default: Node)', 'Node');
     }
 
     static getConnectionDescription() {

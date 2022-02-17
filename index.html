@@ -22,6 +22,8 @@
         
         
         <div id="flowchart-code-preview" rows="10" cols="60"></div>
+
+        
     </div>    
 </div>
 
@@ -76,17 +78,31 @@
                 if (!startingNodeElement) {
                     
                     const nodeType = Flowchart.getNodeType();
+                    if (nodeType == null) {
+                        return;
+                    }
                     const nodeDescription = Flowchart.getNodeDescription();
+                    if (nodeDescription == null) {
+                        return;
+                    }
                     flowchart.addNode(nodeDescription, nodeType);
                     
                 } else if (finishingNodeElement == startingNodeElement || !finishingNodeElement ||!finishingNodeElement.classList.contains('node')) {
                     const nodeType = Flowchart.getNodeType();
+                    if (nodeType == null) {
+                        return;
+                    }
                     const nodeDescription = Flowchart.getNodeDescription();
-
+                    if (nodeDescription == null) {
+                        return;
+                    }
                     const startingNode = flowchart.findNodeByMermaidId(startingNodeElement.id);
                     const connectionDescription = startingNode.type == 'decision' 
                         ? Flowchart.getConnectionDescription()
                         : '';
+                    if (connectionDescription == null) {
+                        return;
+                    }
                     flowchart.addNodeTo(startingNodeElement.id, shouldReattachConnected, nodeDescription, nodeType, connectionDescription);
                 }
                 else {
