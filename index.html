@@ -68,13 +68,16 @@
 
                     const availableTypes = Object.keys(Node.typeSigns);
                     console.log(availableTypes);
-                    const availableTypesText = availableTypes.reduce((prev, curr) => `${prev}/${curr}`);
-                    const nodeDescription = prompt("Node description");
-                    let nodeType; 
-                    while(!availableTypes.includes(nodeType)) {
-                        nodeType = prompt(`Node type (${availableTypesText})`);
+                    const availableTypesText = availableTypes.reduce((accumulator, curr, index) => 
+                        `${accumulator}\n${index}: ${curr}`, '');
+                    let nodeTypeIndex = parseInt(prompt(`Node type (default: operation)\n${availableTypesText}`));
+                    let nodeType = 'operation';
+                    if(nodeTypeIndex != NaN && nodeTypeIndex >= 0 && nodeTypeIndex < availableTypes.length) {
+                        nodeType = availableTypes[nodeTypeIndex];
                     }
-                    const connectionDescription = prompt("Connection description");
+
+                    const nodeDescription = prompt('Node description (default: Node') || 'Node';
+                    const connectionDescription = prompt('Connection description (press Enter to leave empty)');
                     flowchart.addNodeTo(finishingNodeElement.id, shouldReattachConnected, nodeDescription, nodeType, connectionDescription);
                 }
                 else {
