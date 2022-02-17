@@ -71,7 +71,7 @@
             workspace.addEventListener('mouseup', (event) => {
                 console.log(event.target);
                 const shouldReattachConnected = !event.getModifierState('Control');
-                // const altPressed = event.getModifierState('Alt');
+                const shouldAddAlternativePath = event.getModifierState('Alt');
                 // const shiftPressed = event.getModifierState('Shift');
 
                 finishingNodeElement = event.target.closest('.node');
@@ -97,17 +97,49 @@
                         return;
                     }
                     const startingNode = flowchart.findNodeByMermaidId(startingNodeElement.id);
-                    const connectionDescription = startingNode.type == 'decision' 
-                        ? Flowchart.getConnectionDescription()
-                        : '';
+                    let connectionDescription = '';
+                    // startingNode.type == 'decision' 
+                      //  ? Flowchart.getConnectionDescription()
+                        //: '';
                     if (connectionDescription == null) {
                         return;
                     }
-                    flowchart.addNodeTo(startingNodeElement.id, shouldReattachConnected, nodeDescription, nodeType, connectionDescription);
+
+                    if (startingNode.type == 'decision') {
+                        if (shouldAddAlternativePath) {
+                            connectionDescription = 'No'
+                            flowchart.addAlternateNode(startingNodeElement.id,nodeDescription, nodeType, connectionDescription);
+                        } 
+                        else {
+                            connectionDescription = 'Yes'
+                            flowchart.addNodeTo(startingNodeElement.id, shouldReattachConnected, nodeDescription, nodeType, connectionDescription);
+                        }
+                    }
+                    else {
+                       flowchart.addNodeTo(startingNodeElement.id, shouldReattachConnected, nodeDescription, nodeType, connectionDescription);
+                    }
                 }
                 else {
-                    const connectionDescription = ''; //Flowchart.getConnectionDescription();
-                    flowchart.connectNodes(startingNodeElement.id, finishingNodeElement.id, shouldReattachConnected, connectionDescription);
+                    const startingNode = flowchart.findNodeByMermaidId(startingNodeElement.id);
+                    let connectionDescription = '';
+                    // startingNode.type == 'decision' 
+                      //  ? Flowchart.getConnectionDescription()
+                        //: '';
+
+                    if (startingNode.type == 'decision') {
+                        if (shouldAddAlternativePath) {
+                            connectionDescription = 'No'
+                            flowchart.connectAlternateNode(startingNodeElement.id, finishingNodeElement.id, connectionDescription);
+                        } 
+                        else {
+                            connectionDescription = 'Yes'
+                            flowchart.connectAlternateNode(startingNodeElement.id, finishingNodeElement.id, connectionDescription);
+                            // flowchart.connectNodes(startingNodeElement.id, finishingNodeElement.id, shouldReattachConnected, connectionDescription);
+                        }
+                    }
+                    else {
+                        flowchart.connectNodes(startingNodeElement.id, finishingNodeElement.id, shouldReattachConnected, connectionDescription);
+                    }
                 }
 
                 redrawButton.click();

@@ -43,18 +43,31 @@ export class Flowchart {
         const newNode = this.addNode(nodeDescription, nodeType);
 
         this.reconnectNodes(currentNode, newNode, shouldReattachConnected, connectionDescription);
-        // if (shouldReattachConnected) {
-        //     currentNode.connections.forEach(c => {
-        //         newNode.connect(c.target, c.description);
-        //     });
-
-        //     currentNode.connections = [];
-        // }
-
-        // currentNode.connect(newNode, connectionDescription);
     }
 
+    addAlternateNode(startingMermaidId,nodeDescription, nodeType, connectionDescription) {
+        const currentNode = this.findNodeByMermaidId(startingMermaidId);
+        console.log(currentNode);
+        if (!currentNode) {
+            return;
+        }
+
+        const newNode = this.addNode(nodeDescription, nodeType);
+        currentNode.connect(newNode, connectionDescription)
+    }
     
+    connectAlternateNode(startingMermaidId, finishingMermaidId, connectionDescription) {
+        const startingNode = this.findNodeByMermaidId(startingMermaidId);
+        const finishingNode = this.findNodeByMermaidId(finishingMermaidId);
+
+        if (!startingNode || !finishingNode) {
+            return;
+        }
+
+        startingNode.connections = startingNode.connections.filter(c => c.description != connectionDescription);
+        startingNode.connect(finishingNode, connectionDescription)
+    }
+
     reconnectNodes(currentNode, newNode, shouldReattachConnected, connectionDescription) {
         if (shouldReattachConnected) {
             currentNode.connections.forEach(c => {
@@ -63,8 +76,8 @@ export class Flowchart {
                 }
             });
 
-            currentNode.connections = [];
         }
+        currentNode.connections = [];
 
         currentNode.connect(newNode, connectionDescription)
     }
