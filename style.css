@@ -9,3 +9,19 @@ svg [id*=active-node] div {
 textarea {
     white-space: pre-wrap;
 }
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.full-height {
+    height: 100%;
+    /* background: aquamarine; */
+  }
+
+#workspace {
+    height: 100%;
+    width: 100%;
+    background-color: aliceblue;
+}

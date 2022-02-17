@@ -9,13 +9,21 @@
             mermaid.initialize({ startOnLoad: true });
         </script>
 
+<div id="page-container" class="full-height">
+    
+    <div>
+        
         <button id="redraw">Redraw</button>
         <button id="clear">Clear</button>
-        Here is one mermaid diagram:
+    </div>
+    <div id="workspace">
+        
         <div id="output"></div>
-
+        
         
         <div id="flowchart-code-preview" rows="10" cols="60"></div>
+    </div>    
+</div>
 
         <script type="module">
             import {Flowchart, Node} from './alakazam.js';
@@ -24,6 +32,7 @@
             flowchart.prepare();
             const redrawButton = document.getElementById('redraw');
             const clearButton = document.getElementById('clear');
+            const workspace = document.getElementById('workspace');
             const output = document.getElementById('output');
             const previewContainer = document.getElementById('flowchart-code-preview');
 
@@ -42,18 +51,21 @@
 
             let startingNodeElement;
             let finishingNodeElement;
-            output.addEventListener('mousedown', (event) => {
+            workspace.addEventListener('mousedown', (event) => {
                 console.log(event.target);
                 const shouldReattachConnected = !event.getModifierState('Control');
                 // const altPressed = event.getModifierState('Alt');
                 // const shiftPressed = event.getModifierState('Shift');
 
                 startingNodeElement = event.target.closest('.node');
-                if (!startingNodeElement || !startingNodeElement.classList.contains('node')) {
-                    return;
-                }
+                // if (!startingNodeElement || !startingNodeElement.classList.contains('node')) {
+                //     return;
+                // }
+
+                
             });
-            output.addEventListener('mouseup', (event) => {
+            
+            workspace.addEventListener('mouseup', (event) => {
                 console.log(event.target);
                 const shouldReattachConnected = !event.getModifierState('Control');
                 // const altPressed = event.getModifierState('Alt');
@@ -61,27 +73,19 @@
 
                 finishingNodeElement = event.target.closest('.node');
                 if (!finishingNodeElement || !startingNodeElement || !finishingNodeElement.classList.contains('node')) {
-                    return;
-                }
-
-                if (finishingNodeElement == startingNodeElement) {
-
-                    const availableTypes = Object.keys(Node.typeSigns);
-                    console.log(availableTypes);
-                    const availableTypesText = availableTypes.reduce((accumulator, curr, index) => 
-                        `${accumulator}\n${index}: ${curr}`, '');
-                    let nodeTypeIndex = parseInt(prompt(`Node type (default: operation)\n${availableTypesText}`));
-                    let nodeType = 'operation';
-                    if(nodeTypeIndex != NaN && nodeTypeIndex >= 0 && nodeTypeIndex < availableTypes.length) {
-                        nodeType = availableTypes[nodeTypeIndex];
-                    }
-
-                    const nodeDescription = prompt('Node description (default: Node') || 'Node';
-                    const connectionDescription = prompt('Connection description (press Enter to leave empty)');
+                    
+                    const nodeType = Flowchart.getNodeType();
+                    const nodeDescription = Flowchart.getNodeDescription();
+                    flowchart.addNode(nodeDescription, nodeType);
+                    
+                } else if (finishingNodeElement == startingNodeElement) {
+                    const nodeType = Flowchart.getNodeType();
+                    const nodeDescription = Flowchart.getNodeDescription();
+                    const connectionDescription = Flowchart.getConnectionDescription();
                     flowchart.addNodeTo(finishingNodeElement.id, shouldReattachConnected, nodeDescription, nodeType, connectionDescription);
                 }
                 else {
-                    const connectionDescription = prompt("Connection description");
+                    const connectionDescription = Flowchart.getConnectionDescription();
                     flowchart.connectNodes(startingNodeElement.id, finishingNodeElement.id, shouldReattachConnected, connectionDescription);
                 }
 

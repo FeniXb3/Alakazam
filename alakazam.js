@@ -1,6 +1,6 @@
 export class Flowchart {
     constructor() {
-        this.entryNode = null;
+        // this.entryNode = null;
         this.nodes = [];
     }
 
@@ -15,14 +15,18 @@ export class Flowchart {
         const firstNode = this.addNode("Start", "start");
         const lastNode = this.addNode("Stop", "stop");
 
-        this.entryNode = firstNode;
+        // this.entryNode = firstNode;
 
-        firstNode.connect(lastNode);
+        // firstNode.connect(lastNode);
     }
 
     generateCode() {
-        const code =  `graph TD
-        ${this.entryNode.getConnectionText()}`;
+        
+        // const code =  `graph TD
+        // ${this.entryNode.getConnectionText()}`;
+
+        const code = this.nodes.map(n => n.getConnectionText())
+            .reduce((acc, curr) => `${acc}\n${curr}`, 'graph TD');
 
         this.nodes.forEach(n => n.dirty = false);
 
@@ -73,8 +77,8 @@ export class Flowchart {
             return;
         }
 
-        startingNode.connect(finishingNode, connectionDescription);
-        //this.reconnectNodes(startingNode, finishingNode, shouldReattachConnected, connectionDescription);
+        // startingNode.connect(finishingNode, connectionDescription);
+        this.reconnectNodes(startingNode, finishingNode, shouldReattachConnected, connectionDescription);
     }
 
     findNodeByMermaidId(mermaidId) {
@@ -84,6 +88,27 @@ export class Flowchart {
         const nodeId = matches[1];
         console.log(nodeId);
         return this.nodes.find(n => n.id == nodeId);
+    }
+
+    static getNodeType() {
+        const availableTypes = Object.keys(Node.typeSigns);
+        const availableTypesText = availableTypes.reduce((accumulator, curr, index) => 
+            `${accumulator}\n${index}: ${curr}`, '');
+        let nodeTypeIndex = parseInt(prompt(`Node type (default: operation)\n${availableTypesText}`));
+        let nodeType = 'operation';
+        if(nodeTypeIndex != NaN && nodeTypeIndex >= 0 && nodeTypeIndex < availableTypes.length) {
+            nodeType = availableTypes[nodeTypeIndex];
+        }
+
+        return nodeType;
+    }
+
+    static getNodeDescription() {
+        return prompt('Node description (default: Node') || 'Node';
+    }
+
+    static getConnectionDescription() {
+        return  prompt('Connection description (press Enter to leave empty)');
     }
 }
 
@@ -147,7 +172,7 @@ export class Node {
             ? this.connections.map(c => 
                 `${this.getNodeText()} ${c.getConnectionText()}`)
                 .reduce((previous, current) => `${previous} \n ${current}`)
-            : '';
+            : this.getNodeText();
         return result
     }
 }
