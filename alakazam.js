@@ -104,7 +104,7 @@ export class Flowchart {
     }
 
     static getNodeDescription() {
-        return prompt('Node description (default: Node') || 'Node';
+        return prompt('Node description (default: Node)') || 'Node';
     }
 
     static getConnectionDescription() {

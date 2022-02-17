@@ -52,6 +52,7 @@
             let startingNodeElement;
             let finishingNodeElement;
             workspace.addEventListener('mousedown', (event) => {
+                event.preventDefault();
                 console.log(event.target);
                 const shouldReattachConnected = !event.getModifierState('Control');
                 // const altPressed = event.getModifierState('Alt');
