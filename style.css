@@ -23,5 +23,11 @@ html, body {
 #workspace {
     height: 100%;
     width: 100%;
+    margin: 0;
     background-color: aliceblue;
+}
+
+svg {
+    display: block;
+    margin: auto;
 }
