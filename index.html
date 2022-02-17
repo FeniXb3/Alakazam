@@ -13,9 +13,10 @@
     
     <div>
         
-        <button id="redraw">Alakazam!</button>
+        <button id="redraw">redraw</button>
         <button id="clear">Clear</button>
         <button id="save-svg">Save SVG file</button>
+        <button id="run">Alakazam!</button>
     </div>
     <div id="workspace">
         
@@ -191,6 +192,11 @@
                 }
 
                 saveSvg(svgElement, `${fileName}.svg`);
+            });
+
+            const runButton = document.getElementById('run');
+            runButton.addEventListener('click', e => {
+                flowchart.alakazam();
             });
             
         </script>

@@ -5,7 +5,18 @@ export class Flowchart {
     }
 
     addNode(description, type) {
-        const newNode = new Node(description, type);
+        let newNode;
+        switch(type) {
+            case 'input':
+                newNode = new InputNode(description, type);
+                break;
+            case 'output':
+                newNode = new OutputNode(description, type);
+                break;
+            default:
+                newNode = new Node(description, type);
+        }
+        
         this.nodes.push(newNode);
 
         return newNode;
@@ -15,9 +26,22 @@ export class Flowchart {
         const firstNode = this.addNode("Start", "start");
         const lastNode = this.addNode("Stop", "stop");
 
+        // const nameQueryNode = this.addNode("What's your name?", "output");
+        // const nameGettingNode = this.addNode("name", "input");
+        // const nameDisplayingName = this.addNode("Ahoy, %name%!", "output");
+
         // this.entryNode = firstNode;
 
         // firstNode.connect(lastNode);
+    }
+
+    alakazam() {
+        const startingNodes = this.nodes.filter(n => n.type == 'start');
+
+        startingNodes.forEach(n => {
+            const state = {};
+            n.perform(state);
+        });
     }
 
     generateCode() {
@@ -204,6 +228,47 @@ export class Node {
                 .reduce((previous, current) => `${previous} \n ${current}`)
             : this.getNodeText();
         return result
+    }
+
+    perform(state) {
+        console.log(`Performing action of ${this.type} node ${this.id}(${this.description})`);
+        console.log(state);
+        this.connections.forEach(c => {
+            c.target.perform(state);
+        });
+    }
+}
+
+class OutputNode extends Node {
+    perform(state) {
+        const pattern = /(?:%(\w+)%)/gm;
+        let parsedText = this.description;
+        let match;
+        do {
+            match = pattern.exec(this.description);
+            if (match) {
+                parsedText = parsedText.replace(match[0], state[match[1]]);
+            }
+        } while(match);
+        
+        alert(parsedText);
+        super.perform(state);
+    }
+}
+
+class InputNode extends Node {
+    constructor(variableName, type) {
+        const description = `Read ${variableName}`;
+        super(description, type);
+
+        this.variableName = variableName;
+    }
+    
+    perform(state) {
+        const value = prompt(this.description);
+        //TODO: handle stopping the run if user cancelled
+        state[this.variableName] = value;
+        super.perform(state);
     }
 }
 
