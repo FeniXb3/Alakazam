@@ -1,6 +1,5 @@
 export class Flowchart {
     constructor() {
-        // this.entryNode = null;
         this.nodes = [];
     }
 
@@ -12,6 +11,9 @@ export class Flowchart {
                 break;
             case 'output':
                 newNode = new OutputNode(description, type);
+                break;
+            case 'decision':
+                newNode = new DecisionNode(description, type);
                 break;
             default:
                 newNode = new Node(description, type);
@@ -26,13 +28,19 @@ export class Flowchart {
         const firstNode = this.addNode("Start", "start");
         const lastNode = this.addNode("Stop", "stop");
 
-        // const nameQueryNode = this.addNode("What's your name?", "output");
-        // const nameGettingNode = this.addNode("name", "input");
-        // const nameDisplayingName = this.addNode("Ahoy, %name%!", "output");
-
-        // this.entryNode = firstNode;
-
-        // firstNode.connect(lastNode);
+        const nameQueryNode = this.addNode("What's your name?", "output");
+        const nameGettingNode = this.addNode("name", "input");
+        const nameDisplayingNode = this.addNode("Ahoy, %name%!", "output");
+        const championDisplayinNode = this.addNode("You are the champion!", "output");
+        const decisionNode = this.addNode("%name% == Champion", "decision");
+        
+        firstNode.connect(nameQueryNode);
+        nameQueryNode.connect(nameGettingNode);
+        nameGettingNode.connect(decisionNode);
+        decisionNode.connect(championDisplayinNode, 'Yes');
+        decisionNode.connect(nameDisplayingNode, 'No');
+        championDisplayinNode.connect(lastNode);
+        nameDisplayingNode.connect(lastNode);
     }
 
     alakazam() {
@@ -230,17 +238,20 @@ export class Node {
         return result
     }
 
-    perform(state) {
+    perform(state, nextConnection) {
         console.log(`Performing action of ${this.type} node ${this.id}(${this.description})`);
         console.log(state);
+
         this.connections.forEach(c => {
-            c.target.perform(state);
+            if (!nextConnection || c.description == nextConnection) {
+                c.target.perform(state);
+            }
         });
     }
 }
 
 class OutputNode extends Node {
-    perform(state) {
+    perform(state, nextConnection) {
         const pattern = /(?:%(\w+)%)/gm;
         let parsedText = this.description;
         let match;
@@ -252,7 +263,7 @@ class OutputNode extends Node {
         } while(match);
         
         alert(parsedText);
-        super.perform(state);
+        super.perform(state, nextConnection);
     }
 }
 
@@ -264,11 +275,52 @@ class InputNode extends Node {
         this.variableName = variableName;
     }
     
-    perform(state) {
+    perform(state, nextConnection) {
         const value = prompt(this.description);
         //TODO: handle stopping the run if user cancelled
         state[this.variableName] = value;
-        super.perform(state);
+        super.perform(state, nextConnection);
+    }
+}
+
+class DecisionNode extends Node {
+    constructor(condition, type) {
+        const description = `Is ${condition} ?`;
+        super(description, type);
+
+        this.condition = condition;
+    }
+    perform(state, nextConnection) {
+        const sides = this.condition.split('==').map(s => s.trim());
+        const leftSidePattern = /(?:%(\w+)%)/gm;
+        const rightSidePattern = /(\w+)/gm;
+
+        const leftSideMatch = leftSidePattern.exec(sides[0]);
+        // console.log(leftSideMatch);
+        
+        const rightSideMatch = rightSidePattern.exec(sides[1]);
+        console.log(rightSideMatch);
+        
+        const leftSide = state[leftSideMatch[1]];
+        const rightSide = rightSideMatch[0];
+        console.log(`Left: {${leftSide}} | Right: {${rightSide}}`);
+
+        if (leftSide === rightSide) {
+            super.perform(state, 'Yes');
+        }
+        else {
+            super.perform(state, 'No');
+        }
+        // let parsedText = this.description;
+        // let match;
+        // do {
+        //     match = pattern.exec(this.description);
+        //     if (match) {
+        //         parsedText = parsedText.replace(match[0], state[match[1]]);
+        //     }
+        // } while(match);
+        
+        // alert(parsedText);
     }
 }
 
