@@ -79,6 +79,12 @@
             }
             // document.getElementsByTagName('body')[0].addEventListener('contextmenu', event => {return false;});
             
+            document.addEventListener('keypress', event => {
+                if (event.key == "Enter" && event.getModifierState('Control')) {
+                    flowchart.alakazam();
+                }
+            });
+
             workspace.addEventListener('mouseup', (event) => {
                 const shouldReattachConnected = !event.getModifierState('Control');
                 const shouldAddAlternativePath = event.getModifierState('Alt');
