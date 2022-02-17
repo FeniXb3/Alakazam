@@ -25,6 +25,7 @@ export class Flowchart {
     }
     
     prepare() {
+        this.nodes = [];
         const firstNode = this.addNode("Start", "start");
         const lastNode = this.addNode("Stop", "stop");
 
@@ -42,6 +43,12 @@ export class Flowchart {
         championDisplayinNode.connect(lastNode);
         nameDisplayingNode.connect(lastNode);
     }
+
+    reset() {
+        this.nodes = [];
+        this.addNode("Start", "start");
+    }
+
 
     alakazam() {
         const startingNodes = this.nodes.filter(n => n.type == 'start');
