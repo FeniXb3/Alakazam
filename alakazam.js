@@ -33,7 +33,7 @@ export class Flowchart {
         const nameGettingNode = this.addNode("name", "input");
         const nameDisplayingNode = this.addNode("Ahoy, %name%!", "output");
         const championDisplayinNode = this.addNode("You are the champion!", "output");
-        const decisionNode = this.addNode("%name% == Champion", "decision");
+        const decisionNode = this.addNode("%name% > Champion", "decision");
         
         firstNode.connect(nameQueryNode);
         nameQueryNode.connect(nameGettingNode);
@@ -297,8 +297,21 @@ class DecisionNode extends Node {
 
         this.condition = condition;
     }
+
+    static operatorFunctions = {
+        '==': (a, b) => a === b,
+        '!=': (a, b) => a !== b,
+        '>': (a, b) => a > b,
+        '<': (a, b) => a < b,
+        '>=': (a, b) => a >= b,
+        '<=': (a, b) => a <= b,
+    }
+
     perform(state, nextConnection) {
-        const sides = this.condition.split('==').map(s => s.trim());
+        const operatorPattern = /(?:==|!=|>|<|>=|<=)/gm;
+        const operator = operatorPattern.exec(this.condition)[0];
+        console.log(operator);
+        const sides = this.condition.split(operator).map(s => s.trim());
         console.log(sides);
         const leftSidePattern = /(?:%(\w+)%|(\w+))/gm;
         const rightSidePattern =/(?:%(\w+)%|(\w+))/gm;
@@ -314,7 +327,7 @@ class DecisionNode extends Node {
         // const rightSide = rightSideMatch[0];
         console.log(`Left: {${leftSide}} | Right: {${rightSide}}`);
 
-        if (leftSide === rightSide) {
+        if (DecisionNode.operatorFunctions[operator](leftSide, rightSide)) {
             super.perform(state, 'Yes');
         }
         else {
