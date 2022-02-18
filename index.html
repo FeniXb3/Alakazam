@@ -87,18 +87,17 @@
             }
             // document.getElementsByTagName('body')[0].addEventListener('contextmenu', event => {return false;});
             
-            document.addEventListener('keypress', event => {
+            document.addEventListener('keyup', event => {
                 if (event.key == "Enter" && event.getModifierState('Control')) {
                     flowchart.alakazam();
+                }
+                else if (event.key == "Escape" && isLinking) {
+                    isLinking = false;
+                    draw();
                 }
             });
 
             workspace.addEventListener('click', (event) => {
-                event.preventDefault();
-                
-                const shouldReattachConnected = !event.getModifierState('Control');
-                const shouldAddAlternativePath = event.getModifierState('Alt');
-                
                 const addButton =  event.target.closest('.add-node');
                 const addAlternateButton =  event.target.closest('.add-alternate-node');
                 const linkButton =  event.target.closest('.link-node');
@@ -123,15 +122,15 @@
                     if (startingNode.type == 'decision') {
                         if (addAlternateButton) {
                             connectionDescription = 'No'
-                            flowchart.addNodeTo(startingNodeElement.id, shouldReattachConnected, nodeDescription, nodeType, connectionDescription);
+                            flowchart.addNodeTo(startingNodeElement.id, false, nodeDescription, nodeType, connectionDescription);
                         } 
                         else {
                             connectionDescription = 'Yes'
-                            flowchart.addNodeTo(startingNodeElement.id, shouldReattachConnected, nodeDescription, nodeType, connectionDescription);
+                            flowchart.addNodeTo(startingNodeElement.id, false, nodeDescription, nodeType, connectionDescription);
                         }
                     }
                     else {
-                        flowchart.addNodeTo(startingNodeElement.id, shouldReattachConnected, nodeDescription, nodeType, connectionDescription);
+                        flowchart.addNodeTo(startingNodeElement.id, false, nodeDescription, nodeType, connectionDescription);
                     }
                 
                 }
@@ -186,13 +185,13 @@
                             else {
                                 connectionDescription = 'Yes'
                                 flowchart.connectAlternateNode(startingNodeElement.id, finishingNodeElement.id, connectionDescription);
-                                // flowchart.connectNodes(startingNodeElement.id, finishingNodeElement.id, shouldReattachConnected, connectionDescription);
+                                // flowchart.connectNodes(startingNodeElement.id, finishingNodeElement.id, false, connectionDescription);
                             }
 
                             isAlternate = false;
                         }
                         else {
-                            flowchart.connectNodes(startingNodeElement.id, finishingNodeElement.id, shouldReattachConnected, connectionDescription);
+                            flowchart.connectNodes(startingNodeElement.id, finishingNodeElement.id, false, connectionDescription);
                         }
 
                         isLinking = false;
@@ -202,50 +201,10 @@
                     startingNodeElement = null;
                     isLinking = false;
                 }
-                // const altPressed = event.getModifierState('Alt');
-                // const shiftPressed = event.getModifierState('Shift');
 
                 draw();
             });
 
-
-            workspace.addEventListener('x', (event) => {
-                // const shiftPressed = event.getModifierState('Shift');
-
-                
-                if (!enableCreateNodeAnywhere && (!startingNodeElement || !startingNodeElement.classList.contains('node'))) {
-                    return;
-                }
-
-                if (!startingNodeElement) {
-                    if (event.button == 0) {   
-                        const nodeType = Flowchart.getNodeType();
-                        if (nodeType == null) {
-                            return;
-                        }
-                        const nodeDescription = Flowchart.getNodeDescription();
-                        if (nodeDescription == null) {
-                            return;
-                        }
-                        flowchart.addNode(nodeDescription, nodeType);
-                    }
-                } else if (finishingNodeElement == startingNodeElement || !finishingNodeElement ||!finishingNodeElement.classList.contains('node')) {
-                    
-                }
-                else {
-                    // startingNode.type == 'decision' 
-                      //  ? Flowchart.getConnectionDescription()
-                        //: '';
-                    if (event.button == 2) {  
-                        
-                    }
-                    else if (event.button == 0) {  
-                      
-                    }
-                }
-
-                draw();
-            });
 
             draw();
             
