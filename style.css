@@ -31,3 +31,46 @@ svg {
     display: block;
     margin: auto;
 }
+
+.link-path {
+    background-color: white;
+    /* fill: black !important; */
+}
+.link-node .inactive-button {
+    fill: black !important;
+}
+
+.link-alternate-node {
+    transform: translate(-12px, 35px)
+}
+.link-alternate-node > g {
+    transform: scale(0.07)
+}
+
+.link-alternate-node .inactive-button {
+    fill: blue !important;
+}
+
+.active-button {
+    fill: yellow !important;
+}
+
+.remove-node path{
+    stroke: black;
+    fill: red !important;
+}
+
+.add-node path {
+    fill:#11FF44 !important;
+}
+
+.add-node g {
+    transform: translate(15px, 10px) scale(0.6) !important;
+}
+.add-alternate-node path {
+    fill:#1c32ad !important;
+}
+
+.add-alternate-node g {
+    transform: translate(15px, 35px) scale(0.6) !important;
+}

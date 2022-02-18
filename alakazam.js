@@ -74,19 +74,28 @@ export class Flowchart {
 
     addNodeTo(mermaidNodeId, shouldReattachConnected, nodeDescription, nodeType, connectionDescription) {
         const currentNode = this.findNodeByMermaidId(mermaidNodeId);
-        console.log(currentNode);
+        
         if (!currentNode) {
             return;
         }
 
         const newNode = this.addNode(nodeDescription, nodeType);
 
-        this.reconnectNodes(currentNode, newNode, shouldReattachConnected, connectionDescription);
+        const currentConnection = currentNode.connections.find(c => c.description == connectionDescription);
+
+        if (currentConnection) {
+            newNode.connect(currentConnection.target);
+            currentConnection.target = newNode;
+        }
+        else {
+            currentNode.connect(newNode, connectionDescription);
+        }
+       // this.reconnectNodes(currentNode, newNode, shouldReattachConnected, connectionDescription);
     }
 
     addAlternateNode(startingMermaidId,nodeDescription, nodeType, connectionDescription) {
         const currentNode = this.findNodeByMermaidId(startingMermaidId);
-        console.log(currentNode);
+        
         if (!currentNode) {
             return;
         }
@@ -123,7 +132,7 @@ export class Flowchart {
 
     removeNode(node) {
         this.nodes.forEach(n => {
-            n.connections = n.connections.filter(c => c.target == node);
+            n.connections = n.connections.filter(c => c.target != node);
         });
 
         this.nodes = this.nodes.filter(n => n != node);
@@ -148,9 +157,7 @@ export class Flowchart {
     findNodeByMermaidId(mermaidId) {
         const pattern = /^flowchart-(\w+)-/gm;
         const matches = pattern.exec(mermaidId);
-        console.log(matches);
         const nodeId = matches[1];
-        console.log(nodeId);
         return this.nodes.find(n => n.id == nodeId);
     }
 
@@ -246,7 +253,7 @@ export class Node {
     }
 
     perform(state, nextConnection) {
-        console.log(`Performing action of ${this.type} node ${this.id}(${this.description})`);
+        console.log(`Performing action of ${this.type} node ${this.id}(${this.description})\nCurrent state:`);
         console.log(state);
 
         this.connections.forEach(c => {
@@ -310,23 +317,17 @@ class DecisionNode extends Node {
     perform(state, nextConnection) {
         const operatorPattern = /(?:==|!=|>|<|>=|<=)/gm;
         const operator = operatorPattern.exec(this.condition)[0];
-        console.log(operator);
         const sides = this.condition.split(operator).map(s => s.trim());
-        console.log(sides);
         const leftSidePattern = /(?:%(\w+)%|(\w+))/gm;
         const rightSidePattern =/(?:%(\w+)%|(\w+))/gm;
 
         const leftSideMatch = leftSidePattern.exec(sides[0]);
-        console.log(leftSideMatch);
         
         const rightSideMatch = rightSidePattern.exec(sides[1]);
-        console.log(rightSideMatch);
         
         const leftSide = leftSideMatch[2] || state[leftSideMatch[1]];
         const rightSide = rightSideMatch[2] || state[rightSideMatch[1]];
-        // const rightSide = rightSideMatch[0];
-        console.log(`Left: {${leftSide}} | Right: {${rightSide}}`);
-
+        
         if (DecisionNode.operatorFunctions[operator](leftSide, rightSide)) {
             super.perform(state, 'Yes');
         }
