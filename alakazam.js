@@ -299,17 +299,19 @@ class DecisionNode extends Node {
     }
     perform(state, nextConnection) {
         const sides = this.condition.split('==').map(s => s.trim());
-        const leftSidePattern = /(?:%(\w+)%)/gm;
-        const rightSidePattern = /(\w+)/gm;
+        console.log(sides);
+        const leftSidePattern = /(?:%(\w+)%|(\w+))/gm;
+        const rightSidePattern =/(?:%(\w+)%|(\w+))/gm;
 
         const leftSideMatch = leftSidePattern.exec(sides[0]);
-        // console.log(leftSideMatch);
+        console.log(leftSideMatch);
         
         const rightSideMatch = rightSidePattern.exec(sides[1]);
         console.log(rightSideMatch);
         
-        const leftSide = state[leftSideMatch[1]];
-        const rightSide = rightSideMatch[0];
+        const leftSide = leftSideMatch[2] || state[leftSideMatch[1]];
+        const rightSide = rightSideMatch[2] || state[rightSideMatch[1]];
+        // const rightSide = rightSideMatch[0];
         console.log(`Left: {${leftSide}} | Right: {${rightSide}}`);
 
         if (leftSide === rightSide) {
