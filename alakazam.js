@@ -33,7 +33,7 @@ export class Flowchart {
         const nameGettingNode = this.addNode("name", "input");
         const nameDisplayingNode = this.addNode("Ahoy, %name%!", "output");
         const championDisplayinNode = this.addNode("You are the champion!", "output");
-        const decisionNode = this.addNode("%name% > Champion", "decision");
+        const decisionNode = this.addNode("%name% == Champion", "decision");
         
         firstNode.connect(nameQueryNode);
         nameQueryNode.connect(nameGettingNode);

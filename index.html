@@ -33,6 +33,7 @@
             import {Flowchart, Node} from './alakazam.js';
 
             const flowchart = new Flowchart();
+            let enableCreateNodeAnywhere = false;
             flowchart.reset();
             const loadExampleButton = document.getElementById('load-example');
             const resetButton = document.getElementById('reset');
@@ -67,11 +68,6 @@
                 // const shiftPressed = event.getModifierState('Shift');
 
                 startingNodeElement = event.target.closest('.node');
-                // if (!startingNodeElement || !startingNodeElement.classList.contains('node')) {
-                //     return;
-                // }
-
-                
             });
 
             document.oncontextmenu = function() {
@@ -92,6 +88,9 @@
 
                 finishingNodeElement = event.target.closest('.node');
                 
+                if (!enableCreateNodeAnywhere && (!startingNodeElement || !startingNodeElement.classList.contains('node'))) {
+                    return;
+                }
 
                 if (!startingNodeElement) {
                     if (event.button == 0) {   
