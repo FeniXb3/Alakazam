@@ -47,6 +47,18 @@ svg {
     transform: scale(0.1)
 }
 
+#output {
+    height: 70%;
+    overflow: scroll;
+}
+
+#save-svg {
+    display: none;
+}
+
+#flowchart-code-preview {
+    display: none;
+}
 
 .link-node {
     transform: translate(1em, 2.5em)

@@ -3,7 +3,7 @@ export class UIHelper {
     static addPlusButton(element) {
         // https://www.svgrepo.com/svg/158248/round-add-button
         const plusSVG = `
-            <svg class="add-node" xmlns="http://www.w3.org/2000/svg">
+            <svg class="flowchart-ui add-node" xmlns="http://www.w3.org/2000/svg">
                 <g>
                     <path d="M16,0C7.164,0,0,7.164,0,16s7.164,16,16,16s16-7.164,16-16S24.836,0,16,0z M24,18h-6v6h-4v-6H8v-4
                     h6V8h4v6h6V18z"/>
@@ -15,7 +15,7 @@ export class UIHelper {
     static addAlternatePlusButton(element) {
         // https://www.svgrepo.com/svg/158248/round-add-button
         const plusSVG = `
-            <svg class="add-alternate-node" xmlns="http://www.w3.org/2000/svg">
+            <svg class="flowchart-ui add-alternate-node" xmlns="http://www.w3.org/2000/svg">
                 <g>
                     <path d="M16,0C7.164,0,0,7.164,0,16s7.164,16,16,16s16-7.164,16-16S24.836,0,16,0z M24,18h-6v6h-4v-6H8v-4
                     h6V8h4v6h6V18z"/>
@@ -27,7 +27,7 @@ export class UIHelper {
     static addLinkButton(element) {
         // https://www.svgrepo.com/svg/126738/link
         const svg = `
-            <svg class="link-node" xmlns="http://www.w3.org/2000/svg">
+            <svg class="flowchart-ui link-node" xmlns="http://www.w3.org/2000/svg">
                 <g
         s>
         <g>
@@ -57,7 +57,7 @@ export class UIHelper {
     static addAlternateLinkButton(element) {
         // https://www.svgrepo.com/svg/126738/link
         const svg = `
-            <svg class="link-alternate-node" xmlns="http://www.w3.org/2000/svg">
+            <svg class="flowchart-ui link-alternate-node" xmlns="http://www.w3.org/2000/svg">
                 <g
         s>
         <g>
@@ -87,7 +87,7 @@ export class UIHelper {
     static addRemoveNodeButton(element) {
         // https://www.svgrepo.com/svg/126738/link
         const svg = `
-            <svg class="remove-node" xmlns="http://www.w3.org/2000/svg">
+            <svg class="flowchart-ui remove-node" xmlns="http://www.w3.org/2000/svg">
                 <g>
         <g>
 	<g>

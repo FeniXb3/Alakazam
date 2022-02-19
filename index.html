@@ -15,7 +15,6 @@
         
         <button id="load-example">Load example</button>
         <button id="reset">Reset</button>
-        <button id="save-svg">Save SVG file</button>
         <button id="run">Alakazam!</button>
     </div>
     <div id="workspace">
@@ -24,13 +23,17 @@
         
         
         <div id="flowchart-code-preview"></div>
-        <div>
-            <button id="serialize-base64">serialize</button>
-            <button id="deserialize-base64">deserialize</button>
-            <button id="serialize-json">serialize JSON</button>
-            <button id="deserialize-json">deserialize JSON</button>
+        <div id="serialization-container">
+            <div>
+                <button id="save-svg">Save SVG file</button>
+                <button id="serialize-base64">serialize</button>
+                
+                <button id="deserialize-base64">deserialize</button>
+                <button id="serialize-json">serialize JSON</button>
+                <button id="deserialize-json">deserialize JSON</button>
+            </div>
+            <textarea id="serialized-data" rows="5" cols="60"></textarea>
         </div>
-        <textarea id="serialized-data" rows="10" cols="60"></textarea>
         
     </div>    
 </div>
@@ -245,10 +248,19 @@
 
 
             draw();
+
+            // https://stackoverflow.com/questions/4777077/removing-elements-by-class-name
+            function removeElementsByClass(target, className){
+                const elements = target.getElementsByClassName(className);
+                while(elements.length > 0){
+                    elements[0].parentNode.removeChild(elements[0]);
+                }
+            }
             
             const svgElement = document.getElementById('theGraph');
             const saveSvgButton = document.getElementById('save-svg');
             function saveSvg(svgEl, name) {
+                removeElementsByClass(svgElement, 'flowchart-ui');
                 svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
                 var svgData = svgEl.outerHTML;
                 var preface = '<?xml version="1.0" standalone="no"?>\r\n';
@@ -268,7 +280,7 @@
                     return;
                 }
 
-                saveSvg(svgElement, `${fileName}.svg`);
+                saveSvg(svgElement, `${fileName}_${Date.now()}.svg`);
             });
 
             const runButton = document.getElementById('run');
