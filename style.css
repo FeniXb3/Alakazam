@@ -123,7 +123,7 @@ svg {
 }
 
 .add-alternate-node{
-    transform: translate(50%, 160%) scale(0.8) !important;
+    transform: translate(50%, 110%) scale(0.8) !important;
 }
 
 .link-alternate-node .icon-background {
@@ -131,7 +131,7 @@ svg {
 }
 
 .link-alternate-node{
-    transform: translate(-50%, 160%) scale(0.8) !important;
+    transform: translate(-50%, 110%) scale(0.8) !important;
 }
 
 .active-button .icon-background {

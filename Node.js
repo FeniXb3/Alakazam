@@ -24,8 +24,8 @@ export class Node {
             closing: "\\]"
         },
         "decision": {
-            opening: "{",
-            closing: "}"
+            opening: "{{",
+            closing: "}}"
         }
     };
 
