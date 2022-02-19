@@ -161,11 +161,20 @@ export class Flowchart {
         return this.nodes.find(n => n.id == nodeId);
     }
 
-    serialize() {
+    serializeJson() {
         return JSON.stringify(this);
     }
+    
+    serializeBase64() {
+        return btoa(unescape(encodeURIComponent(JSON.stringify(this))));
+    }
 
-    deserialize(jsonString) {
+    deserializeBase64(content) {
+        this.deserializeJson(decodeURIComponent(escape(atob(content))));
+    }
+    
+
+    deserializeJson(jsonString) {
         Object.assign(this, JSON.parse(jsonString));
 
         this.nodes = this.nodes.map(n => {

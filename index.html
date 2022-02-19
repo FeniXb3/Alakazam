@@ -25,8 +25,10 @@
         
         <div id="flowchart-code-preview"></div>
         <div>
-            <button id="serialize">serialize</button>
-            <button id="deserialize">deserialize</button>
+            <button id="serialize-base64">serialize</button>
+            <button id="deserialize-base64">deserialize</button>
+            <button id="serialize-json">serialize JSON</button>
+            <button id="deserialize-json">deserialize JSON</button>
         </div>
         <textarea id="serialized-data" rows="10" cols="60"></textarea>
         
@@ -45,8 +47,10 @@
             const output = document.getElementById('output');
             const previewContainer = document.getElementById('flowchart-code-preview');
 
-            const serializeButton = document.getElementById('serialize');
-            const deserializeButton = document.getElementById('deserialize');
+            const serializeBase64Button = document.getElementById('serialize-base64');
+            const deserializeBase64Button = document.getElementById('deserialize-base64');
+            const serializeJsonButton = document.getElementById('serialize-json');
+            const deserializeJsonButton = document.getElementById('deserialize-json');
             const serializedData = document.getElementById('serialized-data');
 
 
@@ -76,15 +80,28 @@
                 });
             }
 
-            serializeButton.addEventListener('click', () => {
-                const jsonString = flowchart.serialize();
-                serializedData.value = jsonString;
+            serializeBase64Button.addEventListener('click', () => {
+                const serializedContent = flowchart.serializeBase64();
+                console.log(serializedContent);
+                serializedData.value = serializedContent;
             });
 
-            deserializeButton.addEventListener('click', () => {
-                const jsonString = serializedData.value;
-                console.log(jsonString);
-                flowchart.deserialize(jsonString);
+            deserializeBase64Button.addEventListener('click', () => {
+                const serializedContent = serializedData.value;
+                flowchart.deserializeBase64(serializedContent);
+                draw();
+            });
+
+            
+            serializeJsonButton.addEventListener('click', () => {
+                const serializedContent = flowchart.serializeJson();
+                console.log(serializedContent);
+                serializedData.value = serializedContent;
+            });
+
+            deserializeJsonButton.addEventListener('click', () => {
+                const serializedContent = serializedData.value;
+                flowchart.deserializeJson(serializedContent);
                 draw();
             });
 
