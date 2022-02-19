@@ -10,9 +10,32 @@ textarea {
     white-space: pre-wrap;
 }
 
-html, body {
-    height: 100%;
-    margin: 0;
+/* override browser default */
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* use viewport-relative units to cover page fully */
+body {
+  height: 100vh;
+  width: 100vw;
+}
+
+
+/* include border and padding in element width and height */
+* {
+  box-sizing: border-box;
+}
+
+#page-container {
+    
+  height: 100%;
+  width: 100%;
+
+  /* example padding, font-size, background, etc */
+
 }
 
 .full-height {
@@ -21,11 +44,12 @@ html, body {
   }
 
 #workspace {
-    height: 100%;
+    height: 80%;
     width: 100%;
     margin: 0;
     background-color: aliceblue;
 }
+
 
 svg {
     display: block;
@@ -34,7 +58,7 @@ svg {
 
 
 #output {
-    height: 70%;
+    height: 80%;
     overflow: scroll;
 }
 
@@ -75,7 +99,7 @@ svg {
 }
 
 .add-node {
-    transform: translate(50%, 50%) !important;
+    transform: translate(50%, 30%) scale(0.8) !important;
 }
 
 .link-node .icon-background {
@@ -83,7 +107,7 @@ svg {
 }
 
 .link-node{
-    transform: translate(-50%, 50%) !important;
+    transform: translate(-50%, 30%) scale(0.8) !important;
 }
 
 .remove-node .icon-background {
@@ -91,7 +115,7 @@ svg {
 }
 
 .remove-node{
-    transform: translate(75%, -125%) !important;
+    transform: translate(55%, -100%) scale(0.8) !important;
 }
 
 .add-alternate-node .icon-background {
@@ -99,7 +123,7 @@ svg {
 }
 
 .add-alternate-node{
-    transform: translate(50%, 160%) !important;
+    transform: translate(50%, 160%) scale(0.8) !important;
 }
 
 .link-alternate-node .icon-background {
@@ -107,7 +131,7 @@ svg {
 }
 
 .link-alternate-node{
-    transform: translate(-50%, 160%) !important;
+    transform: translate(-50%, 160%) scale(0.8) !important;
 }
 
 .active-button .icon-background {

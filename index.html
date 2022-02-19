@@ -11,21 +11,21 @@
 <body>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>
-        mermaid.initialize({ startOnLoad: true });
+        mermaid.initialize({ startOnLoad: true, 
+            'themeVariables': {'fontSize': '25px'}
+     });
     </script>
 
-    <div id="page-container" class="full-height">
+    <div id="page-container">
 
-        <div>
+        <div if="header-menu">
 
             <button id="load-example" class="btn btn-primary">Load example</button>
             <button id="reset" class="btn btn-danger">Reset</button>
             <button id="run" class="btn btn-success">Alakazam!</button>
         </div>
         <div id="workspace">
-
             <div id="output"></div>
-
 
             <div id="flowchart-code-preview"></div>
             <div id="serialization-container">
@@ -37,9 +37,8 @@
                     <button id="serialize-json" class="btn btn-secondary">serialize JSON</button>
                     <button id="deserialize-json" class="btn btn-secondary">deserialize JSON</button>
                 </div>
-                <textarea id="serialized-data" rows="5" cols="60"></textarea>
+                <textarea id="serialized-data" rows="3" cols="30"></textarea>
             </div>
-
         </div>
     </div>
 
