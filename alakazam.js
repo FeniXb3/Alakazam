@@ -33,7 +33,7 @@ export class Flowchart {
         const nameGettingNode = this.addNode("name", "input");
         const nameDisplayingNode = this.addNode("Ahoy, %name%!", "output");
         const championDisplayinNode = this.addNode("You are the champion!", "output");
-        const decisionNode = this.addNode("%name% == Champion", "decision");
+        const decisionNode = this.addNode("%name% == Champion || %name% == champion OR %name% == CHAMPION", "decision");
         
         firstNode.connect(nameQueryNode);
         nameQueryNode.connect(nameGettingNode);
@@ -236,7 +236,7 @@ export class Node {
 
     getNodeText() {
         const brackets = Node.typeSigns[this.type]
-        return `${this.id}${brackets.opening}${this.description}${brackets.closing}`;
+        return `${this.id}${brackets.opening}"${this.description}"${brackets.closing}`;
     }
 
     getConnectionText() {
@@ -314,21 +314,58 @@ class DecisionNode extends Node {
         '<=': (a, b) => a <= b,
     }
 
-    perform(state, nextConnection) {
-        const operatorPattern = /(?:==|!=|>|<|>=|<=)/gm;
-        const operator = operatorPattern.exec(this.condition)[0];
-        const sides = this.condition.split(operator).map(s => s.trim());
-        const leftSidePattern = /(?:%(\w+)%|(\w+))/gm;
-        const rightSidePattern =/(?:%(\w+)%|(\w+))/gm;
+    
+    static logicalOperatorFunctions = {
+        'OR': (a, b) => a || b,
+        '||': (a, b) => a || b,
+        'AND': (a, b) => a && b,
+        '&&': (a, b) => a && b
+    }
 
-        const leftSideMatch = leftSidePattern.exec(sides[0]);
-        
-        const rightSideMatch = rightSidePattern.exec(sides[1]);
-        
-        const leftSide = leftSideMatch[2] || state[leftSideMatch[1]];
-        const rightSide = rightSideMatch[2] || state[rightSideMatch[1]];
-        
-        if (DecisionNode.operatorFunctions[operator](leftSide, rightSide)) {
+    perform(state, nextConnection) {
+        const logicalOperatorPattern = /(?:\s(OR|\|\||AND|&&)\s)/gm
+        const logicalOperators = [];
+
+        let logicalOperatorMatch;
+        do {
+            logicalOperatorMatch =  logicalOperatorPattern.exec(this.condition);
+            if (logicalOperatorMatch) {
+                logicalOperators.push(logicalOperatorMatch[0].trim());
+            }
+        } while (logicalOperatorMatch);
+
+        const logicalOperands = this.condition.split(logicalOperatorPattern).map(o => o.trim());
+        let result = null;
+        console.log(logicalOperands);
+
+        let currentLogicalOperator = null;
+        logicalOperands.forEach((lo, index) => {
+            if (index % 2) {
+                currentLogicalOperator = lo;
+            } 
+            else {
+                const operatorPattern = /(?:==|!=|>|<|>=|<=)/gm;
+                const leftSidePattern = /(?:%(\w+)%|(\w+))/gm;
+                const rightSidePattern =/(?:%(\w+)%|(\w+))/gm;
+                console.log(lo);
+                const operator = operatorPattern.exec(lo)[0];
+                const sides = lo.split(operator).map(s => s.trim());
+                console.log(sides);
+                const leftSideMatch = leftSidePattern.exec(sides[0]);
+                
+                const rightSideMatch = rightSidePattern.exec(sides[1]);
+                
+                const leftSide = leftSideMatch[2] || state[leftSideMatch[1]];
+                const rightSide = rightSideMatch[2] || state[rightSideMatch[1]];
+                
+                const localResult = DecisionNode.operatorFunctions[operator](leftSide, rightSide);
+                result = result == null ? localResult 
+                    : DecisionNode.logicalOperatorFunctions[currentLogicalOperator](result, localResult); 
+            }
+        });
+
+
+        if (result) {
             super.perform(state, 'Yes');
         }
         else {
