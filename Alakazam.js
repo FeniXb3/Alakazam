@@ -18,6 +18,7 @@ export class Alakazam {
         this.serializeJsonButton = document.getElementById('serialize-json');
         this.deserializeJsonButton = document.getElementById('deserialize-json');
         this.serializedData = document.getElementById('serialized-data');
+        this.sharingLink = document.getElementById('sharing-link');
 
         this.startingNodeElement;
         this.finishingNodeElement;
@@ -240,6 +241,10 @@ export class Alakazam {
                 }
             });
         });
+
+        const serializedData = this.flowchart.serializeBase64();
+        this.sharingLink.href = `?data=${serializedData}`;
+        this.sharingLink.target = '_blank';
     }
 
     // https://stackoverflow.com/questions/4777077/removing-elements-by-class-name
