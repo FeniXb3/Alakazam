@@ -161,6 +161,51 @@ export class Flowchart {
         return this.nodes.find(n => n.id == nodeId);
     }
 
+    serialize() {
+        return JSON.stringify(this);
+    }
+
+    deserialize(jsonString) {
+        Object.assign(this, JSON.parse(jsonString));
+
+        this.nodes = this.nodes.map(n => {
+            let nodeInstance;
+            switch(n.type) {
+                case "input":
+                    nodeInstance = new InputNode()
+                    break;
+                case "output":
+                    nodeInstance = new OutputNode()
+                    break;
+                case "decision":
+                    nodeInstance = new DecisionNode()
+                    break;
+                default:
+                    nodeInstance = new Node();
+            }
+            Object.assign(nodeInstance, n);
+
+            return nodeInstance;
+        });
+
+        const thisFlowchart = this;
+        this.nodes = this.nodes.map(n => {
+            n.connections = n.connections.map(c => {
+                let connectionInstance = new Connection();
+                Object.assign(connectionInstance, c);
+
+                connectionInstance.target = thisFlowchart.nodes.find(x => x.id == c.target);
+
+                return connectionInstance;
+            });
+
+            return n;
+        });
+
+
+        console.log(this);
+    }
+
     static getNodeType() {
         const availableTypes = Object.keys(Node.typeSigns);
         const availableTypesText = availableTypes.reduce((accumulator, curr, index) => 
@@ -222,7 +267,7 @@ export class Node {
         this.type = type;
         this.connections = [];
         this.description = description;
-        this.id = 'a' + Node.ids.length;
+        this.id = `node${Date.now()}_${Node.ids.length}`;
         Node.ids.push(this.id);
     }
 
@@ -398,5 +443,12 @@ class Connection {
         return this.description
             ? `-->|${this.description}|`
             : `-->`;
+    }
+
+    toJSON() {
+        return {
+            "description": this.description,
+            "target": this.target.id
+        }
     }
 }

@@ -23,8 +23,12 @@
         <div id="output"></div>
         
         
-        <div id="flowchart-code-preview" rows="10" cols="60"></div>
-
+        <div id="flowchart-code-preview"></div>
+        <div>
+            <button id="serialize">serialize</button>
+            <button id="deserialize">deserialize</button>
+        </div>
+        <textarea id="serialized-data" rows="10" cols="60"></textarea>
         
     </div>    
 </div>
@@ -40,6 +44,11 @@
             const workspace = document.getElementById('workspace');
             const output = document.getElementById('output');
             const previewContainer = document.getElementById('flowchart-code-preview');
+
+            const serializeButton = document.getElementById('serialize');
+            const deserializeButton = document.getElementById('deserialize');
+            const serializedData = document.getElementById('serialized-data');
+
 
             function draw() {
                 const flowchartCode = flowchart.generateCode();
@@ -66,6 +75,18 @@
                     });
                 });
             }
+
+            serializeButton.addEventListener('click', () => {
+                const jsonString = flowchart.serialize();
+                serializedData.value = jsonString;
+            });
+
+            deserializeButton.addEventListener('click', () => {
+                const jsonString = serializedData.value;
+                console.log(jsonString);
+                flowchart.deserialize(jsonString);
+                draw();
+            });
 
             loadExampleButton.addEventListener('click', () => {
                 flowchart.prepare();
