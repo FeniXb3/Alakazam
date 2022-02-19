@@ -32,20 +32,6 @@ svg {
     margin: auto;
 }
 
-.link-path {
-    background-color: white;
-    /* fill: black !important; */
-}
-.link-node .inactive-button {
-    fill: black !important;
-}
-
-.link-alternate-node {
-    transform: translate(-2.9em, 2.5em)
-}
-.link-alternate-node > g {
-    transform: scale(0.1)
-}
 
 #output {
     height: 70%;
@@ -60,46 +46,72 @@ svg {
     display: none;
 }
 
-.link-node {
-    transform: translate(1em, 2.5em)
-}
-.link-node > g {
-    transform: scale(0.1)
-}
-.remove-node {
-    transform: translate(-2.5em, -2.5em)
-}
-.remove-node > g {
-    transform: scale(0.1)
+.flowchart-ui {
+    pointer-events: none;
 }
 
-
-.link-alternate-node .inactive-button {
-    fill: blue !important;
+.flowchart-ui foreignObject {
+    margin: auto;
+}
+.flowchart-ui div {
+    text-align: center;
+    height: 100%;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    vertical-align: middle;
+}
+.flowchart-ui div span {
+    pointer-events: all;
+    text-align: center;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    vertical-align: middle;
 }
 
-.active-button {
-    fill: yellow !important;
-}
-
-.remove-node path{
-    stroke: black;
-    fill: red !important;
-}
-
-.add-node path {
-    fill:#11FF44 !important;
+.add-node .icon-background {
+    color:green;
 }
 
 .add-node {
-    transform: translate(1em, 0.5em) scale(1) !important;
-}
-.add-alternate-node path {
-    fill:#1c32ad !important;
+    transform: translate(50%, 50%) !important;
 }
 
-.add-alternate-node {
-    transform: translate(-3em, 0.5em) scale(1) !important;
+.link-node .icon-background {
+    color:darkgreen;
+}
+
+.link-node{
+    transform: translate(-50%, 50%) !important;
+}
+
+.remove-node .icon-background {
+    color:red;
+}
+
+.remove-node{
+    transform: translate(75%, -125%) !important;
+}
+
+.add-alternate-node .icon-background {
+    color:blue;
+}
+
+.add-alternate-node{
+    transform: translate(50%, 160%) !important;
+}
+
+.link-alternate-node .icon-background {
+    color:darkblue;
+}
+
+.link-alternate-node{
+    transform: translate(-50%, 160%) !important;
+}
+
+.active-button .icon-background {
+    color: yellow !important;
 }
 
 #theGraph {
