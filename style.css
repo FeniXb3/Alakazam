@@ -41,11 +41,26 @@ svg {
 }
 
 .link-alternate-node {
-    transform: translate(-12px, 35px)
+    transform: translate(-2.9em, 2.5em)
 }
 .link-alternate-node > g {
-    transform: scale(0.07)
+    transform: scale(0.1)
 }
+
+
+.link-node {
+    transform: translate(1em, 2.5em)
+}
+.link-node > g {
+    transform: scale(0.1)
+}
+.remove-node {
+    transform: translate(-2.5em, -2.5em)
+}
+.remove-node > g {
+    transform: scale(0.1)
+}
+
 
 .link-alternate-node .inactive-button {
     fill: blue !important;
@@ -64,13 +79,18 @@ svg {
     fill:#11FF44 !important;
 }
 
-.add-node g {
-    transform: translate(15px, 10px) scale(0.6) !important;
+.add-node {
+    transform: translate(1em, 0.5em) scale(1) !important;
 }
 .add-alternate-node path {
     fill:#1c32ad !important;
 }
 
-.add-alternate-node g {
-    transform: translate(15px, 35px) scale(0.6) !important;
+.add-alternate-node {
+    transform: translate(-3em, 0.5em) scale(1) !important;
+}
+
+#theGraph {
+    max-width: fit-content !important;
+    max-height: fit-content !important;
 }

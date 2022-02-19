@@ -27,11 +27,8 @@ export class UIHelper {
     static addLinkButton(element) {
         // https://www.svgrepo.com/svg/126738/link
         const svg = `
-            <svg transform="
-        translate(-12, 10)" class="link-node" xmlns="http://www.w3.org/2000/svg">
-                <g transform="
-
-        scale(0.07)"
+            <svg class="link-node" xmlns="http://www.w3.org/2000/svg">
+                <g
         s>
         <g>
 <g>
@@ -90,12 +87,8 @@ export class UIHelper {
     static addRemoveNodeButton(element) {
         // https://www.svgrepo.com/svg/126738/link
         const svg = `
-            <svg class="remove-node" transform="
-        translate(-25, -30)" class="link-node" xmlns="http://www.w3.org/2000/svg">
-                <g transform="
-
-        scale(0.07)"
-        s>
+            <svg class="remove-node" xmlns="http://www.w3.org/2000/svg">
+                <g>
         <g>
 	<g>
 		<g>
