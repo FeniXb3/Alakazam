@@ -30,6 +30,17 @@ export class Alakazam {
         this.saveSvgButton = document.getElementById('save-svg');
         this.runButton = document.getElementById('run');
 
+        this.setupEventListeners();
+
+        // const data = window.location.hash.replace('#','');
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+          });
+
+        if (params.data) {
+            this.flowchart.deserializeBase64(params.data);
+        }
+
     }
 
     setupEventListeners = () => {
