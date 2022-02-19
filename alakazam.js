@@ -281,6 +281,7 @@ export class Node {
     }
 
     connect(node, description) {
+        description = description || "";
         this.connections.push(new Connection(node, description));
     }
 
