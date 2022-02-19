@@ -215,8 +215,7 @@
 
                     isAlternate = linkAlternateButton != null;
 
-                    linkButton.classList.toggle('inactive-button');
-                    linkButton.classList.toggle('active-button');
+                    (linkButton || linkAlternateButton).classList.toggle('active-button');
 
                     return;
                 }
