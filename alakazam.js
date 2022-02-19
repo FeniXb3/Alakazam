@@ -390,8 +390,8 @@ class DecisionNode extends Node {
             } 
             else {
                 const operatorPattern = /(?:==|!=|>|<|>=|<=)/gm;
-                const leftSidePattern = /(?:%(\w+)%|(\w+))/gm;
-                const rightSidePattern =/(?:%(\w+)%|(\w+))/gm;
+                const leftSidePattern = /(?:%([a-zA-Z0-9_żźćńółęąśŻŹĆĄŚĘŁÓŃ]+)%|([ a-zA-Z0-9_zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+))/gm;
+                const rightSidePattern =/(?:%([a-zA-Z0-9_żźćńółęąśŻŹĆĄŚĘŁÓŃ]+)%|([ a-zA-Z0-9_zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+))/gm;
                 console.log(lo);
                 const operator = operatorPattern.exec(lo)[0];
                 const sides = lo.split(operator).map(s => s.trim());
