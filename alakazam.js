@@ -5,7 +5,7 @@ export class Flowchart {
 
     addNode(description, type) {
         let newNode;
-        switch(type) {
+        switch (type) {
             case 'input':
                 newNode = new InputNode(description, type);
                 break;
@@ -18,12 +18,12 @@ export class Flowchart {
             default:
                 newNode = new Node(description, type);
         }
-        
+
         this.nodes.push(newNode);
 
         return newNode;
     }
-    
+
     prepare() {
         this.nodes = [];
         const firstNode = this.addNode("Start", "start");
@@ -34,7 +34,7 @@ export class Flowchart {
         const nameDisplayingNode = this.addNode("Ahoy, %name%!", "output");
         const championDisplayinNode = this.addNode("You are the champion!", "output");
         const decisionNode = this.addNode("%name% == Champion || %name% == champion OR %name% == CHAMPION", "decision");
-        
+
         firstNode.connect(nameQueryNode);
         nameQueryNode.connect(nameGettingNode);
         nameGettingNode.connect(decisionNode);
@@ -60,7 +60,7 @@ export class Flowchart {
     }
 
     generateCode() {
-        
+
         // const code =  `graph TD
         // ${this.entryNode.getConnectionText()}`;
 
@@ -74,7 +74,7 @@ export class Flowchart {
 
     addNodeTo(mermaidNodeId, shouldReattachConnected, nodeDescription, nodeType, connectionDescription) {
         const currentNode = this.findNodeByMermaidId(mermaidNodeId);
-        
+
         if (!currentNode) {
             return;
         }
@@ -90,12 +90,12 @@ export class Flowchart {
         else {
             currentNode.connect(newNode, connectionDescription);
         }
-       // this.reconnectNodes(currentNode, newNode, shouldReattachConnected, connectionDescription);
+        // this.reconnectNodes(currentNode, newNode, shouldReattachConnected, connectionDescription);
     }
 
-    addAlternateNode(startingMermaidId,nodeDescription, nodeType, connectionDescription) {
+    addAlternateNode(startingMermaidId, nodeDescription, nodeType, connectionDescription) {
         const currentNode = this.findNodeByMermaidId(startingMermaidId);
-        
+
         if (!currentNode) {
             return;
         }
@@ -103,7 +103,7 @@ export class Flowchart {
         const newNode = this.addNode(nodeDescription, nodeType);
         currentNode.connect(newNode, connectionDescription)
     }
-    
+
     connectAlternateNode(startingMermaidId, finishingMermaidId, connectionDescription) {
         const startingNode = this.findNodeByMermaidId(startingMermaidId);
         const finishingNode = this.findNodeByMermaidId(finishingMermaidId);
@@ -164,7 +164,7 @@ export class Flowchart {
     serializeJson() {
         return JSON.stringify(this);
     }
-    
+
     serializeBase64() {
         return btoa(unescape(encodeURIComponent(JSON.stringify(this))));
     }
@@ -172,14 +172,14 @@ export class Flowchart {
     deserializeBase64(content) {
         this.deserializeJson(decodeURIComponent(escape(atob(content))));
     }
-    
+
 
     deserializeJson(jsonString) {
         Object.assign(this, JSON.parse(jsonString));
 
         this.nodes = this.nodes.map(n => {
             let nodeInstance;
-            switch(n.type) {
+            switch (n.type) {
                 case "input":
                     nodeInstance = new InputNode()
                     break;
@@ -217,7 +217,7 @@ export class Flowchart {
 
     static getNodeType() {
         const availableTypes = Object.keys(Node.typeSigns);
-        const availableTypesText = availableTypes.reduce((accumulator, curr, index) => 
+        const availableTypesText = availableTypes.reduce((accumulator, curr, index) =>
             `${accumulator}\n${index}: ${curr}`, '');
         const answer = prompt(`Node type (default: operation)\n${availableTypesText}`, '2');
         if (answer == null) {
@@ -226,7 +226,7 @@ export class Flowchart {
 
         let nodeTypeIndex = parseInt(answer);
         let nodeType = 'operation';
-        if(nodeTypeIndex != NaN && nodeTypeIndex >= 0 && nodeTypeIndex < availableTypes.length) {
+        if (nodeTypeIndex != NaN && nodeTypeIndex >= 0 && nodeTypeIndex < availableTypes.length) {
             nodeType = availableTypes[nodeTypeIndex];
         }
 
@@ -238,7 +238,7 @@ export class Flowchart {
     }
 
     static getConnectionDescription() {
-        return  prompt('Connection description (press Enter to leave empty)');
+        return prompt('Connection description (press Enter to leave empty)');
     }
 }
 
@@ -253,7 +253,7 @@ export class Node {
             opening: "([",
             closing: "])"
         },
-        "operation":{
+        "operation": {
             opening: "[",
             closing: "]"
         },
@@ -298,8 +298,8 @@ export class Node {
             return '';
         }
         this.dirty = true;
-        const result = this.connections.length > 0 
-            ? this.connections.map(c => 
+        const result = this.connections.length > 0
+            ? this.connections.map(c =>
                 `${this.getNodeText()} ${c.getConnectionText()}`)
                 .reduce((previous, current) => `${previous} \n ${current}`)
             : this.getNodeText();
@@ -328,8 +328,8 @@ class OutputNode extends Node {
             if (match) {
                 parsedText = parsedText.replace(match[0], state[match[1]]);
             }
-        } while(match);
-        
+        } while (match);
+
         alert(parsedText);
         super.perform(state, nextConnection);
     }
@@ -342,7 +342,7 @@ class InputNode extends Node {
 
         this.variableName = variableName;
     }
-    
+
     perform(state, nextConnection) {
         const value = prompt(this.description);
         //TODO: handle stopping the run if user cancelled
@@ -368,7 +368,7 @@ class DecisionNode extends Node {
         '<=': (a, b) => a <= b,
     }
 
-    
+
     static logicalOperatorFunctions = {
         'OR': (a, b) => a || b,
         '||': (a, b) => a || b,
@@ -382,7 +382,7 @@ class DecisionNode extends Node {
 
         let logicalOperatorMatch;
         do {
-            logicalOperatorMatch =  logicalOperatorPattern.exec(this.condition);
+            logicalOperatorMatch = logicalOperatorPattern.exec(this.condition);
             if (logicalOperatorMatch) {
                 logicalOperators.push(logicalOperatorMatch[0].trim());
             }
@@ -396,25 +396,25 @@ class DecisionNode extends Node {
         logicalOperands.forEach((lo, index) => {
             if (index % 2) {
                 currentLogicalOperator = lo;
-            } 
+            }
             else {
                 const operatorPattern = /(?:==|!=|>|<|>=|<=)/gm;
                 const leftSidePattern = /(?:%([a-zA-Z0-9_żźćńółęąśŻŹĆĄŚĘŁÓŃ]+)%|([ a-zA-Z0-9_zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+))/gm;
-                const rightSidePattern =/(?:%([a-zA-Z0-9_żźćńółęąśŻŹĆĄŚĘŁÓŃ]+)%|([ a-zA-Z0-9_zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+))/gm;
+                const rightSidePattern = /(?:%([a-zA-Z0-9_żźćńółęąśŻŹĆĄŚĘŁÓŃ]+)%|([ a-zA-Z0-9_zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+))/gm;
                 console.log(lo);
                 const operator = operatorPattern.exec(lo)[0];
                 const sides = lo.split(operator).map(s => s.trim());
                 console.log(sides);
                 const leftSideMatch = leftSidePattern.exec(sides[0]);
-                
+
                 const rightSideMatch = rightSidePattern.exec(sides[1]);
-                
+
                 const leftSide = leftSideMatch[2] || state[leftSideMatch[1]];
                 const rightSide = rightSideMatch[2] || state[rightSideMatch[1]];
-                
+
                 const localResult = DecisionNode.operatorFunctions[operator](leftSide, rightSide);
-                result = result == null ? localResult 
-                    : DecisionNode.logicalOperatorFunctions[currentLogicalOperator](result, localResult); 
+                result = result == null ? localResult
+                    : DecisionNode.logicalOperatorFunctions[currentLogicalOperator](result, localResult);
             }
         });
 
@@ -433,13 +433,13 @@ class DecisionNode extends Node {
         //         parsedText = parsedText.replace(match[0], state[match[1]]);
         //     }
         // } while(match);
-        
+
         // alert(parsedText);
     }
 }
 
 class Connection {
-    constructor (target, description) {
+    constructor(target, description) {
         this.target = target;
         this.description = description;
     }

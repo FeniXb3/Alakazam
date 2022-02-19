@@ -1,300 +1,304 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="style.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        <script src="https://kit.fontawesome.com/dcc5e199b7.js" crossorigin="anonymous"></script>
-    </head>
-    <body>
-        <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-        <script>
-            mermaid.initialize({ startOnLoad: true });
-        </script>
 
-<div id="page-container" class="full-height">
-    
-    <div>
-        
-        <button id="load-example" class="btn btn-primary">Load example</button>
-        <button id="reset" class="btn btn-danger">Reset</button>
-        <button id="run" class="btn btn-success">Alakazam!</button>
-    </div>
-    <div id="workspace">
-        
-        <div id="output"></div>
-        
-        
-        <div id="flowchart-code-preview"></div>
-        <div id="serialization-container">
-            <div>
-                <button id="save-svg" class="btn btn-secondary">Save SVG file</button>
-                <button id="serialize-base64" class="btn btn-secondary">serialize</button>
-                
-                <button id="deserialize-base64" class="btn btn-secondary">deserialize</button>
-                <button id="serialize-json" class="btn btn-secondary">serialize JSON</button>
-                <button id="deserialize-json" class="btn btn-secondary">deserialize JSON</button>
-            </div>
-            <textarea id="serialized-data" rows="5" cols="60"></textarea>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/dcc5e199b7.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+
+    <div id="page-container" class="full-height">
+
+        <div>
+
+            <button id="load-example" class="btn btn-primary">Load example</button>
+            <button id="reset" class="btn btn-danger">Reset</button>
+            <button id="run" class="btn btn-success">Alakazam!</button>
         </div>
-        
-    </div>    
-</div>
+        <div id="workspace">
 
-        <script type="module">
-            import {Flowchart, Node} from './alakazam.js';
-            import {UIHelper} from './uihelper.js';
-            const flowchart = new Flowchart();
-            let enableCreateNodeAnywhere = false;
-            flowchart.reset();
-            const loadExampleButton = document.getElementById('load-example');
-            const resetButton = document.getElementById('reset');
-            const workspace = document.getElementById('workspace');
-            const output = document.getElementById('output');
-            const previewContainer = document.getElementById('flowchart-code-preview');
-
-            const serializeBase64Button = document.getElementById('serialize-base64');
-            const deserializeBase64Button = document.getElementById('deserialize-base64');
-            const serializeJsonButton = document.getElementById('serialize-json');
-            const deserializeJsonButton = document.getElementById('deserialize-json');
-            const serializedData = document.getElementById('serialized-data');
+            <div id="output"></div>
 
 
-            function draw() {
-                const flowchartCode = flowchart.generateCode();
-                previewContainer.innerText = flowchartCode;
-                mermaid.render('theGraph', flowchartCode, function(svgCode) {
-                    output.innerHTML = svgCode;
+            <div id="flowchart-code-preview"></div>
+            <div id="serialization-container">
+                <div>
+                    <button id="save-svg" class="btn btn-secondary">Save SVG file</button>
+                    <button id="serialize-base64" class="btn btn-secondary">serialize</button>
 
-                    const svgNodes = Array.from(output.getElementsByClassName('node'));
-                    svgNodes.forEach((n, i) => {
-                        const flowchartNode = flowchart.findNodeByMermaidId(n.id);
-                        // UIHelper.addButtonContainer(n);
-                        const uiContainer = n;//n.querySelector('.flowchart-ui-inner-container');
-                        
-                        if (flowchartNode.type != 'stop') {
-                            UIHelper.addPlusButton(uiContainer);
-                        }
+                    <button id="deserialize-base64" class="btn btn-secondary">deserialize</button>
+                    <button id="serialize-json" class="btn btn-secondary">serialize JSON</button>
+                    <button id="deserialize-json" class="btn btn-secondary">deserialize JSON</button>
+                </div>
+                <textarea id="serialized-data" rows="5" cols="60"></textarea>
+            </div>
 
-                        if (flowchartNode.type == 'decision') {
-                            UIHelper.addAlternatePlusButton(uiContainer);
-                            UIHelper.addAlternateLinkButton(uiContainer);
-                        }
-                         
-                        if (i != 0) {
-                            UIHelper.addRemoveNodeButton(uiContainer);
-                        }
-                        if (svgNodes.length > 1 && flowchartNode.type != 'stop') {
-                            UIHelper.addLinkButton(uiContainer);
-                        }
-                    });
+        </div>
+    </div>
+
+    <script type="module">
+        import { Flowchart, Node } from './alakazam.js';
+        import { UIHelper } from './uihelper.js';
+        const flowchart = new Flowchart();
+        let enableCreateNodeAnywhere = false;
+        flowchart.reset();
+        const loadExampleButton = document.getElementById('load-example');
+        const resetButton = document.getElementById('reset');
+        const workspace = document.getElementById('workspace');
+        const output = document.getElementById('output');
+        const previewContainer = document.getElementById('flowchart-code-preview');
+
+        const serializeBase64Button = document.getElementById('serialize-base64');
+        const deserializeBase64Button = document.getElementById('deserialize-base64');
+        const serializeJsonButton = document.getElementById('serialize-json');
+        const deserializeJsonButton = document.getElementById('deserialize-json');
+        const serializedData = document.getElementById('serialized-data');
+
+
+        function draw() {
+            const flowchartCode = flowchart.generateCode();
+            previewContainer.innerText = flowchartCode;
+            mermaid.render('theGraph', flowchartCode, function (svgCode) {
+                output.innerHTML = svgCode;
+
+                const svgNodes = Array.from(output.getElementsByClassName('node'));
+                svgNodes.forEach((n, i) => {
+                    const flowchartNode = flowchart.findNodeByMermaidId(n.id);
+                    // UIHelper.addButtonContainer(n);
+                    const uiContainer = n;//n.querySelector('.flowchart-ui-inner-container');
+
+                    if (flowchartNode.type != 'stop') {
+                        UIHelper.addPlusButton(uiContainer);
+                    }
+
+                    if (flowchartNode.type == 'decision') {
+                        UIHelper.addAlternatePlusButton(uiContainer);
+                        UIHelper.addAlternateLinkButton(uiContainer);
+                    }
+
+                    if (i != 0) {
+                        UIHelper.addRemoveNodeButton(uiContainer);
+                    }
+                    if (svgNodes.length > 1 && flowchartNode.type != 'stop') {
+                        UIHelper.addLinkButton(uiContainer);
+                    }
                 });
+            });
+        }
+
+        serializeBase64Button.addEventListener('click', () => {
+            const serializedContent = flowchart.serializeBase64();
+            console.log(serializedContent);
+            serializedData.value = serializedContent;
+        });
+
+        deserializeBase64Button.addEventListener('click', () => {
+            const serializedContent = serializedData.value;
+            flowchart.deserializeBase64(serializedContent);
+            draw();
+        });
+
+
+        serializeJsonButton.addEventListener('click', () => {
+            const serializedContent = flowchart.serializeJson();
+            console.log(serializedContent);
+            serializedData.value = serializedContent;
+        });
+
+        deserializeJsonButton.addEventListener('click', () => {
+            const serializedContent = serializedData.value;
+            flowchart.deserializeJson(serializedContent);
+            draw();
+        });
+
+        loadExampleButton.addEventListener('click', () => {
+            flowchart.prepare();
+            draw();
+        });
+
+        resetButton.addEventListener('click', () => {
+            flowchart.reset();
+            draw();
+        });
+
+        let startingNodeElement;
+        let finishingNodeElement;
+        let isLinking = false;
+        let isAlternate = false;
+
+        document.oncontextmenu = function () {
+            return false;
+        }
+        // document.getElementsByTagName('body')[0].addEventListener('contextmenu', event => {return false;});
+
+        document.addEventListener('keyup', event => {
+            if (event.key == "Enter" && event.getModifierState('Control')) {
+                flowchart.alakazam();
             }
-
-            serializeBase64Button.addEventListener('click', () => {
-                const serializedContent = flowchart.serializeBase64();
-                console.log(serializedContent);
-                serializedData.value = serializedContent;
-            });
-
-            deserializeBase64Button.addEventListener('click', () => {
-                const serializedContent = serializedData.value;
-                flowchart.deserializeBase64(serializedContent);
+            else if (event.key == "Escape" && isLinking) {
+                isLinking = false;
                 draw();
-            });
-
-            
-            serializeJsonButton.addEventListener('click', () => {
-                const serializedContent = flowchart.serializeJson();
-                console.log(serializedContent);
-                serializedData.value = serializedContent;
-            });
-
-            deserializeJsonButton.addEventListener('click', () => {
-                const serializedContent = serializedData.value;
-                flowchart.deserializeJson(serializedContent);
-                draw();
-            });
-
-            loadExampleButton.addEventListener('click', () => {
-                flowchart.prepare();
-                draw();
-            });
-
-            resetButton.addEventListener('click', () =>{
-                flowchart.reset();
-                draw();
-            });
-
-            let startingNodeElement;
-            let finishingNodeElement;
-            let isLinking = false;
-            let isAlternate = false;
-
-            document.oncontextmenu = function() {
-                return false;
             }
-            // document.getElementsByTagName('body')[0].addEventListener('contextmenu', event => {return false;});
-            
-            document.addEventListener('keyup', event => {
-                if (event.key == "Enter" && event.getModifierState('Control')) {
-                    flowchart.alakazam();
-                }
-                else if (event.key == "Escape" && isLinking) {
-                    isLinking = false;
-                    draw();
-                }
-            });
+        });
 
-            workspace.addEventListener('click', (event) => {
-                console.log(event.target);
-                const addButton =  event.target.closest('.add-node');
-                const addAlternateButton =  event.target.closest('.add-alternate-node');
-                const linkButton =  event.target.closest('.link-node');
-                const linkAlternateButton =  event.target.closest('.link-alternate-node');
-                const removeNodeButton =  event.target.closest('.remove-node');
-                
-                console.log(addButton);
-                if (addButton || addAlternateButton) {    
-                    startingNodeElement = event.target.closest('.node');
-                    const startingNode = flowchart.findNodeByMermaidId(startingNodeElement.id);
-                        
-                    const nodeType = Flowchart.getNodeType();
-                    if (nodeType == null) {
-                        return;
-                    }
-                    const nodeDescription = Flowchart.getNodeDescription();
-                    if (nodeDescription == null) {
-                        return;
-                    }
-                    let connectionDescription = '';
-  
-                    if (startingNode.type == 'decision') {
-                        if (addAlternateButton) {
-                            connectionDescription = 'No'
-                            flowchart.addNodeTo(startingNodeElement.id, false, nodeDescription, nodeType, connectionDescription);
-                        } 
-                        else {
-                            connectionDescription = 'Yes'
-                            flowchart.addNodeTo(startingNodeElement.id, false, nodeDescription, nodeType, connectionDescription);
-                        }
-                    }
-                    else {
+        workspace.addEventListener('click', (event) => {
+            console.log(event.target);
+            const addButton = event.target.closest('.add-node');
+            const addAlternateButton = event.target.closest('.add-alternate-node');
+            const linkButton = event.target.closest('.link-node');
+            const linkAlternateButton = event.target.closest('.link-alternate-node');
+            const removeNodeButton = event.target.closest('.remove-node');
+
+            console.log(addButton);
+            if (addButton || addAlternateButton) {
+                startingNodeElement = event.target.closest('.node');
+                const startingNode = flowchart.findNodeByMermaidId(startingNodeElement.id);
+
+                const nodeType = Flowchart.getNodeType();
+                if (nodeType == null) {
+                    return;
+                }
+                const nodeDescription = Flowchart.getNodeDescription();
+                if (nodeDescription == null) {
+                    return;
+                }
+                let connectionDescription = '';
+
+                if (startingNode.type == 'decision') {
+                    if (addAlternateButton) {
+                        connectionDescription = 'No'
                         flowchart.addNodeTo(startingNodeElement.id, false, nodeDescription, nodeType, connectionDescription);
                     }
-                
-                }
-                else if (removeNodeButton) {
-                    if (!isLinking) {
-                        console.log('Removing node!');
-                        startingNodeElement = event.target.closest('.node');
-                        const startingNode = flowchart.findNodeByMermaidId(startingNodeElement.id);
-                        console.log(startingNode);
-                        if(startingNode) {
-                            flowchart.removeNode(startingNode);
-                        }
-                    }
                     else {
-                        console.log('Removing connnection');
-                        finishingNodeElement = event.target.closest('.node');
-                        const startingNode = flowchart.findNodeByMermaidId(startingNodeElement.id);
-                        const finishingNode = flowchart.findNodeByMermaidId(finishingNodeElement.id);
-
-                        flowchart.removeConnection(startingNode, finishingNode);
-                        isLinking = false;
-                    }
-                }
-                else if (linkButton || linkAlternateButton) {
-                    if (!isLinking) {
-                        isLinking = true;
-                        
-                        startingNodeElement = event.target.closest('.node');
-                        const startingNode = flowchart.findNodeByMermaidId(startingNodeElement.id);
-                        
-                        isAlternate = linkAlternateButton != null;
-                        
-                        linkButton.classList.toggle('inactive-button');
-                        linkButton.classList.toggle('active-button');
-                        
-                        return;
-                    }
-                    else {
-                        finishingNodeElement = event.target.closest('.node');
-                        const startingNode = flowchart.findNodeByMermaidId(startingNodeElement.id);
-                        const finishingNode = flowchart.findNodeByMermaidId(finishingNodeElement.id);
-                        let connectionDescription = '';
-                        
-                        if (startingNode.type == 'decision') {
-                            if (isAlternate) {
-                                connectionDescription = 'No'
-                                flowchart.connectAlternateNode(startingNodeElement.id, finishingNodeElement.id, connectionDescription);
-                            } 
-                            else {
-                                connectionDescription = 'Yes'
-                                flowchart.connectAlternateNode(startingNodeElement.id, finishingNodeElement.id, connectionDescription);
-                                // flowchart.connectNodes(startingNodeElement.id, finishingNodeElement.id, false, connectionDescription);
-                            }
-
-                            isAlternate = false;
-                        }
-                        else {
-                            flowchart.connectNodes(startingNodeElement.id, finishingNodeElement.id, false, connectionDescription);
-                        }
-
-                        isLinking = false;
+                        connectionDescription = 'Yes'
+                        flowchart.addNodeTo(startingNodeElement.id, false, nodeDescription, nodeType, connectionDescription);
                     }
                 }
                 else {
-                    startingNodeElement = null;
+                    flowchart.addNodeTo(startingNodeElement.id, false, nodeDescription, nodeType, connectionDescription);
+                }
+
+            }
+            else if (removeNodeButton) {
+                if (!isLinking) {
+                    console.log('Removing node!');
+                    startingNodeElement = event.target.closest('.node');
+                    const startingNode = flowchart.findNodeByMermaidId(startingNodeElement.id);
+                    console.log(startingNode);
+                    if (startingNode) {
+                        flowchart.removeNode(startingNode);
+                    }
+                }
+                else {
+                    console.log('Removing connnection');
+                    finishingNodeElement = event.target.closest('.node');
+                    const startingNode = flowchart.findNodeByMermaidId(startingNodeElement.id);
+                    const finishingNode = flowchart.findNodeByMermaidId(finishingNodeElement.id);
+
+                    flowchart.removeConnection(startingNode, finishingNode);
                     isLinking = false;
                 }
-
-                draw();
-            });
-
-
-            draw();
-
-            // https://stackoverflow.com/questions/4777077/removing-elements-by-class-name
-            function removeElementsByClass(target, className){
-                const elements = target.getElementsByClassName(className);
-                while(elements.length > 0){
-                    elements[0].parentNode.removeChild(elements[0]);
-                }
             }
-            
-            const svgElement = document.getElementById('theGraph');
-            const saveSvgButton = document.getElementById('save-svg');
-            function saveSvg(svgEl, name) {
-                removeElementsByClass(svgElement, 'flowchart-ui');
-                svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-                var svgData = svgEl.outerHTML;
-                var preface = '<?xml version="1.0" standalone="no"?>\r\n';
-                var svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
-                var svgUrl = URL.createObjectURL(svgBlob);
-                var downloadLink = document.createElement("a");
-                downloadLink.href = svgUrl;
-                downloadLink.download = name;
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-            }
-            
-            saveSvgButton.addEventListener('click', event => {
-                const fileName = prompt('Choose file name', 'alakazam');
-                if (fileName == null) {
+            else if (linkButton || linkAlternateButton) {
+                if (!isLinking) {
+                    isLinking = true;
+
+                    startingNodeElement = event.target.closest('.node');
+                    const startingNode = flowchart.findNodeByMermaidId(startingNodeElement.id);
+
+                    isAlternate = linkAlternateButton != null;
+
+                    linkButton.classList.toggle('inactive-button');
+                    linkButton.classList.toggle('active-button');
+
                     return;
                 }
+                else {
+                    finishingNodeElement = event.target.closest('.node');
+                    const startingNode = flowchart.findNodeByMermaidId(startingNodeElement.id);
+                    const finishingNode = flowchart.findNodeByMermaidId(finishingNodeElement.id);
+                    let connectionDescription = '';
 
-                saveSvg(svgElement, `${fileName}_${Date.now()}.svg`);
-            });
+                    if (startingNode.type == 'decision') {
+                        if (isAlternate) {
+                            connectionDescription = 'No'
+                            flowchart.connectAlternateNode(startingNodeElement.id, finishingNodeElement.id, connectionDescription);
+                        }
+                        else {
+                            connectionDescription = 'Yes'
+                            flowchart.connectAlternateNode(startingNodeElement.id, finishingNodeElement.id, connectionDescription);
+                            // flowchart.connectNodes(startingNodeElement.id, finishingNodeElement.id, false, connectionDescription);
+                        }
 
-            const runButton = document.getElementById('run');
-            runButton.addEventListener('click', e => {
-                flowchart.alakazam();
-            });
+                        isAlternate = false;
+                    }
+                    else {
+                        flowchart.connectNodes(startingNodeElement.id, finishingNodeElement.id, false, connectionDescription);
+                    }
 
-         
-        </script>
-       
-    </body>
+                    isLinking = false;
+                }
+            }
+            else {
+                startingNodeElement = null;
+                isLinking = false;
+            }
+
+            draw();
+        });
+
+
+        draw();
+
+        // https://stackoverflow.com/questions/4777077/removing-elements-by-class-name
+        function removeElementsByClass(target, className) {
+            const elements = target.getElementsByClassName(className);
+            while (elements.length > 0) {
+                elements[0].parentNode.removeChild(elements[0]);
+            }
+        }
+
+        const svgElement = document.getElementById('theGraph');
+        const saveSvgButton = document.getElementById('save-svg');
+        function saveSvg(svgEl, name) {
+            removeElementsByClass(svgElement, 'flowchart-ui');
+            svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+            var svgData = svgEl.outerHTML;
+            var preface = '<?xml version="1.0" standalone="no"?>\r\n';
+            var svgBlob = new Blob([preface, svgData], { type: "image/svg+xml;charset=utf-8" });
+            var svgUrl = URL.createObjectURL(svgBlob);
+            var downloadLink = document.createElement("a");
+            downloadLink.href = svgUrl;
+            downloadLink.download = name;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+
+        saveSvgButton.addEventListener('click', event => {
+            const fileName = prompt('Choose file name', 'alakazam');
+            if (fileName == null) {
+                return;
+            }
+
+            saveSvg(svgElement, `${fileName}_${Date.now()}.svg`);
+        });
+
+        const runButton = document.getElementById('run');
+        runButton.addEventListener('click', e => {
+            flowchart.alakazam();
+        });
+
+
+    </script>
+
+</body>
+
 </html>

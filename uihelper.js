@@ -1,5 +1,5 @@
 export class UIHelper {
-       
+
     static addButtonContainer(element, innerContent) {
         innerContent = innerContent || '';
         const container = `
@@ -45,18 +45,18 @@ export class UIHelper {
         UIHelper.addButtonContainer(element, UIHelper.getButtonHtml('link', 'link-node'));
         // UIHelper.addButtonWithIcon(element, 'link', 'link-node');
     }
-    
+
     static addAlternateLinkButton(element) {
         UIHelper.addButtonContainer(element, UIHelper.getButtonHtml('link', 'link-alternate-node'));
         // UIHelper.addButtonWithIcon(element, 'link', 'link-alternate-node');
     }
 
-    
+
     static addRemoveNodeButton(element) {
-        
+
         UIHelper.addButtonContainer(element, UIHelper.getButtonHtml('trash', 'remove-node'));
         // UIHelper.addButtonWithIcon(element, 'trash', 'remove-node');
     }
 
-    
+
 }
