@@ -2,7 +2,7 @@
 const WebSocketServer = require('ws');
  
 // Creating a new websocket server
-const wss = new WebSocketServer.Server({ port: 8080 })
+const wss = new WebSocketServer.Server({ port: 1337 })
  
 const ids = [];
 const chambers = {};

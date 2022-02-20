@@ -57,7 +57,7 @@ export class Alakazam {
             const address = this.serverAddressText.value;
             console.log(`Connecting to: ${address}`);
             if (address) {
-                this.ws = new WebSocket(`ws://${address}`);
+                this.ws = new WebSocket(address);
                 this.ws.addEventListener('open', () =>{
                     console.log(`Connected to ${address}`);
                 });
