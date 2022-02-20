@@ -1,0 +1,27 @@
+{
+  "name": "alakazam",
+  "version": "0.1.1",
+  "description": "Draw flowchart and let the magic happen",
+  "main": "server.js",
+  "dependencies": {
+    "ws": "^8.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FeniXb3/Alakazam.git"
+  },
+  "keywords": [
+    "flowchart"
+  ],
+  "author": "Konrad Gadzina",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FeniXb3/Alakazam/issues"
+  },
+  "homepage": "https://github.com/FeniXb3/Alakazam#readme"
+}

@@ -20,6 +20,11 @@ export class Alakazam {
         this.serializedData = document.getElementById('serialized-data');
         this.sharingLink = document.getElementById('sharing-link');
 
+        this.connectServerButton = document.getElementById('connect-server');
+        this.serverAddressText = document.getElementById('server-address');
+        this.chamberNameText = document.getElementById('chamber-name');
+        this.ws = null;
+
         this.startingNodeElement;
         this.finishingNodeElement;
         this.isLinking = false;
@@ -41,10 +46,38 @@ export class Alakazam {
         if (params.data) {
             this.flowchart.deserializeBase64(params.data);
         }
+    }
 
+    isConnectedToServer = () => {
+        return this.ws != null && this.ws.readyState == 1;
     }
 
     setupEventListeners = () => {
+        this.connectServerButton.addEventListener('click', () => {
+            const address = this.serverAddressText.value;
+            console.log(`Connecting to: ${address}`);
+            if (address) {
+                this.ws = new WebSocket(`ws://${address}`);
+                this.ws.addEventListener('open', () =>{
+                    console.log(`Connected to ${address}`);
+                });
+
+                this.ws.addEventListener('close', () =>{
+                    console.log(`Connection to ${address} closed`);
+                });
+
+                this.ws.addEventListener('message', (message) => {
+                    console.log(`Message incoming:`, message);
+                    const jsonMessage = JSON.parse(message.data);
+
+                    if (jsonMessage.command == 'update') {
+                        this.flowchart.deserializeBase64(jsonMessage.flowchart);
+                        this.draw(true);
+                    }
+                });
+            }
+        });
+
         this.serializeBase64Button.addEventListener('click', () => {
             const serializedContent = this.flowchart.serializeBase64();
             this.serializedData.value = serializedContent;
@@ -211,7 +244,7 @@ export class Alakazam {
         });
     }
 
-    draw = () => {
+    draw = (blockBroadcast) => {
         const flowchartCode = this.flowchart.generateCode();
         this.previewContainer.innerText = flowchartCode;
         
@@ -245,6 +278,14 @@ export class Alakazam {
         const serializedData = this.flowchart.serializeBase64();
         this.sharingLink.href = `?data=${serializedData}`;
         this.sharingLink.target = '_blank';
+
+        if (!blockBroadcast && this.isConnectedToServer()) {
+            const broadcastData = {
+                command: 'update',
+                flowchart: serializedData
+            }
+            this.ws.send(JSON.stringify(broadcastData));
+        }
     }
 
     // https://stackoverflow.com/questions/4777077/removing-elements-by-class-name
