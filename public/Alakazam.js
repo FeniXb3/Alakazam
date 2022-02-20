@@ -54,12 +54,21 @@ export class Alakazam {
 
     setupEventListeners = () => {
         this.connectServerButton.addEventListener('click', () => {
-            const address = this.serverAddressText.value;
+            const address = `wss://alakazam.enklawa-tworcza.pl:1337`; 
+            this.chamberName = this.chamberNameText.value;
+            //this.serverAddressText.value;
             console.log(`Connecting to: ${address}`);
             if (address) {
                 this.ws = new WebSocket(address);
                 this.ws.addEventListener('open', () =>{
                     console.log(`Connected to ${address}`);
+                    const chamberJoinData = {
+                        command: 'join',
+                        chamber: this.chamberName,
+                        flowchart: this.flowchart.serializeBase64()
+                    };
+
+                    this.ws.send(JSON.stringify(chamberJoinData));
                 });
 
                 this.ws.addEventListener('close', () =>{
@@ -282,6 +291,7 @@ export class Alakazam {
         if (!blockBroadcast && this.isConnectedToServer()) {
             const broadcastData = {
                 command: 'update',
+                chamber: this.chamberName,
                 flowchart: serializedData
             }
             this.ws.send(JSON.stringify(broadcastData));

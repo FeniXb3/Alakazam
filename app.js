@@ -4,7 +4,6 @@ const WebSocketServer = require('ws');
 // Creating a new websocket server
 const wss = new WebSocketServer.Server({ port: 1337 })
  
-const ids = [];
 const chambers = {};
 
 // Creating connection using websocket
@@ -13,12 +12,32 @@ wss.on('connection', ws => {
     // sending message
     ws.on('message', (data, isBinary) => {
         console.log(`Client has sent us: ${data}`)
+        const jsonData = JSON.parse(data);
+        const chamberName = jsonData.chamber;
+
+        switch (jsonData) {
+            case 'join':
+                if (chamberName in chambers) {
+                    ws.send(chambers[jsonData].flowchart);
+                }
+                else {
+                    chambers[chamberName] = {
+                        flowchart: jsonData.flowchart,
+                        owner: ws,
+                        mages: [ws]
+                    }
+                }
+                break;
+            case 'update':
+                chambers[chamberName].flowchart = jsonData.flowchart;
+                chambers[chamberName].mages.forEach(mage => {
+                    if (mage !== ws && mage.readyState == 1) {
+                        mage.send(data, { binary: isBinary });
+                    }
+                });
+                break;
+        }
         
-        wss.clients.forEach(client => {
-            if (client !== ws && client.readyState == 1) {
-                client.send(data, { binary: isBinary });
-            }
-        });
     });
     // handling what to do when clients disconnects from server
     ws.on('close', () => {
