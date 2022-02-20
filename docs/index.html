@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/dcc5e199b7.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true, 
+            'themeVariables': {'fontSize': '25px'}
+     });
+    </script>
+
+    <div id="page-container">
+
+        <div if="header-menu">
+
+            <button id="load-example" class="btn btn-primary">Load example</button>
+            <button id="reset" class="btn btn-danger">Reset</button>
+            <button id="run" class="btn btn-success"><i class="fa-solid fa-wand-magic-sparkles"></i> Alakazam!</button>
+        </div>
+        <div id="workspace">
+            <div id="output"></div>
+
+            <div id="flowchart-code-preview"></div>
+            <div id="serialization-container">
+                <div>
+                    <button id="save-svg" class="btn btn-secondary">Save SVG file</button>
+                    <button id="serialize-base64" class="btn btn-secondary">serialize</button>
+
+                    <button id="deserialize-base64" class="btn btn-secondary">deserialize</button>
+                    <button id="serialize-json" class="btn btn-secondary">serialize JSON</button>
+                    <button id="deserialize-json" class="btn btn-secondary">deserialize JSON</button>
+                </div>
+                <textarea id="serialized-data" rows="3" cols="30"></textarea>
+                <a id="sharing-link" href="">Sharing link</a>
+            </div>
+            <div>
+                <!-- <input id="server-address" type="text" name="server-address"/> -->
+                <input id="chamber-name" type="text" name="chamber-name"/>
+                <button id="connect-server" class="btn btn-primary">Connect to server</button> 
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+       import { Alakazam } from './Alakazam.js';
+       const alakazam = new Alakazam();
+    //    alakazam.setupEventListeners();
+       alakazam.draw();
+    </script>
+
+</body>
+
+</html>
