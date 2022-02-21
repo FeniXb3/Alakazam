@@ -157,6 +157,7 @@ export class Alakazam {
     setupEventListeners = () => {
         this.connectServerButton.addEventListener('click', () => {
             const address = `ws://alakazam.enklawa-tworcza.pl:1337`; 
+            // const address = `ws://localhost:1337`;
             this.chamberName = this.chamberNameText.value;
             //this.serverAddressText.value;
             console.log(`Connecting to: ${address}`);

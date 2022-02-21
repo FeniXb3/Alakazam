@@ -15,10 +15,15 @@ wss.on('connection', ws => {
         const jsonData = JSON.parse(data);
         const chamberName = jsonData.chamber;
 
-        switch (jsonData) {
+        switch (jsonData.command) {
             case 'join':
+                console.log('case join');
                 if (chamberName in chambers) {
-                    ws.send(chambers[jsonData].flowchart);
+                    const broadcastData = {
+                        command: 'update',
+                        flowchart: chambers[chamberName].flowchart
+                    }
+                    ws.send(JSON.stringify(broadcastData), { binary: isBinary });
                 }
                 else {
                     chambers[chamberName] = {
@@ -29,10 +34,16 @@ wss.on('connection', ws => {
                 }
                 break;
             case 'update':
+                console.log('case update');
                 chambers[chamberName].flowchart = jsonData.flowchart;
+                const broadcastData = {
+                    command: 'update',
+                    flowchart: jsonData.flowchart
+                }
                 chambers[chamberName].mages.forEach(mage => {
                     if (mage !== ws && mage.readyState == 1) {
-                        mage.send(data, { binary: isBinary });
+                        console.log('Sending update info to ', mage);
+                        mage.send(JSON.stringify(broadcastData), { binary: isBinary });
                     }
                 });
                 break;
