@@ -132,6 +132,10 @@ export class Flowchart {
         startingNode.connections = startingNode.connections.filter(c => c.target != finishingNode);
     }
 
+    removeConnectionByDescription(startingNode, description) {
+        description = description || "";
+        startingNode.connections = startingNode.connections.filter(c => c.description != description);
+    }
     connectNodes(startingMermaidId, finishingMermaidId, shouldReattachConnected, connectionDescription) {
         const startingNode = this.findNodeByMermaidId(startingMermaidId);
         const finishingNode = this.findNodeByMermaidId(finishingMermaidId);
