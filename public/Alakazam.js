@@ -1,6 +1,7 @@
 import { Flowchart } from './Flowchart.js';
 import { Node } from './Node.js';
 import { UIHelper } from './uihelper.js';
+import { WheelMenu } from './WheelMenu.js';
 
 export class Alakazam {
     constructor() {
@@ -25,12 +26,10 @@ export class Alakazam {
         this.chamberNameText = document.getElementById('chamber-name');
         this.ws = null;
 
-        this.startingNodeElement;
-        this.finishingNodeElement;
+        this.currentNodeElement;
+        this.previousNodeElement;
         this.isLinking = false;
         this.isAlternate = false;
-
-
 
         this.svgElement = document.getElementById('theGraph');
         this.saveSvgButton = document.getElementById('save-svg');
@@ -46,10 +45,113 @@ export class Alakazam {
         if (params.data) {
             this.flowchart.deserializeBase64(params.data);
         }
+
+        this.nodeMenu = new WheelMenu('node-menu', this.flowchart);
+        this.nodeMenu.setupHandler(icon.plus, () => {
+            this.addNode();
+            this.draw();
+        });
+
+        this.nodeMenu.setupHandler(icon.trash, () => {
+            this.removeNode();
+            this.draw();
+        });
+
+        this.nodeMenu.setupHandler(icon.connect, () => {
+            this.initializeLinkingNode();
+        });
+
+        this.nodeMenu.setupHandler(icon.disconnect, () => {
+            this.removeConnection();
+            this.draw();
+        });
+
+    }
+
+    setMenuStartingPosition = () => {
+        this.nodeMenu.hide();
+        this.currentNodeElement = this.output.querySelector('.node');
+        const rect = this.currentNodeElement.getBoundingClientRect();
+        this.nodeMenu.moveTo(rect.x + (rect.width/2), rect.y + rect.height);
+        this.nodeMenu.prepareMenuItems(this.currentNodeElement);
     }
 
     isConnectedToServer = () => {
         return this.ws != null && this.ws.readyState == 1;
+    }
+
+    removeNode = () => {
+        const currentNode = this.flowchart.findNodeByMermaidId(this.currentNodeElement.id);
+
+        if (currentNode) {
+            this.flowchart.removeNode(currentNode);
+        }
+    }
+
+    removeConnection = () => {;
+        let connectionDescription = '';
+        const currentNode = this.flowchart.findNodeByMermaidId(this.currentNodeElement.id);
+        if (currentNode.type == 'decision') {
+            const pathName = prompt('Witch path do you want to create (Yes/No)?', 'Yes');
+            if (!(['Yes', 'No'].includes(pathName))) {
+                return;
+            }
+            connectionDescription = pathName;
+        }
+
+        this.flowchart.removeConnectionByDescription(currentNode, connectionDescription);
+    }
+
+    initializeLinkingNode = () => {
+        this.isLinking = true;
+    }
+
+    finalizeLinkingNode = () => {
+        const currentNodeMermaidId = this.currentNodeElement.id;
+        const previousNodeMermaidId = this.previousNodeElement.id;
+        const previousNode = this.flowchart.findNodeByMermaidId(previousNodeMermaidId);
+
+        let connectionDescription = '';
+
+        if (previousNode.type == 'decision') {
+            const pathName = prompt('Witch path do you want to create (Yes/No)?', 'Yes');
+            if (!(['Yes', 'No'].includes(pathName))) {
+                return;
+            }
+            connectionDescription = pathName;
+            this.flowchart.connectAlternateNode(previousNodeMermaidId, currentNodeMermaidId, connectionDescription);
+        }
+        else {
+            this.flowchart.connectNodes(previousNodeMermaidId, currentNodeMermaidId, false, connectionDescription);
+        }
+
+        this.isLinking = false;
+        this.draw();
+    }
+
+    addNode = () => {
+                const currentNode = this.flowchart.findNodeByMermaidId(this.currentNodeElement.id);
+                
+                let connectionDescription = '';
+
+                if (currentNode.type == 'decision') {
+                    const pathName = prompt('Witch path do you want to create (Yes/No)?', 'Yes');
+                    if (!(['Yes', 'No'].includes(pathName))) {
+                        return;
+                    }
+                    connectionDescription = pathName;
+                }
+
+                const nodeType = Flowchart.getNodeType();
+                if (nodeType == null) {
+                    return;
+                }
+                const nodeDescription = Flowchart.getNodeDescription();
+                if (nodeDescription == null) {
+                    return;
+                }
+                
+                this.flowchart.addNodeTo(this.currentNodeElement.id, false, nodeDescription, nodeType, connectionDescription);
     }
 
     setupEventListeners = () => {
@@ -98,7 +200,6 @@ export class Alakazam {
             this.draw();
         });
 
-
         this.serializeJsonButton.addEventListener('click', () => {
             const serializedContent = this.flowchart.serializeJson();
             this.serializedData.value = serializedContent;
@@ -113,11 +214,13 @@ export class Alakazam {
         this.loadExampleButton.addEventListener('click', () => {
             this.flowchart.prepare();
             this.draw();
+            this.setMenuStartingPosition();
         });
 
         this.resetButton.addEventListener('click', () => {
             this.flowchart.reset();
             this.draw();
+            this.setMenuStartingPosition();
         });
 
         document.oncontextmenu = function () {
@@ -134,107 +237,21 @@ export class Alakazam {
             }
         });
 
-        this.workspace.addEventListener('click', (event) => {
-            const addButton = event.target.closest('.add-node');
-            const addAlternateButton = event.target.closest('.add-alternate-node');
-            const linkButton = event.target.closest('.link-node');
-            const linkAlternateButton = event.target.closest('.link-alternate-node');
-            const removeNodeButton = event.target.closest('.remove-node');
-
-            if (addButton || addAlternateButton) {
-                this.startingNodeElement = event.target.closest('.node');
-                const startingNode = this.flowchart.findNodeByMermaidId(this.startingNodeElement.id);
-
-                const nodeType = Flowchart.getNodeType();
-                if (nodeType == null) {
-                    return;
-                }
-                const nodeDescription = Flowchart.getNodeDescription();
-                if (nodeDescription == null) {
-                    return;
-                }
-                let connectionDescription = '';
-
-                if (startingNode.type == 'decision') {
-                    if (addAlternateButton) {
-                        connectionDescription = 'No'
-                        this.flowchart.addNodeTo(this.startingNodeElement.id, false, nodeDescription, nodeType, connectionDescription);
-                    }
-                    else {
-                        connectionDescription = 'Yes'
-                        this.flowchart.addNodeTo(this.startingNodeElement.id, false, nodeDescription, nodeType, connectionDescription);
-                    }
-                }
-                else {
-                    this.flowchart.addNodeTo(this.startingNodeElement.id, false, nodeDescription, nodeType, connectionDescription);
-                }
-
+        this.workspace.addEventListener('click', (event) => {   
+            if (!event.target.closest('.node')) {
+                this.nodeMenu.hide();
+                return;
             }
-            else if (removeNodeButton) {
-                if (!this.isLinking) {
-                    console.log('Removing node!');
-                    this.startingNodeElement = event.target.closest('.node');
-                    const startingNode = this.flowchart.findNodeByMermaidId(this.startingNodeElement.id);
-                    console.log(startingNode);
-                    if (startingNode) {
-                        this.flowchart.removeNode(startingNode);
-                    }
-                }
-                else {
-                    console.log('Removing connnection');
-                    this.finishingNodeElement = event.target.closest('.node');
-                    const startingNode = this.flowchart.findNodeByMermaidId(this.startingNodeElement.id);
-                    const finishingNode = this.flowchart.findNodeByMermaidId(this.finishingNodeElement.id);
 
-                    this.flowchart.removeConnection(startingNode, finishingNode);
-                    this.isLinking = false;
-                }
-            }
-            else if (linkButton || linkAlternateButton) {
-                if (!this.isLinking) {
-                    this.isLinking = true;
+            this.previousNodeElement = this.currentNodeElement;
+            this.currentNodeElement = event.target.closest('.node');
 
-                    this.startingNodeElement = event.target.closest('.node');
-                    const startingNode = this.flowchart.findNodeByMermaidId(this.startingNodeElement.id);
-
-                    this.isAlternate = linkAlternateButton != null;
-
-                    (linkButton || linkAlternateButton).classList.toggle('active-button');
-
-                    return;
-                }
-                else {
-                    this.finishingNodeElement = event.target.closest('.node');
-                    const startingNode = this.flowchart.findNodeByMermaidId(this.startingNodeElement.id);
-                    const finishingNode = this.flowchart.findNodeByMermaidId(this.finishingNodeElement.id);
-                    let connectionDescription = '';
-
-                    if (startingNode.type == 'decision') {
-                        if (this.isAlternate) {
-                            connectionDescription = 'No'
-                            this.flowchart.connectAlternateNode(this.startingNodeElement.id, this.finishingNodeElement.id, connectionDescription);
-                        }
-                        else {
-                            connectionDescription = 'Yes'
-                            this.flowchart.connectAlternateNode(this.startingNodeElement.id, this.finishingNodeElement.id, connectionDescription);
-                            // flowchart.connectNodes(startingNodeElement.id, finishingNodeElement.id, false, connectionDescription);
-                        }
-
-                        this.isAlternate = false;
-                    }
-                    else {
-                        this.flowchart.connectNodes(this.startingNodeElement.id, this.finishingNodeElement.id, false, connectionDescription);
-                    }
-
-                    this.isLinking = false;
-                }
+            if (this.isLinking) {
+                this.finalizeLinkingNode();
             }
             else {
-                this.startingNodeElement = null;
-                this.isLinking = false;
+                this.nodeMenu.show(event.clientX, event.clientY, this.currentNodeElement);
             }
-
-            this.draw();
         });
 
 
@@ -260,28 +277,28 @@ export class Alakazam {
         mermaid.render('theGraph', flowchartCode, (svgCode) => {
             this.output.innerHTML = svgCode;
 
-            const svgNodes = Array.from(output.getElementsByClassName('node'));
-            svgNodes.forEach((n, i) => {
-                const flowchartNode = this.flowchart.findNodeByMermaidId(n.id);
-                // UIHelper.addButtonContainer(n);
-                const uiContainer = n;//n.querySelector('.flowchart-ui-inner-container');
+            // const svgNodes = Array.from(output.getElementsByClassName('node'));
+            // svgNodes.forEach((n, i) => {
+            //     const flowchartNode = this.flowchart.findNodeByMermaidId(n.id);
+            //     // UIHelper.addButtonContainer(n);
+            //     const uiContainer = n;//n.querySelector('.flowchart-ui-inner-container');
 
-                if (flowchartNode.type != 'stop') {
-                    UIHelper.addPlusButton(uiContainer);
-                }
+            //     if (flowchartNode.type != 'stop') {
+            //         UIHelper.addPlusButton(uiContainer);
+            //     }
 
-                if (flowchartNode.type == 'decision') {
-                    UIHelper.addAlternatePlusButton(uiContainer);
-                    UIHelper.addAlternateLinkButton(uiContainer);
-                }
+            //     if (flowchartNode.type == 'decision') {
+            //         UIHelper.addAlternatePlusButton(uiContainer);
+            //         UIHelper.addAlternateLinkButton(uiContainer);
+            //     }
 
-                if (i != 0) {
-                    UIHelper.addRemoveNodeButton(uiContainer);
-                }
-                if (svgNodes.length > 1 && flowchartNode.type != 'stop') {
-                    UIHelper.addLinkButton(uiContainer);
-                }
-            });
+            //     if (i != 0) {
+            //         UIHelper.addRemoveNodeButton(uiContainer);
+            //     }
+            //     if (svgNodes.length > 1 && flowchartNode.type != 'stop') {
+            //         UIHelper.addLinkButton(uiContainer);
+            //     }
+            // });
         });
 
         const serializedData = this.flowchart.serializeBase64();
