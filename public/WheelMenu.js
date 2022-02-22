@@ -80,7 +80,7 @@ export class WheelMenu {
             case icon.disconnect:
                 return flowchartNode.connections.length == 0;
             case icon.edit:
-                return true;
+                return this.flowchart.nodes.indexOf(flowchartNode) == 0;
             default:
                 return false;
         }

@@ -148,6 +148,12 @@ export class Flowchart {
         this.reconnectNodes(startingNode, finishingNode, shouldReattachConnected, connectionDescription);
     }
 
+    editNode(node) {
+        const editPromptInfo = node.getEditInfo();
+        const newContent = prompt(editPromptInfo.title, editPromptInfo.content);
+        node.update(newContent);
+    }
+
     findNodeByMermaidId(mermaidId) {
         const pattern = /^flowchart-(\w+)-/gm;
         const matches = pattern.exec(mermaidId);

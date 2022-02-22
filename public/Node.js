@@ -43,6 +43,17 @@ export class Node {
         this.connections.push(new Connection(node, description));
     }
 
+    getEditInfo() {
+        return {
+            title: 'Update node\'s description',
+            content: this.description
+        }
+    }
+
+    update(description) {
+        this.description = description;
+    }
+
     disconnect(node) {
         this.connections = this.connections.filter(c => c.target != node);
     }

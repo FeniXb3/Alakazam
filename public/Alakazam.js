@@ -66,6 +66,19 @@ export class Alakazam {
             this.draw();
         });
 
+        this.nodeMenu.setupHandler(icon.edit, () => {
+            this.editNode();
+            this.draw();
+        });
+
+    }
+
+    editNode = () => {
+        const currentNode = this.flowchart.findNodeByMermaidId(this.currentNodeElement.id);
+
+        if (currentNode) {
+            this.flowchart.editNode(currentNode);
+        }
     }
 
     setMenuStartingPosition = () => {

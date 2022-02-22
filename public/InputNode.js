@@ -14,4 +14,16 @@ export class InputNode extends Node {
         state[this.variableName] = value;
         super.perform(state, nextConnection);
     }
+
+    getEditInfo() {
+        return {
+            title: 'Update variable name',
+            content: this.variableName
+        }
+    }
+
+    update(variableName) {
+        this.variableName = variableName;
+        this.description = `Read ${this.variableName}`;
+    }
 }

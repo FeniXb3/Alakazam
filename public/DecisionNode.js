@@ -74,15 +74,17 @@ export class DecisionNode extends Node {
         else {
             super.perform(state, 'No');
         }
-        // let parsedText = this.description;
-        // let match;
-        // do {
-        //     match = pattern.exec(this.description);
-        //     if (match) {
-        //         parsedText = parsedText.replace(match[0], state[match[1]]);
-        //     }
-        // } while(match);
+    }
+    
+    getEditInfo() {
+        return {
+            title: 'Update node\'s condition',
+            content: this.condition
+        }
+    }
 
-        // alert(parsedText);
+    update(condition) {
+        this.condition = condition;
+        this.description = `Is ${condition} ?`;
     }
 }
