@@ -151,7 +151,9 @@ export class Flowchart {
     editNode(node) {
         const editPromptInfo = node.getEditInfo();
         const newContent = prompt(editPromptInfo.title, editPromptInfo.content);
-        node.update(newContent);
+        if (newContent !== null) {
+            node.update(newContent);
+        }
     }
 
     findNodeByMermaidId(mermaidId) {
