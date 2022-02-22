@@ -19,6 +19,7 @@ wss.on('connection', ws => {
             case 'join':
                 console.log('case join');
                 if (chamberName in chambers) {
+                    chambers[chamberName].mages.push(ws);
                     const broadcastData = {
                         command: 'update',
                         flowchart: chambers[chamberName].flowchart
