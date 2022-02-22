@@ -56,9 +56,16 @@ svg {
     margin: auto;
 }
 
+#output-container {
+    width: 100vw;
+    height: 80vh;
+    margin: auto;
+    overflow: scroll;
+}
 
 #output {
-    height: 80%;
+    height: 100vh;
+    width: 20000px;
     overflow: scroll;
 }
 

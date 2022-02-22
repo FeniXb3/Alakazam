@@ -77,6 +77,15 @@ export class Alakazam {
             this.draw();
         });
 
+        this.centerView();
+    }
+
+    centerView = () => {
+        const outputContainer = document.getElementById("output-container");
+        const outputRect = output.getBoundingClientRect();
+        const outputContainerRect = outputContainer.getBoundingClientRect()
+        outputContainer.scrollTop = 0;
+        outputContainer.scrollLeft = outputRect.width/2 - outputContainerRect.width/2;
     }
 
     editNode = () => {
