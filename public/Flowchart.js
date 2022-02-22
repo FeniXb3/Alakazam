@@ -205,16 +205,16 @@ export class Flowchart {
     }
 
     static getNodeType() {
-        const availableTypes = Object.keys(Node.typeSigns);
+        const availableTypes = Object.keys(Node.typeSigns).filter(t => t != 'start');
         const availableTypesText = availableTypes.reduce((accumulator, curr, index) =>
             `${accumulator}\n${index}: ${curr}`, '');
-        const answer = prompt(`Node type (default: operation)\n${availableTypesText}`, '2');
+        const answer = prompt(`Node type (default: output)\n${availableTypesText}`, '3');
         if (answer == null) {
             return null;
         }
 
         let nodeTypeIndex = parseInt(answer);
-        let nodeType = 'operation';
+        let nodeType = 'output';
         if (nodeTypeIndex != NaN && nodeTypeIndex >= 0 && nodeTypeIndex < availableTypes.length) {
             nodeType = availableTypes[nodeTypeIndex];
         }
