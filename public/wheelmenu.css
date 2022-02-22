@@ -1,36 +1,36 @@
-#node-menu > svg { width: 100%; height: 100%; }
+div[id$="-wheel-menu"] > svg { width: 100%; height: 100%; }
 
-#node-menu > svg path {
+div[id$="-wheel-menu"] > svg path {
     pointer-events: all;
 }
 
-#node-menu { 
+div[id$="-wheel-menu"] { 
     height: 300px; 
     width: 300px; 
     margin:auto; 
     position: absolute;
     pointer-events: none;
 }
-@media (max-width: 400px) { #node-menu { height: 300px; width: 300px; } }
+@media (max-width: 400px) { div[id$="-wheel-menu"] { height: 300px; width: 300px; } }
 
-[class|=wheelnav-node-menu-slice-basic] { fill: #497F4C; stroke: none; }
-[class|=wheelnav-node-menu-slice-selected] { fill: #497F4C; stroke: none; }
-[class|=wheelnav-node-menu-slice-hover] { fill: #497F4C;  stroke: none; fill-opacity: 0.77; cursor: pointer; }
+[class|=wheelnav-node-wheel-menu-slice-basic] { fill: #497F4C; stroke: none; }
+[class|=wheelnav-node-wheel-menu-slice-selected] { fill: #497F4C; stroke: none; }
+[class|=wheelnav-node-wheel-menu-slice-hover] { fill: #497F4C;  stroke: none; fill-opacity: 0.77; cursor: pointer; }
 
-[class|=wheelnav-node-menu-title-basic] { fill: #333; stroke: none; }
-[class|=wheelnav-node-menu-title-selected] { fill: #fff; stroke: none; }
-[class|=wheelnav-node-menu-title-hover] { fill: #222; stroke: none; cursor: pointer; }
+[class|=wheelnav-node-wheel-menu-title-basic] { fill: #333; stroke: none; }
+[class|=wheelnav-node-wheel-menu-title-selected] { fill: #fff; stroke: none; }
+[class|=wheelnav-node-wheel-menu-title-hover] { fill: #222; stroke: none; cursor: pointer; }
 
-[class|=wheelnav-node-menu-line-basic] { stroke: #444; stroke-width: 1; }
-[class|=wheelnav-node-menu-line-selected] { stroke: #444; stroke-width: 1; }
-[class|=wheelnav-node-menu-line-hover] { stroke: #222; stroke-width: 2; cursor: pointer; }
+[class|=wheelnav-node-wheel-menu-line-basic] { stroke: #444; stroke-width: 1; }
+[class|=wheelnav-node-wheel-menu-line-selected] { stroke: #444; stroke-width: 1; }
+[class|=wheelnav-node-wheel-menu-line-hover] { stroke: #222; stroke-width: 2; cursor: pointer; }
 
-.wheelnav-node-menu-spreader-in,
-.wheelnav-node-menu-spreader-out { fill: #444; stroke: #444; stroke-width: 2; cursor: pointer; }
-.wheelnav-node-menu-spreadertitle-in,
-.wheelnav-node-menu-spreadertitle-out { fill: #eee; stroke: #444; cursor: pointer; }
+.wheelnav-node-wheel-menu-spreader-in,
+.wheelnav-node-wheel-menu-spreader-out { fill: #444; stroke: #444; stroke-width: 2; cursor: pointer; }
+.wheelnav-node-wheel-menu-spreadertitle-in,
+.wheelnav-node-wheel-menu-spreadertitle-out { fill: #eee; stroke: #444; cursor: pointer; }
 
-.wheelnav-node-menu-marker { stroke: #444; stroke-width: 2; }
+.wheelnav-node-wheel-menu-marker { stroke: #444; stroke-width: 2; }
 
 .hidden {
     visibility: hidden;

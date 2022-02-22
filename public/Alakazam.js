@@ -46,7 +46,13 @@ export class Alakazam {
             this.flowchart.deserializeBase64(params.data);
         }
 
-        this.nodeMenu = new WheelMenu('node-menu', this.flowchart);
+        this.nodeMenu = new WheelMenu('node-wheel-menu', this.flowchart, [
+            icon.plus,
+            icon.connect,
+            icon.disconnect,
+            icon.trash,
+            icon.edit
+        ]);
         this.nodeMenu.setupHandler(icon.plus, () => {
             this.addNode();
             this.draw();
@@ -81,12 +87,16 @@ export class Alakazam {
         }
     }
 
-    setMenuStartingPosition = () => {
-        this.nodeMenu.hide();
-        this.currentNodeElement = this.output.querySelector('.node');
-        const rect = this.currentNodeElement.getBoundingClientRect();
-        this.nodeMenu.moveTo(rect.x + (rect.width/2), rect.y + rect.height);
-        this.nodeMenu.prepareMenuItems(this.currentNodeElement);
+    setMenuStartingPosition = (wheelMenu, targetNode) => {
+        wheelMenu = wheelMenu || this.nodeMenu;
+        if (!targetNode) {
+            this.currentNodeElement = this.output.querySelector('.node');
+            targetNode = this.currentNodeElement;
+        }
+        // this.nodeMenu.hide();
+        const rect = targetNode.getBoundingClientRect();
+        wheelMenu.moveTo(rect.x + (rect.width/2), rect.y + rect.height);
+        wheelMenu.prepareMenuItems(targetNode);
     }
 
     isConnectedToServer = () => {
@@ -228,13 +238,17 @@ export class Alakazam {
         this.loadExampleButton.addEventListener('click', () => {
             this.flowchart.prepare();
             this.draw();
-            this.setMenuStartingPosition();
+            
+            this.currentNodeElement = this.output.querySelector('.node');
+            this.setMenuStartingPosition(this.nodeMenu, this.currentNodeElement);
         });
 
         this.resetButton.addEventListener('click', () => {
             this.flowchart.reset();
             this.draw();
-            this.setMenuStartingPosition();
+    
+            this.currentNodeElement = this.output.querySelector('.node');
+            this.setMenuStartingPosition(this.nodeMenu, this.currentNodeElement);
         });
 
         document.oncontextmenu = function () {

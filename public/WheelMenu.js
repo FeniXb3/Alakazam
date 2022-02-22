@@ -1,9 +1,9 @@
 export class WheelMenu {
-    constructor(containerId, flowchart) {
+    constructor(containerId, flowchart, titles) {
         this.flowchart = flowchart;
         this.containerDiv = document.getElementById(containerId);
         
-        const wheel = new wheelnav(containerId);
+        const wheel = new wheelnav(containerId, null, 300,300);
         wheel.slicePathFunction = slicePath().MenuSliceWithoutLine;
         wheel.spreaderEnable = true;
         wheel.clickModeSpreadOff = true;
@@ -16,13 +16,7 @@ export class WheelMenu {
         wheel.animatetime = 300;
         wheel.animateeffect = 'linear';
         wheel.selectedNavItemIndex = null;
-        wheel.createWheel([
-            icon.plus,
-            icon.connect,
-            icon.disconnect,
-            icon.trash,
-            icon.edit
-        ], true);
+        wheel.createWheel(titles, true);
         
         
         wheel.spreadWheel();

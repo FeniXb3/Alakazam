@@ -46,7 +46,13 @@ export class Alakazam {
             this.flowchart.deserializeBase64(params.data);
         }
 
-        this.nodeMenu = new WheelMenu('node-menu', this.flowchart);
+        this.nodeMenu = new WheelMenu('node-wheel-menu', this.flowchart, [
+            icon.plus,
+            icon.connect,
+            icon.disconnect,
+            icon.trash,
+            icon.edit
+        ]);
         this.nodeMenu.setupHandler(icon.plus, () => {
             this.addNode();
             this.draw();
