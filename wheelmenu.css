@@ -1,0 +1,56 @@
+div[id$="-wheel-menu"] > svg { width: 100%; height: 100%; }
+
+div[id$="-wheel-menu"] > svg path {
+    pointer-events: all;
+}
+
+div[id$="-wheel-menu"] { 
+    height: 300px; 
+    width: 300px; 
+    margin:auto; 
+    position: absolute;
+    pointer-events: none;
+}
+@media (max-width: 400px) { div[id$="-wheel-menu"] { height: 300px; width: 300px; } }
+
+[class|=wheelnav-node-wheel-menu-slice-basic] { fill: #497F4C; stroke: none; }
+[class|=wheelnav-node-wheel-menu-slice-selected] { fill: #497F4C; stroke: none; }
+[class|=wheelnav-node-wheel-menu-slice-hover] { fill: #497F4C;  stroke: none; fill-opacity: 0.77; cursor: pointer; }
+
+[class|=wheelnav-node-wheel-menu-title-basic] { fill: #333; stroke: none; }
+[class|=wheelnav-node-wheel-menu-title-selected] { fill: #fff; stroke: none; }
+[class|=wheelnav-node-wheel-menu-title-hover] { fill: #222; stroke: none; cursor: pointer; }
+
+[class|=wheelnav-node-wheel-menu-line-basic] { stroke: #444; stroke-width: 1; }
+[class|=wheelnav-node-wheel-menu-line-selected] { stroke: #444; stroke-width: 1; }
+[class|=wheelnav-node-wheel-menu-line-hover] { stroke: #222; stroke-width: 2; cursor: pointer; }
+
+.wheelnav-node-wheel-menu-spreader-in,
+.wheelnav-node-wheel-menu-spreader-out { fill: #444; stroke: #444; stroke-width: 2; cursor: pointer; }
+.wheelnav-node-wheel-menu-spreadertitle-in,
+.wheelnav-node-wheel-menu-spreadertitle-out { fill: #eee; stroke: #444; cursor: pointer; }
+
+.wheelnav-node-wheel-menu-marker { stroke: #444; stroke-width: 2; }
+
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 300ms, opacity 300ms linear;
+    
+}
+
+.visible {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 300ms linear;
+  }
+
+.disabled {
+    filter: grayscale(1);
+    opacity: 0.3;
+    /* pointer-events: none !important; */
+}
+  
+.hidden svg path {
+    pointer-events: none !important;
+}

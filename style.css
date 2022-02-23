@@ -1,0 +1,147 @@
+svg div:hover {
+    color: blueviolet;
+}
+
+svg [id*=active-node] div {
+    color:forestgreen;
+}
+
+textarea {
+    white-space: pre-wrap;
+}
+
+/* override browser default */
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* use viewport-relative units to cover page fully */
+body {
+  height: 100vh;
+  width: 100vw;
+}
+
+
+/* include border and padding in element width and height */
+* {
+  box-sizing: border-box;
+}
+
+#page-container {
+    
+  height: 100%;
+  width: 100%;
+
+  /* example padding, font-size, background, etc */
+
+}
+
+.full-height {
+    height: 100%;
+    /* background: aquamarine; */
+  }
+
+#workspace {
+    height: 80%;
+    width: 100%;
+    margin: 0;
+    background-color: aliceblue;
+}
+
+
+svg {
+    display: block;
+    margin: auto;
+}
+
+#output-container {
+    width: 100vw;
+    height: 80vh;
+    margin: auto;
+    overflow: scroll;
+}
+
+#output {
+    height: 100vh;
+    width: 20000px;
+    overflow: scroll;
+}
+
+#flowchart-code-preview {
+    display: none;
+}
+
+.flowchart-ui {
+    pointer-events: none;
+}
+
+.flowchart-ui foreignObject {
+    margin: auto;
+}
+.flowchart-ui div {
+    text-align: center;
+    height: 100%;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    vertical-align: middle;
+}
+.flowchart-ui div span {
+    pointer-events: all;
+    text-align: center;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    vertical-align: middle;
+}
+
+.add-node .icon-background {
+    color:green;
+}
+
+.add-node {
+    transform: translate(50%, 30%) scale(0.8) !important;
+}
+
+.link-node .icon-background {
+    color:darkgreen;
+}
+
+.link-node{
+    transform: translate(-50%, 30%) scale(0.8) !important;
+}
+
+.remove-node .icon-background {
+    color:red;
+}
+
+.remove-node{
+    transform: translate(55%, -100%) scale(0.8) !important;
+}
+
+.add-alternate-node .icon-background {
+    color:blue;
+}
+
+.add-alternate-node{
+    transform: translate(50%, 110%) scale(0.8) !important;
+}
+
+.link-alternate-node .icon-background {
+    color:darkblue;
+}
+
+.link-alternate-node{
+    transform: translate(-50%, 110%) scale(0.8) !important;
+}
+
+.active-button .icon-background {
+    color: yellow !important;
+}
+
+#theGraph {
+    max-width: fit-content !important;
+    max-height: fit-content !important;
+}
