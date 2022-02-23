@@ -33,6 +33,7 @@ export class Alakazam {
         this.previousNodeElement;
         this.isLinking = false;
         this.isAlternate = false;
+        this.isRemovingConnection = false;
 
         this.svgElement = document.getElementById('theGraph');
         this.saveSvgButton = document.getElementById('save-svg');
@@ -49,7 +50,19 @@ export class Alakazam {
             this.flowchart.deserializeBase64(params.data);
         }
 
-        this.nodeMenu = new WheelMenu('node-wheel-menu', this.flowchart, [
+        const nodeMenuConfig = {
+            slicePathFunction: slicePath().MenuSliceWithoutLine,
+            spreaderEnable: true,
+            clickModeSpreadOff: true,
+            spreaderInTitle: icon.list,
+            spreaderOutTitle: icon.contract,
+            navAngle: 0,
+            navItemsContinuous: false,
+            sliceAngle: 0,
+            wheelRadius: 95,
+        }
+
+        this.nodeMenu = new WheelMenu('node-wheel-menu', this.flowchart, nodeMenuConfig, [
             icon.plus,
             icon.connect,
             icon.disconnect,
@@ -58,7 +71,6 @@ export class Alakazam {
         ]);
         this.nodeMenu.setupHandler(icon.plus, () => {
             this.addNode();
-            this.draw();
         });
 
         this.nodeMenu.setupHandler(icon.trash, () => {
@@ -72,15 +84,69 @@ export class Alakazam {
 
         this.nodeMenu.setupHandler(icon.disconnect, () => {
             this.removeConnection();
-            this.draw();
         });
 
         this.nodeMenu.setupHandler(icon.edit, () => {
             this.editNode();
             this.draw();
         });
-
+        
+        const decisionMenuConfig = {
+            slicePathFunction: slicePath().MenuSliceSelectedLine,
+            spreaderEnable: false,
+            navAngle: 147.5,
+            navItemsContinuous: true,
+            sliceAngle: -115,
+            wheelRadius: 170,
+        }
+        
+        this.decisionMenu = new WheelMenu('decision-wheel-menu', this.flowchart, decisionMenuConfig, [
+            icon.check,
+            icon.cross
+        ]);
+        this.decisionMenu.hide();
+        this.decisionMenu.setupHandler(icon.check, () => {
+            
+            this.performDecisionAction('Yes');
+        });
+        this.decisionMenu.setupHandler(icon.cross, () => {
+            this.performDecisionAction('No');
+        });
+        
         this.centerView();
+    }
+
+    performDecisionAction = (connectionDescription) => {
+        if (this.isLinking) {
+            // this.finalizeLinkingNode(connectionDescription);
+            this.targetConnectionDescription = connectionDescription;
+            this.showAlert('linking');
+        }
+        else if (this.isRemovingConnection) {
+            const currentNode = this.flowchart.findNodeByMermaidId(this.currentNodeElement.id);
+            this.flowchart.removeConnectionByDescription(currentNode, connectionDescription);
+            this.isRemovingConnection = false;
+            this.draw();
+        }
+        else {
+            this.finalizeAddingNode(connectionDescription);
+            this.draw();
+        }
+
+        this.isDeciding = false;
+    }
+
+    finalizeAddingNode = (connectionDescription) => {
+        const nodeType = Flowchart.getNodeType();
+        if (nodeType == null) {
+            return;
+        }
+        const nodeDescription = Flowchart.getNodeDescription();
+        if (nodeDescription == null) {
+            return;
+        }
+        
+        this.flowchart.addNodeTo(this.currentNodeElement.id, false, nodeDescription, nodeType, connectionDescription);
     }
 
     centerView = () => {
@@ -129,20 +195,35 @@ export class Alakazam {
     removeConnection = () => {;
         let connectionDescription = '';
         const currentNode = this.flowchart.findNodeByMermaidId(this.currentNodeElement.id);
+        
         if (currentNode.type == 'decision') {
-            const pathName = prompt('Witch path do you want to create (Yes/No)?', 'Yes');
-            if (!(['Yes', 'No'].includes(pathName))) {
-                return;
-            }
-            connectionDescription = pathName;
+            this.isRemovingConnection = true;
+            const rect = this.currentNodeElement.getBoundingClientRect();
+            this.isDeciding = true;
+            this.decisionMenu.show(rect.x + (rect.width/2), rect.y + rect.height, this.currentNodeElement)
+            return;
         }
 
         this.flowchart.removeConnectionByDescription(currentNode, connectionDescription);
+        
+        this.isRemovingConnection = true;
+        this.draw();
     }
 
     initializeLinkingNode = () => {
+        const currentNodeMermaidId = this.currentNodeElement.id;
+        
+        const currentNode = this.flowchart.findNodeByMermaidId(currentNodeMermaidId);
+        
         this.isLinking = true;
-        this.showAlert('linking');
+        if (currentNode.type == 'decision') {
+            const rect = this.currentNodeElement.getBoundingClientRect();
+            this.isDeciding = true;
+            this.decisionMenu.show(rect.x + (rect.width/2), rect.y + rect.height, this.currentNodeElement)
+        }
+        else {        
+            this.showAlert('linking');
+        }
     }
 
     showAlert = (alertType) => {
@@ -161,53 +242,37 @@ export class Alakazam {
         this.alertContainer.classList.remove('visible');
     }
 
-    finalizeLinkingNode = () => {
-        this.hideAlert();
+    finalizeLinkingNode = (connectionDescription) => {
+        console.log("------------------------")
+        connectionDescription = connectionDescription || '';
         const currentNodeMermaidId = this.currentNodeElement.id;
         const previousNodeMermaidId = this.previousNodeElement.id;
-        const previousNode = this.flowchart.findNodeByMermaidId(previousNodeMermaidId);
-
-        let connectionDescription = '';
-
-        if (previousNode.type == 'decision') {
-            const pathName = prompt('Witch path do you want to create (Yes/No)?', 'Yes');
-            if (!(['Yes', 'No'].includes(pathName))) {
-                return;
-            }
-            connectionDescription = pathName;
-            this.flowchart.connectAlternateNode(previousNodeMermaidId, currentNodeMermaidId, connectionDescription);
-        }
-        else {
-            this.flowchart.connectNodes(previousNodeMermaidId, currentNodeMermaidId, false, connectionDescription);
-        }
-
+        
+        this.flowchart.connectAlternateNode(previousNodeMermaidId, currentNodeMermaidId, connectionDescription);
+        // this.flowchart.connectNodes(previousNodeMermaidId, currentNodeMermaidId, false, connectionDescription);
+        this.endLinkingNode();
+        this.hideAlert();
+    }
+    
+    endLinkingNode = () => {
         this.isLinking = false;
         this.draw();
     }
 
     addNode = () => {
-                const currentNode = this.flowchart.findNodeByMermaidId(this.currentNodeElement.id);
-                
-                let connectionDescription = '';
+        const currentNode = this.flowchart.findNodeByMermaidId(this.currentNodeElement.id);
+        
+        let connectionDescription = '';
 
-                if (currentNode.type == 'decision') {
-                    const pathName = prompt('Witch path do you want to create (Yes/No)?', 'Yes');
-                    if (!(['Yes', 'No'].includes(pathName))) {
-                        return;
-                    }
-                    connectionDescription = pathName;
-                }
+        if (currentNode.type == 'decision') {
+            const rect = this.currentNodeElement.getBoundingClientRect();
+            this.isDeciding = true;
+            this.decisionMenu.show(rect.x + (rect.width/2), rect.y + rect.height, this.currentNodeElement)
+            return;
+        }
 
-                const nodeType = Flowchart.getNodeType();
-                if (nodeType == null) {
-                    return;
-                }
-                const nodeDescription = Flowchart.getNodeDescription();
-                if (nodeDescription == null) {
-                    return;
-                }
-                
-                this.flowchart.addNodeTo(this.currentNodeElement.id, false, nodeDescription, nodeType, connectionDescription);
+        this.finalizeAddingNode(connectionDescription);
+        this.draw();
     }
 
     setupEventListeners = () => {
@@ -309,15 +374,26 @@ export class Alakazam {
             if (event.key == "Enter" && event.getModifierState('Control')) {
                 this.flowchart.alakazam();
             }
-            else if (event.key == "Escape" && this.isLinking) {
+            else if (event.key == "Escape") {
+                this.isDeciding = false;
                 this.isLinking = false;
+                this.targetConnectionDescription = '';
+                this.decisionMenu.hide();
+                this.nodeMenu.hide();
+                this.isLinking = false;
+                this.decisionMenu.hide();
+                this.isDeciding = false;
                 this.hideAlert();
-                this.draw();
             }
         });
 
-        this.workspace.addEventListener('click', (event) => {   
+        this.workspace.addEventListener('click', (event) => {
+            this.decisionMenu.hide();
             if (!event.target.closest('.node')) {
+                this.isDeciding = false;
+                this.isLinking = false;
+                this.targetConnectionDescription = '';
+                this.decisionMenu.hide();
                 this.nodeMenu.hide();
                 return;
             }
@@ -325,8 +401,11 @@ export class Alakazam {
             this.previousNodeElement = this.currentNodeElement;
             this.currentNodeElement = event.target.closest('.node');
 
-            if (this.isLinking) {
-                this.finalizeLinkingNode();
+            console.log('Deciding: ', this.isDeciding);
+            if (this.isLinking && !this.isDeciding) {
+                console.log('==============asdfghjk');
+                this.finalizeLinkingNode(this.targetConnectionDescription);
+                this.targetConnectionDescription = '';
             }
             else {
                 this.nodeMenu.show(event.clientX, event.clientY, this.currentNodeElement);
