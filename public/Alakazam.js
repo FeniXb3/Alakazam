@@ -20,6 +20,7 @@ export class Alakazam {
         this.deserializeJsonButton = document.getElementById('deserialize-json');
         this.serializedData = document.getElementById('serialized-data');
         this.sharingLink = document.getElementById('sharing-link');
+        this.fileInput = document.getElementById('load-zam');
 
         this.connectServerButton = document.getElementById('connect-server');
         this.serverAddressText = document.getElementById('server-address');
@@ -226,15 +227,32 @@ export class Alakazam {
         });
 
         this.serializeBase64Button.addEventListener('click', () => {
+            const fileName = prompt('Provide flowchart Zam file name', `flowchart_${Date.now()}`);
+            if (fileName == null) {
+                return;
+            }
+
             const serializedContent = this.flowchart.serializeBase64();
             this.serializedData.value = serializedContent;
+            
+            this.saveLinkHelper = this.saveLinkHelper || document.createElement("a");
+            this.saveLinkHelper.href = window.URL.createObjectURL(new Blob([serializedContent], {type: "text/plain"}));
+            this.saveLinkHelper.download = `${fileName}.zam`;
+            this.saveLinkHelper.click(); 
         });
 
         this.deserializeBase64Button.addEventListener('click', () => {
-            const serializedContent = this.serializedData.value;
-            this.flowchart.deserializeBase64(serializedContent);
-            this.draw();
+            this.fileInput.click();
         });
+
+        this.fileInput.addEventListener('change', (event) => {
+            this.readFile(event.target.files[0], (serializedContent) => {
+                this.flowchart.deserializeBase64(serializedContent);
+                this.draw();
+            });
+            
+        });
+
 
         this.serializeJsonButton.addEventListener('click', () => {
             const serializedContent = this.flowchart.serializeJson();
@@ -308,6 +326,17 @@ export class Alakazam {
         this.runButton.addEventListener('click', e => {
             this.flowchart.alakazam();
         });
+    }
+
+    readFile = (file, callback) => {
+        let reader = new FileReader();
+    
+        reader.onload = function() {
+            callback(reader.result);
+        };
+    
+        console.log(file.type);
+        reader.readAsText(file);
     }
 
     draw = (blockBroadcast) => {

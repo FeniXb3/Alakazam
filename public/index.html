@@ -41,13 +41,16 @@
             <div id="serialization-container">
                 <div>
                     <button id="save-svg" class="btn btn-secondary">Save SVG file</button>
-                    <button id="serialize-base64" class="btn btn-secondary">serialize</button>
+                    <button id="serialize-base64" class="btn btn-lg btn-secondary"><i class="fa-solid fa-download"></i> Save Zam</button>
+                    <button id="deserialize-base64" class="btn btn-lg btn-secondary"><i class="fa-solid fa-upload"></i> Load Zam</button>
+                    <form>
+                        <input type="file" id="load-zam" accept=".zam" hidden/>
+                    </form>
 
-                    <button id="deserialize-base64" class="btn btn-secondary">deserialize</button>
-                    <button id="serialize-json" class="btn btn-secondary">serialize JSON</button>
-                    <button id="deserialize-json" class="btn btn-secondary">deserialize JSON</button>
+                    <button id="serialize-json" class="btn btn-secondary" hidden>serialize JSON</button>
+                    <button id="deserialize-json" class="btn btn-secondary" hidden>deserialize JSON</button>
                 </div>
-                <textarea id="serialized-data" rows="3" cols="30"></textarea>
+                <textarea id="serialized-data" rows="3" cols="30" hidden></textarea>
                 <a id="sharing-link" href="">Sharing link</a>
             </div>
             <div>
