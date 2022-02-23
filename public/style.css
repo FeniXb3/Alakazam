@@ -69,10 +69,6 @@ svg {
     overflow: scroll;
 }
 
-#save-svg {
-    display: none;
-}
-
 #flowchart-code-preview {
     display: none;
 }

@@ -319,8 +319,8 @@ export class Alakazam {
             if (fileName == null) {
                 return;
             }
-
-            saveSvg(this.svgElement, `${fileName}_${Date.now()}.svg`);
+            this.svgElement = document.getElementById('theGraph');
+            this.saveSvg(this.svgElement, `${fileName}_${Date.now()}.svg`);
         });
 
         this.runButton.addEventListener('click', e => {
@@ -393,7 +393,7 @@ export class Alakazam {
     }
 
     saveSvg(svgEl, name) {
-        this.removeElementsByClass(svgElement, 'flowchart-ui');
+        // this.removeElementsByClass(this.svgElement, 'flowchart-ui');
         svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
         var svgData = svgEl.outerHTML;
         var preface = '<?xml version="1.0" standalone="no"?>\r\n';
