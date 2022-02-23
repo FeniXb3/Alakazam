@@ -102,10 +102,13 @@ export class Alakazam {
             this.currentNodeElement = this.output.querySelector('.node');
             targetNode = this.currentNodeElement;
         }
-        // this.nodeMenu.hide();
         const rect = targetNode.getBoundingClientRect();
         wheelMenu.moveTo(rect.x + (rect.width/2), rect.y + rect.height);
         wheelMenu.prepareMenuItems(targetNode);
+        
+        setTimeout(() => {
+            this.nodeMenu.hide();
+        }, 300);
     }
 
     isConnectedToServer = () => {
