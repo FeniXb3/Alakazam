@@ -112,14 +112,49 @@ export class Alakazam {
         this.decisionMenu.setupHandler(icon.cross, () => {
             this.performDecisionAction('No');
         });
+
+        const nodeTypeMenuMenuConfig = {
+            slicePathFunction: slicePath().MenuSliceSelectedLine,
+            spreaderEnable: false,
+            navAngle: 0,
+            navItemsContinuous: false,
+            sliceAngle: 0,
+            wheelRadius: 95,
+        }
+        
+        this.nodeTypeMenu = new WheelMenu('node-type-wheel-menu', this.flowchart, nodeTypeMenuMenuConfig, [
+            icon.bubble,
+            icon.import,
+            icon.smallgear,
+            icon.stop,
+            icon.split,
+        ]);
+        this.nodeTypeMenu.hide();
+        this.nodeTypeMenu.setupHandler(icon.bubble, () => {
+            // this.nodeTypeToAdd = 'input';
+            this.endAddingNode('output');
+        });
+        this.nodeTypeMenu.setupHandler(icon.import, () => {
+            this.endAddingNode('input');
+        });
+        this.nodeTypeMenu.setupHandler(icon.smallgear, () => {
+            this.endAddingNode('operation');
+        });
+        this.nodeTypeMenu.setupHandler(icon.stop, () => {
+            this.endAddingNode('stop');
+        });
+        this.nodeTypeMenu.setupHandler(icon.split, () => {
+            this.endAddingNode('decision');
+        });
+        
         
         this.centerView();
     }
 
     performDecisionAction = (connectionDescription) => {
+        this.targetConnectionDescription = connectionDescription;
         if (this.isLinking) {
             // this.finalizeLinkingNode(connectionDescription);
-            this.targetConnectionDescription = connectionDescription;
             this.showAlert('linking');
         }
         else if (this.isRemovingConnection) {
@@ -130,13 +165,17 @@ export class Alakazam {
         }
         else {
             this.finalizeAddingNode(connectionDescription);
-            this.draw();
         }
 
         this.isDeciding = false;
     }
 
     finalizeAddingNode = (connectionDescription) => {
+        const rect = this.currentNodeElement.getBoundingClientRect();
+        this.isDeciding = true;
+        this.nodeTypeMenu.show(rect.x + (rect.width/2), rect.y + rect.height, this.currentNodeElement)
+        return;
+
         const nodeType = Flowchart.getNodeType();
         if (nodeType == null) {
             return;
@@ -147,6 +186,15 @@ export class Alakazam {
         }
         
         this.flowchart.addNodeTo(this.currentNodeElement.id, false, nodeDescription, nodeType, connectionDescription);
+    }
+
+    endAddingNode = (nodeType) => {
+        const nodeDescription = Flowchart.getNodeDescription();
+        if (nodeDescription == null) {
+            return;
+        }
+        this.flowchart.addNodeTo(this.currentNodeElement.id, false, nodeDescription, nodeType, this.targetConnectionDescription);
+        this.draw();
     }
 
     centerView = () => {
