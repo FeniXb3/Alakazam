@@ -13,6 +13,8 @@ export class Alakazam {
         this.workspace = document.getElementById('workspace');
         this.output = document.getElementById('output');
         this.previewContainer = document.getElementById('flowchart-code-preview');
+        this.alertContainer = document.getElementById('alert-container');
+        this.alertElement = document.getElementById('alert');
 
         this.serializeBase64Button = document.getElementById('serialize-base64');
         this.deserializeBase64Button = document.getElementById('deserialize-base64');
@@ -140,9 +142,27 @@ export class Alakazam {
 
     initializeLinkingNode = () => {
         this.isLinking = true;
+        this.showAlert('linking');
+    }
+
+    showAlert = (alertType) => {
+        let alertText = '';
+        switch(alertType) {
+            case 'linking':
+                alertText = 'Select node to link to...'
+                break;
+        }
+
+        this.alertElement.innerText = alertText;
+        this.alertContainer.classList.add('visible');
+    }
+
+    hideAlert = () => {
+        this.alertContainer.classList.remove('visible');
     }
 
     finalizeLinkingNode = () => {
+        this.hideAlert();
         const currentNodeMermaidId = this.currentNodeElement.id;
         const previousNodeMermaidId = this.previousNodeElement.id;
         const previousNode = this.flowchart.findNodeByMermaidId(previousNodeMermaidId);
@@ -291,6 +311,7 @@ export class Alakazam {
             }
             else if (event.key == "Escape" && this.isLinking) {
                 this.isLinking = false;
+                this.hideAlert();
                 this.draw();
             }
         });

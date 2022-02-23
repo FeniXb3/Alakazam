@@ -145,3 +145,9 @@ svg {
     max-width: fit-content !important;
     max-height: fit-content !important;
 }
+
+#alert-container {
+    position:absolute;
+    width: 100vw;
+    margin: auto;
+}
