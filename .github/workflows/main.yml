@@ -1,0 +1,49 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
+      - name: Deploy to GitHub Pages
+        # You may pin to the exact commit or the version.
+        # uses: JamesIves/github-pages-deploy-action@830e6a4f7c81743c52f3fed0ac67428feff9620a
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
+        with:
+          # This option allows you to define a private SSH key to be used in conjunction with a repository deployment key to deploy using SSH. The private key should be stored in the `secrets / with` menu **as a secret**. The public should be stored in the repositories deployment keys menu and be given write access.
+ 
+          token: ${{ github.token }}
+          # This is the branch you wish to deploy to, for example gh-pages or docs.
+          branch: gh-pages
+          # The folder in your repository that you want to deploy. If your build script compiles into a directory named build you would put it here. Folder paths cannot have a leading / or ./. If you wish to deploy the root directory you can place a . here.
+          folder: public
+          # If you would like to push the contents of the deployment folder into a specific directory on the deployment branch you can specify it here.
