@@ -188,7 +188,8 @@ export class Flowchart {
 
         const thisFlowchart = this;
         this.nodes = this.nodes.map(n => {
-            n.connections = n.connections.map(c => {
+            n.connections = n.connections.sort((a, b) => -a.description.localeCompare(b.description))
+                .map(c => {
                 let connectionInstance = new Connection();
                 Object.assign(connectionInstance, c);
 
