@@ -1,15 +1,18 @@
 export class WheelMenu {
-    constructor(containerId, flowchart, titles) {
+    constructor(containerId, flowchart, config, titles) {
         this.flowchart = flowchart;
         this.containerDiv = document.getElementById(containerId);
-        
-        const wheel = new wheelnav(containerId, null, 300,300);
-        wheel.slicePathFunction = slicePath().MenuSliceWithoutLine;
-        wheel.spreaderEnable = true;
-        wheel.clickModeSpreadOff = true;
-        wheel.spreaderInTitle = icon.list;
-        wheel.spreaderOutTitle = icon.contract;
-        wheel.wheelRadius = 95;
+
+        const wheel = new wheelnav(containerId);
+        wheel.slicePathFunction = config.slicePathFunction;
+        wheel.spreaderEnable = config.spreaderEnable;
+        wheel.clickModeSpreadOff = config.clickModeSpreadOff;
+        wheel.spreaderInTitle = config.spreaderInTitle;
+        wheel.spreaderOutTitle = config.spreaderOutTitle;
+        wheel.navAngle = config.navAngle;
+        wheel.navItemsContinuous = config.navItemsContinuous;
+        wheel.sliceAngle = config.sliceAngle;
+        wheel.wheelRadius = config.wheelRadius;
         wheel.maxPercent = 1;
         wheel.clickModeRotate = false;
         
