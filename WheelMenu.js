@@ -13,6 +13,7 @@ export class WheelMenu {
         wheel.navItemsContinuous = config.navItemsContinuous;
         wheel.sliceAngle = config.sliceAngle;
         wheel.wheelRadius = config.wheelRadius;
+        wheel.colors = config.colors;
         wheel.maxPercent = 1;
         wheel.clickModeRotate = false;
         
