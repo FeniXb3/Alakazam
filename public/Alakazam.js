@@ -60,6 +60,7 @@ export class Alakazam {
             navItemsContinuous: false,
             sliceAngle: 0,
             wheelRadius: 95,
+            colors: colorpalette.defaultpalette,
         }
 
         this.nodeMenu = new WheelMenu('node-wheel-menu', this.flowchart, nodeMenuConfig, [
@@ -98,6 +99,7 @@ export class Alakazam {
             navItemsContinuous: true,
             sliceAngle: -115,
             wheelRadius: 170,
+            colors: new Array("#00A0B0", "#EB6841"),
         }
         
         this.decisionMenu = new WheelMenu('decision-wheel-menu', this.flowchart, decisionMenuConfig, [
@@ -120,6 +122,7 @@ export class Alakazam {
             navItemsContinuous: false,
             sliceAngle: 0,
             wheelRadius: 95,
+            colors: colorpalette.greensilver,
         }
         
         this.nodeTypeMenu = new WheelMenu('node-type-wheel-menu', this.flowchart, nodeTypeMenuMenuConfig, [
