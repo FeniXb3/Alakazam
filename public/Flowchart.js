@@ -148,9 +148,7 @@ export class Flowchart {
         this.reconnectNodes(startingNode, finishingNode, shouldReattachConnected, connectionDescription);
     }
 
-    editNode(node) {
-        const editPromptInfo = node.getEditInfo();
-        const newContent = prompt(editPromptInfo.title, editPromptInfo.content);
+    editNode(node, newContent) {
         if (newContent !== null) {
             node.update(newContent);
         }
