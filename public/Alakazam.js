@@ -469,10 +469,6 @@ export class Alakazam {
             this.setMenuStartingPosition(this.nodeMenu, this.currentNodeElement);
         });
 
-        document.oncontextmenu = function () {
-            return false;
-        }
-
         document.addEventListener('keyup', event => {
             if (event.key == "Enter" && event.getModifierState('Control')) {
                 this.flowchart.alakazam();
