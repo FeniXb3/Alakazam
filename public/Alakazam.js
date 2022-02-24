@@ -486,6 +486,7 @@ export class Alakazam {
                 this.isLinking = false;
                 this.decisionMenu.hide();
                 this.isDeciding = false;
+                this.isEditing = false;
                 this.hideAlert();
             }
         });
