@@ -24,6 +24,10 @@ export class Alakazam {
         this.sharingLink = document.getElementById('sharing-link');
         this.fileInput = document.getElementById('load-zam');
 
+        this.nodeDataModalTrigger = document.getElementById('node-data-modal-trigger');
+        this.nodeDataModal = document.getElementById('nodeDescriptionModal');
+        this.saveNodeDataButton = document.getElementById('save-node-data');
+
         this.connectServerButton = document.getElementById('connect-server');
         this.serverAddressText = document.getElementById('server-address');
         this.chamberNameText = document.getElementById('chamber-name');
@@ -135,19 +139,40 @@ export class Alakazam {
         this.nodeTypeMenu.hide();
         this.nodeTypeMenu.setupHandler(icon.bubble, () => {
             // this.nodeTypeToAdd = 'input';
-            this.endAddingNode('output');
+            
+            this.nodeDataModal.setAttribute('data-node-type', 'output');
+            const modalTitle = this.nodeDataModal.querySelector('.modal-title');
+            modalTitle.textContent = 'Provide text to display';
+            this.nodeDataModalTrigger.click();
+            // this.endAddingNode('output');
         });
         this.nodeTypeMenu.setupHandler(icon.import, () => {
-            this.endAddingNode('input');
+            this.nodeDataModal.setAttribute('data-node-type', 'input');
+            const modalTitle = this.nodeDataModal.querySelector('.modal-title');
+            modalTitle.textContent = 'Provide variable name to store input data';
+            this.nodeDataModalTrigger.click();
+            // this.endAddingNode('input');
         });
         this.nodeTypeMenu.setupHandler(icon.smallgear, () => {
-            this.endAddingNode('operation');
+            this.nodeDataModal.setAttribute('data-node-type', 'operation');
+            const modalTitle = this.nodeDataModal.querySelector('.modal-title');
+            modalTitle.textContent = 'Provide operation';
+            this.nodeDataModalTrigger.click();
+            // this.endAddingNode('operation');
         });
         this.nodeTypeMenu.setupHandler(icon.stop, () => {
-            this.endAddingNode('stop');
+            this.nodeDataModal.setAttribute('data-node-type', 'stop');
+            const modalTitle = this.nodeDataModal.querySelector('.modal-title');
+            modalTitle.textContent = 'Just write Stop';
+            this.nodeDataModalTrigger.click();
+            // this.endAddingNode('stop');
         });
         this.nodeTypeMenu.setupHandler(icon.split, () => {
-            this.endAddingNode('decision');
+            this.nodeDataModal.setAttribute('data-node-type', 'decision');
+            const modalTitle = this.nodeDataModal.querySelector('.modal-title');
+            modalTitle.textContent = 'Provide condition to be checked';
+            this.nodeDataModalTrigger.click();
+            // this.endAddingNode('decision');
         });
         
         
@@ -177,25 +202,16 @@ export class Alakazam {
         const rect = this.currentNodeElement.getBoundingClientRect();
         this.isDeciding = true;
         this.nodeTypeMenu.show(rect.x + (rect.width/2), rect.y + rect.height, this.currentNodeElement)
-        return;
-
-        const nodeType = Flowchart.getNodeType();
-        if (nodeType == null) {
-            return;
-        }
-        const nodeDescription = Flowchart.getNodeDescription();
-        if (nodeDescription == null) {
-            return;
-        }
-        
-        this.flowchart.addNodeTo(this.currentNodeElement.id, false, nodeDescription, nodeType, connectionDescription);
     }
 
-    endAddingNode = (nodeType) => {
-        const nodeDescription = Flowchart.getNodeDescription();
-        if (nodeDescription == null) {
-            return;
-        }
+    endAddingNode = (nodeType, nodeDescription) => {
+//         this.nodeDataModalTrigger.click();
+// return;
+
+        // const nodeDescription = Flowchart.getNodeDescription();
+        // if (nodeDescription == null) {
+        //     return;
+        // }
         this.flowchart.addNodeTo(this.currentNodeElement.id, false, nodeDescription, nodeType, this.targetConnectionDescription);
         this.draw();
     }
@@ -212,7 +228,14 @@ export class Alakazam {
         const currentNode = this.flowchart.findNodeByMermaidId(this.currentNodeElement.id);
 
         if (currentNode) {
-            this.flowchart.editNode(currentNode);
+            this.isEditing = true;
+            const editModalInfo = currentNode.getEditInfo();
+            // const newContent = prompt(editModalInfo.title, editModalInfo.content);
+            const modalTitle = this.nodeDataModal.querySelector('.modal-title');
+            modalTitle.textContent = editModalInfo.title;
+            const nodeDescriptionInput = this.nodeDataModal.querySelector('.modal-body input');
+            nodeDescriptionInput.value = editModalInfo.content;
+            this.nodeDataModalTrigger.click();
         }
     }
 
@@ -400,6 +423,35 @@ export class Alakazam {
             this.flowchart.deserializeJson(serializedContent);
             this.draw();
         });
+
+        this.nodeDataModal.querySelector('form').addEventListener('submit', (event) => {
+            this.saveNodeDataButton.click();
+            event.preventDefault();
+        });
+        $('#nodeDescriptionModal').on('shown.bs.modal', () => {
+            const nodeDescriptionInput = this.nodeDataModal.querySelector('.modal-body input');
+            // nodeDescriptionInput.value = 'test';
+            nodeDescriptionInput.focus();
+        });
+        this.saveNodeDataButton.addEventListener('click', () => {
+            const nodeDescription = this.nodeDataModal.querySelector('.modal-body input').value;
+            const nodeType = this.nodeDataModal.getAttribute('data-node-type');
+
+            if (this.isEditing) {
+                const currentNode = this.flowchart.findNodeByMermaidId(this.currentNodeElement.id);
+                this.flowchart.editNode(currentNode, nodeDescription);
+                this.draw();
+            }
+            else {
+                this.endAddingNode(nodeType, nodeDescription);
+            }
+            
+
+
+            this.isEditing = false;
+            $('.close').click(); 
+        });
+
 
         this.loadExampleButton.addEventListener('click', () => {
             this.flowchart.prepare();
