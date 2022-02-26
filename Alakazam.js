@@ -300,20 +300,54 @@ export class Alakazam {
         }
     }
 
-    showAlert = (alertType) => {
+    showAlert = (alertType, timeout) => {
         let alertText = '';
+        let className = 'alert-info';
         switch(alertType) {
             case 'linking':
                 alertText = 'Select node to link to...'
+                className = 'alert-warning';
+                break;
+            case 'connecting':
+                alertText = 'Connecting to server...'
+                break;
+            case 'connected':
+                alertText = 'Connected!'
+                break;
+            case 'joining':
+                alertText = 'Joining chamber...'
+                break;
+            case 'disconnected':
+                alertText = 'Disconnected from the server'
+                break;
+            case 'remote update':
+                alertText = 'Zam updated by other user'
                 break;
         }
 
         this.alertElement.innerText = alertText;
+        this.alertElement.classList.remove(...this.alertElement.classList);
+        this.alertElement.classList.add('alert');
+        this.alertElement.classList.add(className);
         this.alertContainer.classList.add('visible');
+
+        if (timeout) {
+            if (this.alertHidingTimeout) {
+                clearTimeout(this.alertHidingTimeout);
+                this.alertHidingTimeout = null;
+            }
+            this.alertHidingTimeout = setTimeout(() => {
+               this.hideAlert(); 
+            }, timeout).stop;
+        }
     }
 
     hideAlert = () => {
         this.alertContainer.classList.remove('visible');
+        this.alertContainer.classList.add('hidden');
+
+        clearTimeout(this.alertHidingTimeout);
+        this.alertHidingTimeout = null;
     }
 
     finalizeLinkingNode = (connectionDescription) => {
@@ -356,10 +390,15 @@ export class Alakazam {
             this.chamberName = this.chamberNameText.value;
             //this.serverAddressText.value;
             console.log(`Connecting to: ${address}`);
+            
+            this.showAlert('connecting', 3000);
             if (address) {
                 this.ws = new WebSocket(address);
                 this.ws.addEventListener('open', () =>{
                     console.log(`Connected to ${address}`);
+                    this.showAlert('connected', 3000);
+                    
+                    this.showAlert('joining', 3000);
                     const chamberJoinData = {
                         command: 'join',
                         chamber: this.chamberName,
@@ -371,6 +410,7 @@ export class Alakazam {
 
                 this.ws.addEventListener('close', () =>{
                     console.log(`Connection to ${address} closed`);
+                    this.showAlert('disconnected', 3000);
                 });
 
                 this.ws.addEventListener('message', (message) => {
@@ -378,6 +418,7 @@ export class Alakazam {
                     const jsonMessage = JSON.parse(message.data);
 
                     if (jsonMessage.command == 'update') {
+                        this.showAlert('remote update', 3000);
                         this.flowchart.deserializeBase64(jsonMessage.flowchart);
                         this.draw(true);
                     }
@@ -476,25 +517,24 @@ export class Alakazam {
             else if (event.key == "Escape") {
                 this.isDeciding = false;
                 this.isLinking = false;
+                this.isEditing = false;
                 this.targetConnectionDescription = '';
                 this.decisionMenu.hide();
                 this.nodeMenu.hide();
-                this.isLinking = false;
-                this.decisionMenu.hide();
-                this.isDeciding = false;
-                this.isEditing = false;
+                this.nodeTypeMenu.hide();
                 this.hideAlert();
             }
         });
 
         this.workspace.addEventListener('click', (event) => {
             this.decisionMenu.hide();
+            this.nodeTypeMenu.hide();
             if (!event.target.closest('.node')) {
                 this.isDeciding = false;
                 this.isLinking = false;
                 this.targetConnectionDescription = '';
-                this.decisionMenu.hide();
                 this.nodeMenu.hide();
+                this.hideAlert();
                 return;
             }
 
