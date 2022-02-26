@@ -476,25 +476,24 @@ export class Alakazam {
             else if (event.key == "Escape") {
                 this.isDeciding = false;
                 this.isLinking = false;
+                this.isEditing = false;
                 this.targetConnectionDescription = '';
                 this.decisionMenu.hide();
                 this.nodeMenu.hide();
-                this.isLinking = false;
-                this.decisionMenu.hide();
-                this.isDeciding = false;
-                this.isEditing = false;
+                this.nodeTypeMenu.hide();
                 this.hideAlert();
             }
         });
 
         this.workspace.addEventListener('click', (event) => {
             this.decisionMenu.hide();
+            this.nodeTypeMenu.hide();
             if (!event.target.closest('.node')) {
                 this.isDeciding = false;
                 this.isLinking = false;
                 this.targetConnectionDescription = '';
-                this.decisionMenu.hide();
                 this.nodeMenu.hide();
+                this.hideAlert();
                 return;
             }
 
