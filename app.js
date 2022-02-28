@@ -1,9 +1,20 @@
-// Importing the required modules
-const WebSocketServer = require('ws');
- 
-// Creating a new websocket server
-const wss = new WebSocketServer.Server({ port: 1337 })
- 
+const WebSocketServer = require('ws').Server;
+const https = require('https');
+const fs = require('fs');
+
+const privateKey = fs.readFileSync('cert/cert.key', 'utf8');
+const certificate = fs.readFileSync('cert/cert.pem', 'utf8');
+const credentials = { key: privateKey, cert: certificate };
+const httpsServer = https.createServer(credentials);
+const port = 1338;
+
+const wss = new WebSocketServer({
+    server: httpsServer
+});
+
+httpsServer.listen(port);
+
+
 const chambers = {};
 
 // Creating connection using websocket
@@ -60,4 +71,5 @@ wss.on('connection', ws => {
         console.log('Some Error occurred')
     }
 });
-console.log('The WebSocket server is running on port 8080');
+
+console.log(`The WebSocket server is running on port ${port}`);
