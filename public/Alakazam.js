@@ -215,6 +215,8 @@ export class Alakazam {
         // }
         this.flowchart.addNodeTo(this.currentNodeElement.id, false, nodeDescription, nodeType, this.targetConnectionDescription);
         this.draw();
+        
+        this.targetConnectionDescription = '';
     }
 
     centerView = () => {
