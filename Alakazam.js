@@ -12,6 +12,7 @@ export class Alakazam {
         this.resetButton = document.getElementById('reset');
         this.workspace = document.getElementById('workspace');
         this.output = document.getElementById('output');
+        this.outputContainer = document.getElementById("output-container");
         this.previewContainer = document.getElementById('flowchart-code-preview');
         this.alertContainer = document.getElementById('alert-container');
         this.alertElement = document.getElementById('alert');
@@ -217,11 +218,10 @@ export class Alakazam {
     }
 
     centerView = () => {
-        const outputContainer = document.getElementById("output-container");
         const outputRect = output.getBoundingClientRect();
-        const outputContainerRect = outputContainer.getBoundingClientRect()
-        outputContainer.scrollTop = 0;
-        outputContainer.scrollLeft = outputRect.width/2 - outputContainerRect.width/2;
+        const outputContainerRect = this.outputContainer.getBoundingClientRect()
+        this.outputContainer.scrollTop = 0;
+        this.outputContainer.scrollLeft = outputRect.width/2 - outputContainerRect.width/2;
     }
 
     editNode = () => {
@@ -385,7 +385,8 @@ export class Alakazam {
 
     setupEventListeners = () => {
         this.connectServerButton.addEventListener('click', () => {
-            const address = `ws://alakazam.enklawa-tworcza.pl:1337`; 
+            const address = `wss://minefield.enklawa-tworcza.pl:1338`; 
+            // const address = `ws://alakazam.enklawa-tworcza.pl:1337`; 
             // const address = `ws://localhost:1337`;
             this.chamberName = this.chamberNameText.value;
             //this.serverAddressText.value;
