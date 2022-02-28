@@ -201,7 +201,7 @@ export class Alakazam {
 
     finalizeAddingNode = (connectionDescription) => {
         const rect = this.currentNodeElement.getBoundingClientRect();
-        this.isDeciding = true;
+        this.isDeciding = false;
         this.nodeTypeMenu.show(rect.x + (rect.width/2), rect.y + rect.height, this.currentNodeElement)
     }
 
