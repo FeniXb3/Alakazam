@@ -202,31 +202,5 @@ export class Flowchart {
 
         console.log(this);
     }
-
-    static getNodeType() {
-        const availableTypes = Object.keys(Node.typeSigns).filter(t => t != 'start');
-        const availableTypesText = availableTypes.reduce((accumulator, curr, index) =>
-            `${accumulator}\n${index}: ${curr}`, '');
-        const answer = prompt(`Node type (default: output)\n${availableTypesText}`, '3');
-        if (answer == null) {
-            return null;
-        }
-
-        let nodeTypeIndex = parseInt(answer);
-        let nodeType = 'output';
-        if (nodeTypeIndex != NaN && nodeTypeIndex >= 0 && nodeTypeIndex < availableTypes.length) {
-            nodeType = availableTypes[nodeTypeIndex];
-        }
-
-        return nodeType;
-    }
-
-    static getNodeDescription() {
-        return prompt('Node description (default: Node)', 'Node');
-    }
-
-    static getConnectionDescription() {
-        return prompt('Connection description (press Enter to leave empty)');
-    }
 }
 
