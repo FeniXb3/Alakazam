@@ -31,13 +31,4 @@ export class InputNode extends Node {
         this.variableName = variableName;
         this.description = `Read ${this.variableName}`;
     }
-    
-    toJSON() {
-        return {
-            "type": this.type,
-            "id": this.id,
-            "variableName": this.variableName,
-            "description": this.description
-        }
-    }
 }
