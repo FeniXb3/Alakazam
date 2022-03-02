@@ -30,7 +30,6 @@ class ModalHandler {
 
                 if (this.currentCallback) {
                     this.currentCallback(content);
-                    this.currentCallback = null;
                 }
             }
         });

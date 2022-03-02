@@ -1,4 +1,5 @@
 import { Node } from "./Node.js";
+import { modal } from "./ModalHandler.js";
 
 export class InputNode extends Node {
     constructor(variableName, type) {
@@ -9,10 +10,14 @@ export class InputNode extends Node {
     }
 
     perform(state, nextConnection) {
-        const value = prompt(this.description);
+        console.log(`[IN] Petfotming input node "${this.description}"`);
+        modal.show(this.description, {}, '', value => {
+            state[this.variableName] = value;
+            console.log('go to next');
+            super.perform(state, nextConnection);
+        });
+
         //TODO: handle stopping the run if user cancelled
-        state[this.variableName] = value;
-        super.perform(state, nextConnection);
     }
 
     getEditInfo() {
@@ -25,5 +30,14 @@ export class InputNode extends Node {
     update(variableName) {
         this.variableName = variableName;
         this.description = `Read ${this.variableName}`;
+    }
+    
+    toJSON() {
+        return {
+            "type": this.type,
+            "id": this.id,
+            "variableName": this.variableName,
+            "description": this.description
+        }
     }
 }
