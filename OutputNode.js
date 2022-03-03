@@ -1,4 +1,5 @@
 import { Node } from "./Node.js";
+import { modal, outputModal } from "./ModalHandler.js";
 
 export class OutputNode extends Node {
     perform(state, nextConnection) {
@@ -12,7 +13,11 @@ export class OutputNode extends Node {
             }
         } while (match);
 
-        alert(parsedText);
-        super.perform(state, nextConnection);
+        outputModal.show('Output', {}, parsedText, () => {
+            super.perform(state, nextConnection);
+        });
+
+        // alert(parsedText);
+        // super.perform(state, nextConnection);
     }
 }

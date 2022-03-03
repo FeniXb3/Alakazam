@@ -429,18 +429,19 @@ export class Alakazam {
         });
 
         this.serializeBase64Button.addEventListener('click', () => {
-            const fileName = prompt('Provide flowchart Zam file name', `flowchart_${Date.now()}`);
-            if (fileName == null) {
-                return;
-            }
+            modal.show('Provide flowchart Zam file name', {}, `flowchart_${Date.now()}`, fileName => {
+                if (fileName == null) {
+                    return;
+                }
 
-            const serializedContent = this.flowchart.serializeBase64();
-            this.serializedData.value = serializedContent;
-            
-            this.saveLinkHelper = this.saveLinkHelper || document.createElement("a");
-            this.saveLinkHelper.href = window.URL.createObjectURL(new Blob([serializedContent], {type: "text/plain"}));
-            this.saveLinkHelper.download = `${fileName}.zam`;
-            this.saveLinkHelper.click(); 
+                const serializedContent = this.flowchart.serializeBase64();
+                this.serializedData.value = serializedContent;
+                
+                this.saveLinkHelper = this.saveLinkHelper || document.createElement("a");
+                this.saveLinkHelper.href = window.URL.createObjectURL(new Blob([serializedContent], {type: "text/plain"}));
+                this.saveLinkHelper.download = `${fileName}.zam`;
+                this.saveLinkHelper.click(); 
+            });
         });
 
         this.deserializeBase64Button.addEventListener('click', () => {
@@ -528,12 +529,13 @@ export class Alakazam {
 
 
         this.saveSvgButton.addEventListener('click', event => {
-            const fileName = prompt('Choose file name', 'alakazam');
-            if (fileName == null) {
-                return;
-            }
-            this.svgElement = document.getElementById('theGraph');
-            this.saveSvg(this.svgElement, `${fileName}_${Date.now()}.svg`);
+            modal.show('Choose file name', {}, 'alakazam', fileName => {
+                if (fileName == null) {
+                    return;
+                }
+                this.svgElement = document.getElementById('theGraph');
+                this.saveSvg(this.svgElement, `${fileName}_${Date.now()}.svg`);
+            });
         });
 
         this.runButton.addEventListener('click', e => {

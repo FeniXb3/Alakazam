@@ -11,7 +11,7 @@ export class InputNode extends Node {
 
     perform(state, nextConnection) {
         console.log(`[IN] Petfotming input node "${this.description}"`);
-        modal.show(this.description, {}, '', value => {
+        modal.show('Input', {}, '', value => {
             state[this.variableName] = value;
             console.log('go to next');
             super.perform(state, nextConnection);
@@ -30,14 +30,5 @@ export class InputNode extends Node {
     update(variableName) {
         this.variableName = variableName;
         this.description = `Read ${this.variableName}`;
-    }
-    
-    toJSON() {
-        return {
-            "type": this.type,
-            "id": this.id,
-            "variableName": this.variableName,
-            "description": this.description
-        }
     }
 }
