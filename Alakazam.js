@@ -159,11 +159,8 @@ export class Alakazam {
             modal.show(titleText, data, '', this.nodeAddingModalCallback);
         });
         
-        this.nodeTypeMenu.setupHandler(icon.stop, () => {           
-            const titleText = 'Just write Stop';
-            const data = {'data-node-type': 'stop'};
-
-            modal.show(titleText, data, '', this.nodeAddingModalCallback);
+        this.nodeTypeMenu.setupHandler(icon.stop, () => {
+            this.nodeAddingModalCallback('Stop', 'stop');
         });
 
         this.nodeTypeMenu.setupHandler(icon.split, () => {  
@@ -177,8 +174,8 @@ export class Alakazam {
         this.centerView();
     }
 
-    nodeAddingModalCallback = (content) => {
-        const nodeType = modal.getAttribute('data-node-type');
+    nodeAddingModalCallback = (content, type) => {
+        const nodeType = type || modal.getAttribute('data-node-type');
 
         if (this.isEditing) {
             const currentNode = this.flowchart.findNodeByMermaidId(this.currentNodeElement.id);
