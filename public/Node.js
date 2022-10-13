@@ -61,7 +61,8 @@ export class Node {
 
     getNodeText() {
         const brackets = Node.typeSigns[this.type]
-        return `${this.id}${brackets.opening}"${this.description}"${brackets.closing}`;
+        const escapedDescription = this.description.replaceAll('"', "#quot;");
+        return `${this.id}${brackets.opening}"${escapedDescription}"${brackets.closing}`;
     }
 
     getConnectionText() {
