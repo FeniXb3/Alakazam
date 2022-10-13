@@ -26,18 +26,31 @@ export class DecisionNode extends Node {
     }
 
     perform(state, nextConnection) {
+        const currentCondition = this.condition;
+        const result = this.getPartialResult(state, currentCondition);
+
+
+        if (result) {
+            super.perform(state, 'Yes');
+        }
+        else {
+            super.perform(state, 'No');
+        }
+    }
+
+    getPartialResult(state, currentCondition) {
         const logicalOperatorPattern = /(?:\s(OR|\|\||AND|&&)\s)/gm
         const logicalOperators = [];
 
         let logicalOperatorMatch;
         do {
-            logicalOperatorMatch = logicalOperatorPattern.exec(this.condition);
+            logicalOperatorMatch = logicalOperatorPattern.exec(currentCondition);
             if (logicalOperatorMatch) {
                 logicalOperators.push(logicalOperatorMatch[0].trim());
             }
         } while (logicalOperatorMatch);
 
-        const logicalOperands = this.condition.split(logicalOperatorPattern).map(o => o.trim());
+        const logicalOperands = currentCondition.split(logicalOperatorPattern).map(o => o.trim());
         let result = null;
         console.log(logicalOperands);
 
@@ -67,13 +80,7 @@ export class DecisionNode extends Node {
             }
         });
 
-
-        if (result) {
-            super.perform(state, 'Yes');
-        }
-        else {
-            super.perform(state, 'No');
-        }
+        return result;
     }
     
     getEditInfo() {
