@@ -19,15 +19,30 @@ export class Flowchart {
         const firstNode = this.addNode("Start", "start");
         const lastNode = this.addNode("Stop", "stop");
 
-        const nameQueryNode = this.addNode("What's your name?", "output");
-        const nameGettingNode = this.addNode("name", "input");
-        const nameDisplayingNode = this.addNode("Ahoy, %name%!", "output");
-        const championDisplayinNode = this.addNode("You are the champion!", "output");
-        const decisionNode = this.addNode("%name% == Champion || %name% == champion OR %name% == CHAMPION", "decision");
+        // const nameQueryNode = this.addNode("What's your name?", "output");
+        // const nameGettingNode = this.addNode("name", "input");
+        // const nameDisplayingNode = this.addNode("Ahoy, %name%!", "output");
+        // const championDisplayinNode = this.addNode("You are the champion!", "output");
+        // const decisionNode = this.addNode("%name% == Champion || %name% == champion OR %name% == CHAMPION", "decision");
 
-        firstNode.connect(nameQueryNode);
-        nameQueryNode.connect(nameGettingNode);
-        nameGettingNode.connect(decisionNode);
+        // firstNode.connect(nameQueryNode);
+        // nameQueryNode.connect(nameGettingNode);
+        // nameGettingNode.connect(decisionNode);
+        // decisionNode.connect(championDisplayinNode, 'Yes');
+        // decisionNode.connect(nameDisplayingNode, 'No');
+        // championDisplayinNode.connect(lastNode);
+        // nameDisplayingNode.connect(lastNode);
+
+        const sign1GettingNode = this.addNode("sign1", "input");
+        const sign2GettingNode = this.addNode("sign2", "input");
+        const nameDisplayingNode = this.addNode("Player 2 won!", "output");
+        const championDisplayinNode = this.addNode("Player 1 won!", "output");
+        const decisionNode = this.addNode("(%sign1% == rock AND %sign2% == scissors) OR (%sign1% == scissors AND %sign2% == paper) OR (%sign1% == paper AND %sign2% == rock)", "decision");
+
+        firstNode.connect(sign1GettingNode);
+        sign1GettingNode.connect(sign2GettingNode);
+        // nameQueryNode.connect(nameGettingNode);
+        sign2GettingNode.connect(decisionNode);
         decisionNode.connect(championDisplayinNode, 'Yes');
         decisionNode.connect(nameDisplayingNode, 'No');
         championDisplayinNode.connect(lastNode);
