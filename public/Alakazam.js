@@ -497,10 +497,40 @@ export class Alakazam {
             }
         });
 
-        this.workspace.addEventListener('click', (event) => {
+        this.workspace.addEventListener('mousedown', event => {
+            if (event.button != 0) {
+                return;
+            }
+            this.tryShowingNodeActionMenu(event);
+        });
+
+        this.workspace.addEventListener('mouseup', event => {
+            if (event.button != 0) {
+                return;
+            }
+            this.tryLinkingOrShowingAddingNodeMenu(event);
+        });
+
+        this.workspace.addEventListener('mousemove', event => {
+            if (this.mouseIsDown) {
+                clearTimeout(this.longPressTiemeout);
+                this.cancelMouseUp = true;
+            }
+        })
+
+
+        this.tryLinkingOrShowingAddingNodeMenu = event => {
+            const target = event.target;
+            this.mouseIsDown = false;
+            clearTimeout(this.longPressTiemeout);
+            if (this.cancelMouseUp) {
+                this.cancelMouseUp = false;
+                return;
+            }
+
             this.decisionMenu.hide();
             this.nodeTypeMenu.hide();
-            if (!event.target.closest('.node')) {
+            if (!target.closest('.node')) {
                 this.isDeciding = false;
                 this.isLinking = false;
                 this.targetConnectionDescription = '';
@@ -510,20 +540,42 @@ export class Alakazam {
             }
 
             this.previousNodeElement = this.currentNodeElement;
-            this.currentNodeElement = event.target.closest('.node');
+            this.currentNodeElement = target.closest('.node');
 
             console.log('Deciding: ', this.isDeciding);
             if (this.isLinking && !this.isDeciding) {
-                console.log('==============asdfghjk');
                 this.finalizeLinkingNode(this.targetConnectionDescription);
                 this.targetConnectionDescription = '';
             }
             else {
-                this.nodeMenu.show(event.clientX, event.clientY, this.currentNodeElement);
+                this.addNode();
             }
-        });
+        }
 
-
+        this.tryShowingNodeActionMenu = event => {
+            this.mouseIsDown = true;
+            this.pressStartTime = Date.now();
+            const target = event.target;
+            
+            this.decisionMenu.hide();
+            this.nodeTypeMenu.hide();
+            if (!target.closest('.node')) {
+                this.isDeciding = false;
+                this.isLinking = false;
+                this.targetConnectionDescription = '';
+                this.nodeMenu.hide();
+                this.hideAlert();
+                return;
+            }
+            
+            this.previousNodeElement = this.currentNodeElement;
+            this.currentNodeElement = target.closest('.node');
+            
+            this.longPressTiemeout = setTimeout(() => {
+                this.cancelMouseUp = true;
+                this.nodeMenu.show(event.clientX, event.clientY, this.currentNodeElement);
+            }, 500);
+        }
 
         this.saveSvgButton.addEventListener('click', event => {
             modal.show('Choose file name', {}, 'alakazam', fileName => {
