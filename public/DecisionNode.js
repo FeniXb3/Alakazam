@@ -2,7 +2,7 @@ import { Node } from "./Node.js";
 
 export class DecisionNode extends Node {
     constructor(condition, type) {
-        const description = `Is ${condition} ?`;
+        const description = DecisionNode.getDescription(condition)
         super(description, type);
 
         this.condition = condition;
@@ -117,6 +117,13 @@ export class DecisionNode extends Node {
 
     update(condition) {
         this.condition = condition;
-        this.description = `Is ${condition} ?`;
+        this.description = DecisionNode.getDescription(condition);
+    }
+
+    static getDescription(condition) {
+        return condition.replaceAll(') OR (', ') <br/> OR (')
+        .replaceAll(') || (', ') <br/> || (')
+        .replaceAll(') AND (', ') <br/> AND (')
+        .replaceAll(') && (', ') <br/> && (');
     }
 }
