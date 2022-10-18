@@ -497,12 +497,12 @@ export class Alakazam {
             }
         });
 
-        this.workspace.addEventListener('mousedown', event => {
-            if (event.button != 0) {
-                return;
-            }
-            this.tryShowingNodeActionMenu(event);
-        });
+        // this.workspace.addEventListener('mousedown', event => {
+        //     if (event.button != 0) {
+        //         return;
+        //     }
+        //     this.tryShowingNodeActionMenu(event);
+        // });
 
         this.workspace.addEventListener('mouseup', event => {
             if (event.button != 0) {
@@ -511,12 +511,12 @@ export class Alakazam {
             this.tryLinkingOrShowingAddingNodeMenu(event);
         });
 
-        this.workspace.addEventListener('mousemove', event => {
-            if (this.mouseIsDown) {
-                clearTimeout(this.longPressTiemeout);
-                this.cancelMouseUp = true;
-            }
-        })
+        // this.workspace.addEventListener('mousemove', event => {
+        //     if (this.mouseIsDown) {
+        //         clearTimeout(this.longPressTiemeout);
+        //         this.cancelMouseUp = true;
+        //     }
+        // });
 
 
         this.tryLinkingOrShowingAddingNodeMenu = event => {
@@ -546,6 +546,9 @@ export class Alakazam {
             if (this.isLinking && !this.isDeciding) {
                 this.finalizeLinkingNode(this.targetConnectionDescription);
                 this.targetConnectionDescription = '';
+            }
+            else if (event.altKey) {
+                this.nodeMenu.show(event.clientX, event.clientY, this.currentNodeElement);
             }
             else {
                 this.addNode();
