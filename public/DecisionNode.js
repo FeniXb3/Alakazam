@@ -86,16 +86,17 @@ export class DecisionNode extends Node {
                 }
                 else {
                     const operatorPattern = /(?:==|!=|>|<|>=|<=)/gm;
-                    const leftSidePattern = /(?:%([a-zA-Z0-9_żźćńółęąśŻŹĆĄŚĘŁÓŃ]+)%|([ a-zA-Z0-9_zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+))/gm;
-                    const rightSidePattern = /(?:%([a-zA-Z0-9_żźćńółęąśŻŹĆĄŚĘŁÓŃ]+)%|([ a-zA-Z0-9_zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+))/gm;
+                    const leftSidePattern = /(?:"([ a-zA-Z0-9_zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+)"|([a-zA-Z0-9_żźćńółęąśŻŹĆĄŚĘŁÓŃ]+))/gm;
+                    const rightSidePattern = /(?:"([ a-zA-Z0-9_zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+)"|([a-zA-Z0-9_żźćńółęąśŻŹĆĄŚĘŁÓŃ]+))/gm;
                 
                     const operator = operatorPattern.exec(lo)[0];
                     const sides = lo.split(operator).map(s => s.trim());
                     const leftSideMatch = leftSidePattern.exec(sides[0]);
                     const rightSideMatch = rightSidePattern.exec(sides[1]);
 
-                    const leftSide = leftSideMatch[2] || state[leftSideMatch[1]];
-                    const rightSide = rightSideMatch[2] || state[rightSideMatch[1]];
+                    const leftSide = leftSideMatch[1] || state[leftSideMatch[2]];
+                    const rightSide = rightSideMatch[1] || state[rightSideMatch[2]];
+                    console.log('Left side: ', leftSide, " | Right side: ", rightSide);
 
                     localResult = DecisionNode.operatorFunctions[operator](leftSide, rightSide);
                 }
