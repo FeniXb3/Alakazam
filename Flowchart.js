@@ -37,7 +37,8 @@ export class Flowchart {
         const sign2GettingNode = this.addNode("sign2", "input");
         const nameDisplayingNode = this.addNode("Player 2 won!", "output");
         const championDisplayinNode = this.addNode("Player 1 won!", "output");
-        const decisionNode = this.addNode("(%sign1% == rock AND %sign2% == scissors) OR (%sign1% == scissors AND %sign2% == paper) OR (%sign1% == paper AND %sign2% == rock)", "decision");
+        // const decisionNode = this.addNode("(%sign1% == rock AND %sign2% == scissors) OR (%sign1% == scissors AND %sign2% == paper) OR (%sign1% == paper AND %sign2% == rock)", "decision");
+        const decisionNode = this.addNode("(sign1 == \"rock\" AND sign2 == \"scissors\") OR (sign1 == \"scissors\" AND sign2 == \"paper\") OR (sign1 == \"paper\" AND sign2 == \"rock\")", "decision");
 
         firstNode.connect(sign1GettingNode);
         sign1GettingNode.connect(sign2GettingNode);
