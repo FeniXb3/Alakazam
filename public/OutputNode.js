@@ -3,7 +3,7 @@ import { modal, outputModal } from "./ModalHandler.js";
 
 export class OutputNode extends Node {
     perform(state, nextConnection) {
-        const pattern = /(?:%(\w+)%)/gm;
+        const pattern = /(?:\${(\w+)})/gm;
         let parsedText = this.description;
         let match;
         do {
