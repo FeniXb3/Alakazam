@@ -636,6 +636,7 @@ export class Alakazam {
             //     }
             // });
         });
+        Prism.highlightAll();
 
         const serializedData = this.flowchart.serializeBase64();
         this.sharingLink.href = `?data=${serializedData}`;
