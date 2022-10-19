@@ -121,7 +121,7 @@ export class DecisionNode extends Node {
     }
 
     static getDescription(condition) {
-        return condition.replaceAll(') OR (', ') <br/> OR (')
+        return (condition || '').replaceAll(') OR (', ') <br/> OR (')
         .replaceAll(') || (', ') <br/> || (')
         .replaceAll(') AND (', ') <br/> AND (')
         .replaceAll(') && (', ') <br/> && (');
