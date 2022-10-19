@@ -2,7 +2,7 @@ import { Node } from "./Node.js";
 
 export class OperationNode extends Node {
     constructor(expression, type) {
-        const description = expression;
+        const description =  `<pre><code class='language-csharp'>${expression}</code></pre>`;
         super(description, type);
 
         this.expression = expression;
@@ -108,6 +108,6 @@ export class OperationNode extends Node {
 
     update(expression) {
         this.expression = expression;
-        this.description = expression;
+        this.description = `<pre><code class='language-csharp'>${expression}</code></pre>`;
     }
 }
