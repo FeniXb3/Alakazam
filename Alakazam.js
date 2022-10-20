@@ -660,13 +660,27 @@ export class Alakazam {
         }
     }
 
-    saveSvg(svgEl, name) {
+    async saveSvg(svgEl, name) {
         // this.removeElementsByClass(this.svgElement, 'flowchart-ui');
         svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-        var svgData = svgEl.outerHTML;
+        let response = await fetch('libs/prism/prism.css');
+        let prismStyle = '';
+        if (response.ok) {
+            const blockCommentPattern = /\/\*[\s\S]*?\*\//gm
+            prismStyle = await (await response.text());
+            console.log(prismStyle);
+            prismStyle = prismStyle.replace(blockCommentPattern, '');
+            console.log(prismStyle);
+
+        } else {
+            alert("HTTP-Error: " + response.status);
+        }
+        var svgData = svgEl.outerHTML.replace('</style>', `${prismStyle}</style>`);
         var preface = '<?xml version="1.0" standalone="no"?>\r\n';
         var svgBlob = new Blob([preface, svgData], { type: "image/svg+xml;charset=utf-8" });
         var svgUrl = URL.createObjectURL(svgBlob);
+        console.log(svgData);
+        
         var downloadLink = document.createElement("a");
         downloadLink.href = svgUrl;
         downloadLink.download = name;
