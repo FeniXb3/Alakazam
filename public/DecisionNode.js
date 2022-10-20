@@ -123,10 +123,10 @@ export class DecisionNode extends Node {
 
     static getDescription(condition) {
         return `<pre>${Node.getHighlightTagOpening()}` 
-            + (condition || '').replaceAll(') OR (', `) ${Node.getHighlightTagClosing()}<br/>${Node.getHighlightTagOpening()} OR (`)
-            .replaceAll(') || (', `) ${Node.getHighlightTagClosing()}<br/>${Node.getHighlightTagOpening()} || (`)
-            .replaceAll(') AND (', `) ${Node.getHighlightTagClosing()}<br/>${Node.getHighlightTagOpening()} AND (`)
-            .replaceAll(') && (', `) ${Node.getHighlightTagClosing()}<br/>${Node.getHighlightTagOpening()} && (`)
+            + (condition || '').replaceAll(') OR (', `) ${Node.getHighlightTagClosing()}\n${Node.getHighlightTagOpening()} OR (`)
+            .replaceAll(') || (', `) ${Node.getHighlightTagClosing()}\n${Node.getHighlightTagOpening()} || (`)
+            .replaceAll(') AND (', `) ${Node.getHighlightTagClosing()}\n${Node.getHighlightTagOpening()} AND (`)
+            .replaceAll(') && (', `) ${Node.getHighlightTagClosing()}\n${Node.getHighlightTagOpening()} && (`)
             + `${Node.getHighlightTagClosing()}</pre>`;
     }
 }
