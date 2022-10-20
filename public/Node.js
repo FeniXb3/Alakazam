@@ -88,4 +88,18 @@ export class Node {
             }
         });
     }
+
+    static highlightLanguage = "csharp";
+
+    static getHighlightTagOpening() {
+        return Node.highlightLanguage 
+            ? `<code class='language-${Node.highlightLanguage}'>`
+            : '';
+    } 
+
+    static getHighlightTagClosing() {
+        return Node.highlightLanguage 
+            ? `</code>`
+            : '';
+    } 
 }

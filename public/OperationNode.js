@@ -2,7 +2,7 @@ import { Node } from "./Node.js";
 
 export class OperationNode extends Node {
     constructor(expression, type) {
-        const description =  `<pre><code class='language-csharp'>${expression}</code></pre>`;
+        const description =  OperationNode.getDescription(expression);
         super(description, type);
 
         this.expression = expression;
@@ -108,6 +108,10 @@ export class OperationNode extends Node {
 
     update(expression) {
         this.expression = expression;
-        this.description = `<pre><code class='language-csharp'>${expression}</code></pre>`;
+        this.description = OperationNode.getDescription(expression);
+    }
+    
+    static getDescription(expression) {
+        return `<pre>${Node.getHighlightTagOpening()}${expression}${Node.getHighlightTagClosing()}</pre>`;
     }
 }
