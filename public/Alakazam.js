@@ -667,7 +667,7 @@ export class Alakazam {
         let prismStyle = '';
         if (response.ok) {
             const blockCommentPattern = /\/\*[\s\S]*?\*\//gm
-            prismStyle = await (await response.text());
+            prismStyle = await response.text();
             console.log(prismStyle);
             prismStyle = prismStyle.replace(blockCommentPattern, '');
             console.log(prismStyle);

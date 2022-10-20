@@ -121,6 +121,10 @@ export class DecisionNode extends Node {
         this.description = DecisionNode.getDescription(condition);
     }
 
+    refreshDescription() {
+        this.description = DecisionNode.getDescription(this.condition)
+    }
+
     static getDescription(condition) {
         return `<pre>${Node.getHighlightTagOpening()}` 
             + (condition || '').replaceAll(') OR (', `) ${Node.getHighlightTagClosing()}\n${Node.getHighlightTagOpening()} OR (`)

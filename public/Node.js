@@ -89,6 +89,10 @@ export class Node {
         });
     }
 
+    refreshDescription() {
+        
+    }
+
     static highlightLanguage = "csharp";
 
     static getHighlightTagOpening() {

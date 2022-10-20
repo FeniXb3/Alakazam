@@ -196,7 +196,7 @@ export class Flowchart {
         this.nodes = this.nodes.map(n => {
             const nodeInstance = NodeFactory.makeNode(n.type);
             Object.assign(nodeInstance, n);
-
+            nodeInstance.refreshDescription();
             return nodeInstance;
         });
 
