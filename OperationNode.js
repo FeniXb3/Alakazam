@@ -2,7 +2,7 @@ import { Node } from "./Node.js";
 
 export class OperationNode extends Node {
     constructor(expression, type) {
-        const description = expression;
+        const description =  OperationNode.getDescription(expression);
         super(description, type);
 
         this.expression = expression;
@@ -47,8 +47,8 @@ export class OperationNode extends Node {
             // }
             // else {
                 const operatorPattern = /(?:\s(\+|-|\*|\/|)\s)/gm;
-                const leftSidePattern = /(?:%([a-zA-Z0-9_żźćńółęąśŻŹĆĄŚĘŁÓŃ]+)%|([ a-zA-Z0-9_zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+))/gm;
-                const rightSidePattern = /(?:%([a-zA-Z0-9_żźćńółęąśŻŹĆĄŚĘŁÓŃ]+)%|([ a-zA-Z0-9_zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+))/gm;
+                const leftSidePattern = /(?:"([ a-zA-Z0-9_zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+)"|([a-zA-Z_żźćńółęąśŻŹĆĄŚĘŁÓŃ][a-zA-Z0-9_żźćńółęąśŻŹĆĄŚĘŁÓŃ]+)|(-?[\d]+\.?[\d]+)|(-?[\d]+))/gm;
+                const rightSidePattern = /(?:"([ a-zA-Z0-9_zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+)"|([a-zA-Z_żźćńółęąśŻŹĆĄŚĘŁÓŃ][a-zA-Z0-9_żźćńółęąśŻŹĆĄŚĘŁÓŃ]+)|(-?[\d]+\.?[\d]+)|(-?[\d]+))/gm;
                 const intPattern = /^(-?[\d]+)$/gm;
                 const floatPattern = /^(-?[\d]+\.?[\d]+)$/gm;
                 
@@ -61,8 +61,9 @@ export class OperationNode extends Node {
                 console.log('leftSideMatch ', leftSideMatch);
 
                 const rightSideMatch = rightSidePattern.exec(sides[1]);
+                console.log('rightSideMatch ', rightSideMatch);
 
-                let leftSide = leftSideMatch[2] || state[leftSideMatch[1]];
+                let leftSide = leftSideMatch[1] || state[leftSideMatch[2]] || parseFloat(leftSideMatch[3]) ||  parseInt(leftSideMatch[4], 10) ;
                 intPattern.lastIndex = 0;
                 floatPattern.lastIndex = 0;
                 if (intPattern.test(leftSide)) {
@@ -74,13 +75,15 @@ export class OperationNode extends Node {
 
                 intPattern.lastIndex = 0;
                 floatPattern.lastIndex = 0;
-                let rightSide = rightSideMatch[2] || state[rightSideMatch[1]];
+                let rightSide = rightSideMatch[1] || state[rightSideMatch[2]] || parseFloat(rightSideMatch[3]) ||  parseInt(rightSideMatch[4], 10);
                 if (intPattern.test(rightSide)) {
                     rightSide = parseInt(rightSide, 10);
                 }
                 else if (floatPattern.test(rightSide)) {
                     rightSide = parseFloat(rightSide);
                 }
+
+                console.log(`Left side: ${leftSide} | Right side: ${rightSide}`);
                 const localResult = OperationNode.operatorFunctions[operator](leftSide, rightSide);
                 result = localResult; 
                 console.log(result);
@@ -89,7 +92,7 @@ export class OperationNode extends Node {
         //     }
         // });
         leftSidePattern.lastIndex = 0;
-        const variableName = leftSidePattern.exec(assignmentOperands[0])[1];
+        const variableName = leftSidePattern.exec(assignmentOperands[0])[2];
         console.log('variable name ', variableName);
         state[variableName] = result;
 
@@ -105,6 +108,10 @@ export class OperationNode extends Node {
 
     update(expression) {
         this.expression = expression;
-        this.description = expression;
+        this.description = OperationNode.getDescription(expression);
+    }
+    
+    static getDescription(expression) {
+        return `<pre>${Node.getHighlightTagOpening()}${expression}${Node.getHighlightTagClosing()}</pre>`;
     }
 }
