@@ -110,6 +110,9 @@ export class OperationNode extends Node {
         this.expression = expression;
         this.description = OperationNode.getDescription(expression);
     }
+    refreshDescription() {
+        this.description = DecisionNode.getDescription(this.expression)
+    }
     
     static getDescription(expression) {
         return `<pre>${Node.getHighlightTagOpening()}${expression}${Node.getHighlightTagClosing()}</pre>`;
