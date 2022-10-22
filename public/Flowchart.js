@@ -80,6 +80,7 @@ export class Flowchart {
 
     addNodeTo(mermaidNodeId, shouldReattachConnected, nodeDescription, nodeType, connectionDescription) {
         const currentNode = this.findNodeByMermaidId(mermaidNodeId);
+        connectionDescription = connectionDescription || '';
 
         if (!currentNode) {
             return;
@@ -90,7 +91,7 @@ export class Flowchart {
         const currentConnection = currentNode.connections.find(c => c.description == connectionDescription);
 
         if (currentConnection) {
-            newNode.connect(currentConnection.target);
+            newNode.connect(currentConnection.target,  (nodeType == 'decision') ? 'Yes' : '');
             currentConnection.target = newNode;
         }
         else {
