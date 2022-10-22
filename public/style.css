@@ -151,3 +151,10 @@ svg {
     width: 100vw;
     margin: auto;
 }
+
+#execution-panel {
+    float: left;
+    position: absolute;
+    min-width: 500px;
+    min-height: 500px;
+}

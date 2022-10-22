@@ -13,9 +13,15 @@ export class OutputNode extends Node {
             }
         } while (match);
 
-        outputModal.show('Output', {}, parsedText, () => {
-            super.perform(state, nextConnection);
-        });
+        // outputModal.show('Output', {}, parsedText, () => {
+        //     super.perform(state, nextConnection);
+        // });
+
+        const executionLog = document.querySelector('#execution-panel .content');
+        const section = document.createElement('section')
+        section.innerHTML = parsedText;
+        executionLog.appendChild(section);
+        super.perform(state, nextConnection);
 
         // alert(parsedText);
         // super.perform(state, nextConnection);
