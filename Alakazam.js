@@ -45,13 +45,9 @@ export class Alakazam {
 
         this.setupEventListeners();
 
-        // const data = window.location.hash.replace('#','');
-        const params = new Proxy(new URLSearchParams(window.location.search), {
-            get: (searchParams, prop) => searchParams.get(prop),
-          });
-
-        if (params.data) {
-            this.flowchart.deserializeBase64(params.data);
+        const params = this.getQueryParams();
+        if (params && params.data) {
+            this.flowchart.deserializeBase64(decodeURIComponent(unescape(params.data)));
         }
 
         const nodeMenuConfig = {
@@ -187,6 +183,13 @@ export class Alakazam {
         }
         this.isEditing = false;
     }
+
+    // source - https://stackoverflow.com/a/21152762/1816426
+    getQueryParams = () => {
+        return location.search
+          ? location.search.substr(1).split`&`.reduce((qd, item) => {let [k,v] = item.split`=`; v = v && decodeURIComponent(v); (qd[k] = qd[k] || []).push(v); return qd}, {})
+          : {}
+      }
 
     performDecisionAction = (connectionDescription) => {
         this.targetConnectionDescription = connectionDescription;
@@ -639,7 +642,7 @@ export class Alakazam {
         Prism.highlightAll();
 
         const serializedData = this.flowchart.serializeBase64();
-        this.sharingLink.href = `?data=${serializedData}`;
+        this.sharingLink.href = `?data=${encodeURIComponent(escape(serializedData))}`;
         this.sharingLink.target = '_blank';
 
         if (!blockBroadcast && this.isConnectedToServer()) {
