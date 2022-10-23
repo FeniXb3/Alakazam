@@ -11,6 +11,8 @@ export class InputNode extends Node {
 
     perform(state, nextConnection) {
         console.log(`[IN] Petfotming input node "${this.description}"`);
+        console.log(`#flowchart-${this.id}`);
+        this.markAsActive();
         // modal.show('Input', {}, '', value => {
         //     state[this.variableName] = value;
         //     console.log('go to next');

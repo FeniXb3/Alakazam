@@ -57,8 +57,15 @@ export class Flowchart {
 
 
     alakazam() {
+        const usedElements = document.querySelectorAll('.used-node');
+        console.log(usedElements);
+        usedElements.forEach(nodeElement => {
+            console.log('1234567');
+            nodeElement.classList.remove('used-node');
+        });
+        const executionLog = document.querySelector('#execution-panel .content');
+        executionLog.innerHTML = '';
         const startingNodes = this.nodes.filter(n => n.type == 'start');
-
         startingNodes.forEach(n => {
             const state = {};
             n.perform(state);

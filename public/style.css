@@ -76,8 +76,29 @@ svg div:hover {
     color: blueviolet;
 }
 
-svg [class*=active-node] div {
-    color:forestgreen;
+
+#theGraph [class*=active-node] div {
+    /* color:forestgreen; */
+    /* background-color: lime !important; */
+    stroke: forestgreen;
+}
+
+#theGraph .active-node rect, 
+#theGraph .active-node circle, 
+#theGraph .active-node ellipse, 
+#theGraph .active-node polygon,
+#theGraph .active-node path {
+    fill: rgb(122, 212, 247) !important;
+    stroke: forestgreen !important;
+}
+
+#theGraph .used-node rect, 
+#theGraph .used-node circle, 
+#theGraph .used-node ellipse, 
+#theGraph .used-node polygon,
+#theGraph .used-node path {
+    fill: rgb(190, 234, 252) !important;
+    stroke: forestgreen !important;
 }
 
 #theGraph {
