@@ -56,6 +56,10 @@ body {
     overflow: scroll;
 }
 
+.hidden {
+    display: none;
+}
+
 #flowchart-code-preview {
     display: none;
 }

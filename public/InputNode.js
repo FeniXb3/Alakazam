@@ -24,6 +24,7 @@ export class InputNode extends Node {
         this.tmpNextConnection = nextConnection;
         executionInput.addEventListener('keypress', this.enterListener)
         executionInput.disabled = false;
+        executionInput.classList.remove('hidden');
         executionInput.focus();
         
         //TODO: handle stopping the run if user cancelled
@@ -39,6 +40,7 @@ export class InputNode extends Node {
         const value = executionInput.value;
         executionInput.value = '';
         executionInput.disabled = true;
+        executionInput.classList.add('hidden');
         
         const executionLog = document.querySelector('#execution-panel .content');
         const section = document.createElement('section')
@@ -51,6 +53,7 @@ export class InputNode extends Node {
         super.perform(this.tmpState, nextConnection);
         this.tmpState = undefined;
         this.tmpNextConnection = undefined;
+        // document.body.focus();
     }
 
     getEditInfo() {
