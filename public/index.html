@@ -24,7 +24,7 @@
 <body>
     <script src="libs/mermaid.min.js"></script>
 
-    <div id="page-container">
+    <div class="container" id="page-container">
         <div id="alert-container" class="hidden">
             <div id="alert" class="alert alert-warning" role="alert">
             </div>
@@ -34,24 +34,28 @@
         <div id="decision-wheel-menu"></div>
         <div id="node-type-wheel-menu"></div>
 
-        <div id="header-menu">
-            <button id="load-example" class="btn btn-lg btn-primary"><i class="fa-solid fa-diagram-project"></i> Load
-                example</button>
-            <button id="reset" class="btn btn-lg btn-danger"><i class="fa-solid fa-window-restore"></i> Reset</button>
-            <button id="run" class="btn btn-lg btn-success"><i class="fa-solid fa-wand-magic-sparkles"></i>
-                Alakazam!</button>
+        <div class="row align-items-start" id="header-menu">
+            <div class="col">
+                <button id="load-example" class="btn btn-lg btn-primary"><i class="fa-solid fa-diagram-project"></i> Load
+                    example</button>
+                <button id="reset" class="btn btn-lg btn-danger"><i class="fa-solid fa-window-restore"></i> Reset</button>
+                <button id="run" class="btn btn-lg btn-success"><i class="fa-solid fa-wand-magic-sparkles"></i>
+                    Alakazam!</button>
+            </div>
         </div>
 
-        <div id="workspace">
-            <div id="output-container">
-                <div id="output"></div>
-                <div id="execution-panel">
-                    <article class="content">
-                    </div>
-                    <input type="text" id="execution-input" name="execution-input" disabled >
-                </div>
+        <div class="row align-items-start" id="workspace">
+            <div class="col-md-9" id="output-container">
+                <div  id="output"></div>
             </div>
+            <div class="col" id="execution-panel">
+                <article class="content">
+                </article>
+                <input type="text" id="execution-input" name="execution-input" disabled >
+            </div>
+        </div>
 
+        <div class="row align-items-end">
             <div id="flowchart-code-preview"></div>
             <div id="serialization-container">
                 <div>
