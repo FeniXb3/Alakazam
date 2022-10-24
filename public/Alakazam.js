@@ -490,6 +490,9 @@ export class Alakazam {
 
         document.addEventListener('keyup', event => {
             if (event.key == "Enter" && event.getModifierState('Control')) {
+                this.panZoomGraph.disablePan();
+                this.panZoomGraph.disableZoom();
+                this.panZoomGraph.disableControlIcons();
                 this.flowchart.alakazam();
             }
             else if (event.key == "Escape") {
@@ -598,6 +601,9 @@ export class Alakazam {
         });
 
         this.runButton.addEventListener('click', e => {
+            this.panZoomGraph.disablePan();
+            this.panZoomGraph.disableZoom();
+            this.panZoomGraph.disableControlIcons();
             this.flowchart.alakazam();
         });
     }
@@ -644,6 +650,13 @@ export class Alakazam {
             // });
         });
         Prism.highlightAll();
+        this.panZoomGraph = svgPanZoom('#theGraph', {
+            zoomEnabled: true,
+            controlIconsEnabled: true
+        });
+        this.panZoomGraph.resize(); // update SVG cached size and controls positions
+        this.panZoomGraph.fit();
+        this.panZoomGraph.center();
 
         const serializedData = this.flowchart.serializeBase64();
         this.sharingLink.href = `?data=${encodeURIComponent(escape(serializedData))}`;

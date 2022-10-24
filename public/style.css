@@ -6,10 +6,10 @@ textarea {
 */
 html,
 body {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
     height: 100%;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 /* 
 body {
@@ -20,7 +20,7 @@ body {
 .container {
     height: 100vh;
     display: grid;
-    grid-template-rows:auto auto 1fr;
+    grid-template-rows:auto auto auto;
     margin: 0;
     /* background-color: orange; */
     /* grid-template-columns:240px 1fr 240px; */
@@ -31,10 +31,12 @@ body {
     height: 100%;
 }
 #output-container {
-    max-width: 700px;
+    height: 100%;
+    /* width: 100%; */
+    /* max-width: 700px; */
     /* height: 10vh; */
-    margin: auto;
-    overflow: scroll;
+    /* margin: auto;
+    overflow: scroll; */
 }
 
 /* #output-container::-webkit-scrollbar {
@@ -47,13 +49,21 @@ body {
   } */
 
 #output {
-    width: 10000px;
-    height: 500px;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    /* width: 10000px;
+    height: 500px; */
     /* margin-left: auto;
     margin-right: auto; */
     /* height: 100%; */
     /* width: 2000px; */
-    overflow: scroll;
+    /* overflow: scroll; */
+}
+
+#theGraph {
+    width: 100%;
+    height: 100%;
 }
 
 .hidden {
@@ -105,10 +115,10 @@ svg div:hover {
     stroke: forestgreen !important;
 }
 
-#theGraph {
+/* #theGraph {
     max-width: fit-content !important;
     max-height: fit-content !important;
-}
+} */
 
 #alert-container {
     position:absolute;
