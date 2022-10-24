@@ -469,10 +469,13 @@ export class Alakazam {
         });
 
         this.loadExampleButton.addEventListener('click', () => {
+            Alakazam.clearExecutionLog();
             this.flowchart.prepare();
             this.draw();
             
             this.currentNodeElement = this.output.querySelector('.node');
+            this.currentNodeElement.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
+       
             this.setMenuStartingPosition(this.nodeMenu, this.currentNodeElement);
         });
 
@@ -481,6 +484,7 @@ export class Alakazam {
             this.draw();
     
             this.currentNodeElement = this.output.querySelector('.node');
+            this.currentNodeElement.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
             this.setMenuStartingPosition(this.nodeMenu, this.currentNodeElement);
         });
 
@@ -690,6 +694,18 @@ export class Alakazam {
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
+    }
+
+    static appendExecutionLog(text) {
+        const executionLog = document.querySelector('#execution-panel .content');
+        const section = document.createElement('section')
+        section.innerHTML = text;
+        executionLog.appendChild(section);
+    }
+    
+    static clearExecutionLog() {
+        const executionLog = document.querySelector('#execution-panel .content');
+        executionLog.innerHTML = '';
     }
 }
 

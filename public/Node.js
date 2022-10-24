@@ -79,20 +79,35 @@ export class Node {
     }
 
     perform(state, nextConnection) {
+        this.markAsActive();
         console.log(`Performing action of ${this.type} node ${this.id}(${this.description})\nCurrent state:`);
         console.log(state);
-
-        this.connections.forEach(c => {
-            if (!nextConnection || c.description == nextConnection) {
-                c.target.perform(state);
-            }
-        });
+        setTimeout(() => {
+            this.markAsUsed();
+            this.connections.forEach(c => {
+                if (!nextConnection || c.description == nextConnection) {
+                    c.target.perform(state);
+                }
+            });
+        }, 500);
     }
 
     refreshDescription() {
         
     }
 
+    markAsActive() {
+        const nodeElement = document.querySelector(`[id*=flowchart-${this.id}]`);
+        nodeElement.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
+        nodeElement.classList.add('active-node');
+    }
+
+    markAsUsed() {
+        const nodeElement = document.querySelector(`[id*=flowchart-${this.id}]`);
+        nodeElement.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
+        nodeElement.classList.remove('active-node');
+        nodeElement.classList.add('used-node');
+    }
     static highlightLanguage = "csharp";
 
     static getHighlightTagOpening() {
