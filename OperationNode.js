@@ -13,6 +13,12 @@ export class OperationNode extends Node {
         '-': (a, b) => a - b,
         '*': (a, b) => a * b,
         '/': (a, b) => a / b,
+        '==': (a, b) => a === b,
+        '!=': (a, b) => a !== b,
+        '>': (a, b) => a > b,
+        '<': (a, b) => a < b,
+        '>=': (a, b) => a >= b,
+        '<=': (a, b) => a <= b,
     }
 
 
@@ -46,7 +52,7 @@ export class OperationNode extends Node {
             //     currentLogicalOperator = lo;
             // }
             // else {
-                const operatorPattern = /(?:\s(\+|-|\*|\/|)\s)/gm;
+                const operatorPattern = /(?:\s(\+|-|\*|\/|==|!=|>|<|>=|<=)\s)/gm;
                 const leftSidePattern = /(?:"([ a-zA-Z0-9_zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+)"|([a-zA-Z_żźćńółęąśŻŹĆĄŚĘŁÓŃ][a-zA-Z0-9_żźćńółęąśŻŹĆĄŚĘŁÓŃ]+)|(-?[\d]+\.?[\d]+)|(-?[\d]+))/gm;
                 const rightSidePattern = /(?:"([ a-zA-Z0-9_zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+)"|([a-zA-Z_żźćńółęąśŻŹĆĄŚĘŁÓŃ][a-zA-Z0-9_żźćńółęąśŻŹĆĄŚĘŁÓŃ]+)|(-?[\d]+\.?[\d]+)|(-?[\d]+))/gm;
                 const intPattern = /^(-?[\d]+)$/gm;
@@ -111,7 +117,7 @@ export class OperationNode extends Node {
         this.description = OperationNode.getDescription(expression);
     }
     refreshDescription() {
-        this.description = DecisionNode.getDescription(this.expression)
+        this.description = OperationNode.getDescription(this.expression)
     }
     
     static getDescription(expression) {

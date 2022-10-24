@@ -1,77 +1,138 @@
-svg div:hover {
-    color: blueviolet;
-}
-
-svg [id*=active-node] div {
-    color:forestgreen;
-}
+/* 
 
 textarea {
     white-space: pre-wrap;
 }
-
-/* override browser default */
+*/
 html,
 body {
   margin: 0;
   padding: 0;
+    height: 100%;
+    overflow: hidden;
 }
-
-/* use viewport-relative units to cover page fully */
+/* 
 body {
   height: 100vh;
   width: 100vw;
-}
+} */
 
-
-/* include border and padding in element width and height */
-* {
-  box-sizing: border-box;
-}
-
-#page-container {
-    
-  height: 100%;
-  width: 100%;
-
-  /* example padding, font-size, background, etc */
-
-}
-
-.full-height {
-    height: 100%;
-    /* background: aquamarine; */
-  }
-
-#workspace {
-    height: 80%;
-    width: 100%;
+.container {
+    height: 100vh;
+    display: grid;
+    grid-template-rows:auto auto 1fr;
     margin: 0;
-    background-color: aliceblue;
+    /* background-color: orange; */
+    /* grid-template-columns:240px 1fr 240px; */
 }
 
 
-svg {
-    display: block;
-    margin: auto;
+.container {
+    height: 100%;
 }
-
 #output-container {
-    width: 100vw;
-    height: 80vh;
+    max-width: 700px;
+    /* height: 10vh; */
     margin: auto;
     overflow: scroll;
 }
+
+/* #output-container::-webkit-scrollbar {
+    display: none;
+  }
+  
+#output-container {
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+  } */
 
 #output {
-    height: 100vh;
-    width: 2000px;
+    width: 10000px;
+    height: 500px;
+    /* margin-left: auto;
+    margin-right: auto; */
+    /* height: 100%; */
+    /* width: 2000px; */
     overflow: scroll;
+}
+
+.hidden {
+    display: none;
 }
 
 #flowchart-code-preview {
     display: none;
 }
+* {
+  box-sizing: border-box;
+}
+#workspace {
+    /* height: 80%; */
+    width: 100%;
+    margin: 0;
+    /* background-color: aliceblue; */
+}
+svg {
+    display: block;
+    margin: auto;
+}
+svg div:hover {
+    color: blueviolet;
+}
+
+
+#theGraph [class*=active-node] div {
+    /* color:forestgreen; */
+    /* background-color: lime !important; */
+    stroke: forestgreen;
+}
+
+#theGraph .active-node rect, 
+#theGraph .active-node circle, 
+#theGraph .active-node ellipse, 
+#theGraph .active-node polygon,
+#theGraph .active-node path {
+    fill: rgb(122, 212, 247) !important;
+    stroke: forestgreen !important;
+}
+
+#theGraph .used-node rect, 
+#theGraph .used-node circle, 
+#theGraph .used-node ellipse, 
+#theGraph .used-node polygon,
+#theGraph .used-node path {
+    fill: rgb(190, 234, 252) !important;
+    stroke: forestgreen !important;
+}
+
+#theGraph {
+    max-width: fit-content !important;
+    max-height: fit-content !important;
+}
+
+#alert-container {
+    position:absolute;
+    width: 100vw;
+    margin: auto;
+}
+/*
+
+
+
+#page-container {
+  height: 100%;
+  width: 100%;
+}
+
+.full-height {
+    height: 100%;
+}
+
+
+
+
+
+
 
 .flowchart-ui {
     pointer-events: none;
@@ -141,13 +202,4 @@ svg {
     color: yellow !important;
 }
 
-#theGraph {
-    max-width: fit-content !important;
-    max-height: fit-content !important;
-}
-
-#alert-container {
-    position:absolute;
-    width: 100vw;
-    margin: auto;
-}
+ */
