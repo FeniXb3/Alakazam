@@ -1,6 +1,7 @@
 import { Connection } from "./Connection.js";
 import { NodeFactory } from "./NodeFactory.js";
 import { Node } from "./Node.js";
+import { Alakazam } from "./Alakazam.js";
 
 export class Flowchart {
     constructor() {
@@ -53,6 +54,7 @@ export class Flowchart {
     reset() {
         this.nodes = [];
         this.addNode("Start", "start");
+        Alakazam.clearExecutionLog();
     }
 
 
@@ -60,11 +62,9 @@ export class Flowchart {
         const usedElements = document.querySelectorAll('.used-node');
         console.log(usedElements);
         usedElements.forEach(nodeElement => {
-            console.log('1234567');
             nodeElement.classList.remove('used-node');
         });
-        const executionLog = document.querySelector('#execution-panel .content');
-        executionLog.innerHTML = '';
+        Alakazam.clearExecutionLog();
         const startingNodes = this.nodes.filter(n => n.type == 'start');
         startingNodes.forEach(n => {
             const state = {};
@@ -225,6 +225,7 @@ export class Flowchart {
 
 
         console.log(this);
+        Alakazam.clearExecutionLog();
     }
 }
 

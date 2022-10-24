@@ -1,5 +1,6 @@
 import { Node } from "./Node.js";
 import { modal, outputModal } from "./ModalHandler.js";
+import { Alakazam } from "./Alakazam.js";
 
 export class OutputNode extends Node {
     perform(state, nextConnection) {
@@ -17,10 +18,7 @@ export class OutputNode extends Node {
         //     super.perform(state, nextConnection);
         // });
 
-        const executionLog = document.querySelector('#execution-panel .content');
-        const section = document.createElement('section')
-        section.innerHTML = parsedText;
-        executionLog.appendChild(section);
+        Alakazam.appendExecutionLog(parsedText);
         super.perform(state, nextConnection);
 
         // alert(parsedText);

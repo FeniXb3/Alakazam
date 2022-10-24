@@ -1,5 +1,6 @@
 import { Node } from "./Node.js";
 import { modal } from "./ModalHandler.js";
+import { Alakazam } from "./Alakazam.js";
 
 export class InputNode extends Node {
     constructor(variableName, type) {
@@ -42,10 +43,8 @@ export class InputNode extends Node {
         executionInput.disabled = true;
         executionInput.classList.add('hidden');
         
-        const executionLog = document.querySelector('#execution-panel .content');
-        const section = document.createElement('section')
-        section.innerHTML = `> ${value}`;
-        executionLog.appendChild(section);
+        Alakazam.appendExecutionLog(`> ${value}`);
+
         let nextConnection = this.tmpNextConnection;
         let state = this.tmpState;
         state[this.variableName] = value;
