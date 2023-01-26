@@ -57,18 +57,25 @@ export class OperationNode extends Node {
                 const rightSidePattern = /(?:"([ a-zA-Z0-9_zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+)"|([a-zA-Z_żźćńółęąśŻŹĆĄŚĘŁÓŃ][a-zA-Z0-9_żźćńółęąśŻŹĆĄŚĘŁÓŃ]+)|(-?[\d]+\.?[\d]+)|(-?[\d]+))/gm;
                 const intPattern = /^(-?[\d]+)$/gm;
                 const floatPattern = /^(-?[\d]+\.?[\d]+)$/gm;
-                
+                let sides = [];
                 console.log(lo);
-                const operator = operatorPattern.exec(lo)[1];//.trim();
-                console.log('operator ', operator);
-                const sides = lo.split(operator).map(s => s.trim());
+                
+                const operatorExecResult = operatorPattern.exec(lo);
+                let operator;
+                if (operatorExecResult == null) {
+                    console.log('Handling no operator');
+                    sides.push(lo);
+                }
+                else {
+                    operator = operatorExecResult[1];//.trim();
+                    console.log('operator ', operator);
+                    sides = lo.split(operator).map(s => s.trim());
+                }
                 console.log(sides);
                 const leftSideMatch = leftSidePattern.exec(sides[0]);
                 console.log('leftSideMatch ', leftSideMatch);
 
-                const rightSideMatch = rightSidePattern.exec(sides[1]);
-                console.log('rightSideMatch ', rightSideMatch);
-
+                
                 let leftSide = leftSideMatch[1] || state[leftSideMatch[2]] || parseFloat(leftSideMatch[3]) ||  parseInt(leftSideMatch[4], 10) ;
                 intPattern.lastIndex = 0;
                 floatPattern.lastIndex = 0;
@@ -78,19 +85,28 @@ export class OperationNode extends Node {
                 else if (floatPattern.test(leftSide)) {
                     leftSide = parseFloat(leftSide);
                 }
+                let localResult;
+                if (sides.length > 1) {
+                    const rightSideMatch = rightSidePattern.exec(sides[1]);
+                    console.log('rightSideMatch ', rightSideMatch);
+                    
+                    intPattern.lastIndex = 0;
+                    floatPattern.lastIndex = 0;
+                    let rightSide = rightSideMatch[1] || state[rightSideMatch[2]] || parseFloat(rightSideMatch[3]) ||  parseInt(rightSideMatch[4], 10);
+                    if (intPattern.test(rightSide)) {
+                        rightSide = parseInt(rightSide, 10);
+                    }
+                    else if (floatPattern.test(rightSide)) {
+                        rightSide = parseFloat(rightSide);
+                    }
 
-                intPattern.lastIndex = 0;
-                floatPattern.lastIndex = 0;
-                let rightSide = rightSideMatch[1] || state[rightSideMatch[2]] || parseFloat(rightSideMatch[3]) ||  parseInt(rightSideMatch[4], 10);
-                if (intPattern.test(rightSide)) {
-                    rightSide = parseInt(rightSide, 10);
+                    console.log(`Left side: ${leftSide} | Right side: ${rightSide}`);
+                    localResult = OperationNode.operatorFunctions[operator](leftSide, rightSide);
                 }
-                else if (floatPattern.test(rightSide)) {
-                    rightSide = parseFloat(rightSide);
+                else {
+                    console.log(`Left side: ${leftSide} | Right side: NOTHING`);
+                    localResult = leftSide;
                 }
-
-                console.log(`Left side: ${leftSide} | Right side: ${rightSide}`);
-                const localResult = OperationNode.operatorFunctions[operator](leftSide, rightSide);
                 result = localResult; 
                 console.log(result);
                 //result == null ? localResult
