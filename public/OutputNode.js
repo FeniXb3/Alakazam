@@ -4,13 +4,14 @@ import { Alakazam } from "./Alakazam.js";
 
 export class OutputNode extends Node {
     perform(state, nextConnection) {
-        const pattern = /(?:\${(\w+)})/gm;
+        const pattern = /(?:\${([^${}]+)})/gm;
         let parsedText = this.description;
         let match;
         do {
             match = pattern.exec(this.description);
             if (match) {
-                parsedText = parsedText.replace(match[0], state[match[1]]);
+                console.log('Parsing ' + match[0]);
+                parsedText = parsedText.replace(match[0], this.getPartialResult(state, match[1]));
             }
         } while (match);
 
