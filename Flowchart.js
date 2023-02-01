@@ -19,36 +19,32 @@ export class Flowchart {
         this.nodes = [];
         const firstNode = this.addNode("Start", "start");
         const lastNode = this.addNode("Stop", "stop");
+        
+        const drawDecisionNode = firstNode.connect(this.addNode("\"Let's play a game! Rock-Paper-Scissors, I mean\"", "output"))
+            .connect(this.addNode("firstPlayerPoints = 0", "operation"))
+            .connect(this.addNode("secondPlayerPoints = 0", "operation"))
+            .connect(this.addNode("roundsPlayed = 0", "operation"))
+            .connect(this.addNode("\"Player 1, provide sign (rock/paper/scissors):\"", "output"))
+            .connect(this.addNode("firstSign", "input"))
+            .connect(this.addNode("\"Player 2, provide sign (rock/paper/scissors):\"", "output"))
+            .connect(this.addNode("secondSign", "input"))
+            .connect(this.addNode("firstSign == secondSign", "decision"));
 
-        // const nameQueryNode = this.addNode("What's your name?", "output");
-        // const nameGettingNode = this.addNode("name", "input");
-        // const nameDisplayingNode = this.addNode("Ahoy, %name%!", "output");
-        // const championDisplayinNode = this.addNode("You are the champion!", "output");
-        // const decisionNode = this.addNode("%name% == Champion || %name% == champion OR %name% == CHAMPION", "decision");
+        const drawOutputNode = drawDecisionNode
+            .connect(this.addNode("\"It's a draw!\"", "output"), "Yes")
+            .connect(lastNode);
+        const firstPlayerWinDecisionNode = drawDecisionNode
+            .connect(this.addNode("(firstSign == \"rock\" && secondSign == \"scissors\") || (firstSign == \"scissors\" && secondSign == \"paper\") || (firstSign == \"paper\" && secondSign == \"rock\")", "decision"), "No");
 
-        // firstNode.connect(nameQueryNode);
-        // nameQueryNode.connect(nameGettingNode);
-        // nameGettingNode.connect(decisionNode);
-        // decisionNode.connect(championDisplayinNode, 'Yes');
-        // decisionNode.connect(nameDisplayingNode, 'No');
-        // championDisplayinNode.connect(lastNode);
-        // nameDisplayingNode.connect(lastNode);
+        firstPlayerWinDecisionNode
+            .connect(this.addNode("firstPlayerPoints = firstPlayerPoints + 1", "operation"), "Yes")
+            .connect(this.addNode("\"First player won!\"", "output"))
+            .connect(lastNode);
 
-        const sign1GettingNode = this.addNode("sign1", "input");
-        const sign2GettingNode = this.addNode("sign2", "input");
-        const nameDisplayingNode = this.addNode("Player 2 won!", "output");
-        const championDisplayinNode = this.addNode("Player 1 won!", "output");
-        // const decisionNode = this.addNode("(%sign1% == rock AND %sign2% == scissors) OR (%sign1% == scissors AND %sign2% == paper) OR (%sign1% == paper AND %sign2% == rock)", "decision");
-        const decisionNode = this.addNode("(sign1 == \"rock\" && sign2 == \"scissors\") || (sign1 == \"scissors\" && sign2 == \"paper\") || (sign1 == \"paper\" && sign2 == \"rock\")", "decision");
-
-        firstNode.connect(sign1GettingNode);
-        sign1GettingNode.connect(sign2GettingNode);
-        // nameQueryNode.connect(nameGettingNode);
-        sign2GettingNode.connect(decisionNode);
-        decisionNode.connect(championDisplayinNode, 'Yes');
-        decisionNode.connect(nameDisplayingNode, 'No');
-        championDisplayinNode.connect(lastNode);
-        nameDisplayingNode.connect(lastNode);
+        firstPlayerWinDecisionNode
+            .connect(this.addNode("secondPlayerPoints = secondPlayerPoints + 1", "operation"), "No")
+            .connect(this.addNode("\"Second player won!\"", "output"))
+            .connect(lastNode);
     }
 
     reset() {
