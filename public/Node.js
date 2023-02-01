@@ -42,6 +42,8 @@ export class Node {
         description = description || "";
         this.connections.push(new Connection(node, description));
         this.connections = this.connections.sort((a, b) => -a.description.localeCompare(b.description));
+
+        return node;
     }
 
     getEditInfo() {
