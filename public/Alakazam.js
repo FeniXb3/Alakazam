@@ -15,6 +15,7 @@ export class Alakazam {
         this.output = document.getElementById('output');
         this.outputContainer = document.getElementById("output-container");
         this.previewContainer = document.getElementById('flowchart-code-preview');
+        this.zoomSlider = document.querySelector("#zoom-range");
         this.alertContainer = document.getElementById('alert-container');
         this.alertElement = document.getElementById('alert');
 
@@ -165,7 +166,6 @@ export class Alakazam {
 
             modal.show(titleText, data, '', this.nodeAddingModalCallback);
         });
-        
         
         this.centerView();
     }
@@ -488,6 +488,10 @@ export class Alakazam {
             this.setMenuStartingPosition(this.nodeMenu, this.currentNodeElement);
         });
 
+        this.zoomSlider.oninput = function() {
+            document.querySelector("#theGraph").setAttribute("width", this.value);
+        }
+
         document.addEventListener('keyup', event => {
             if (event.key == "Enter" && event.getModifierState('Control')) {
                 this.flowchart.alakazam();
@@ -657,6 +661,8 @@ export class Alakazam {
             }
             this.ws.send(JSON.stringify(broadcastData));
         }
+
+        document.querySelector("#theGraph").setAttribute("width", this.zoomSlider.value);
     }
 
     // https://stackoverflow.com/questions/4777077/removing-elements-by-class-name
