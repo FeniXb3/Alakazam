@@ -25,8 +25,6 @@ export class OutputNode extends Node {
             } while (match);
         }
 
-        parsedText = this.getPartialResult(state, parsedText);
-
         // outputModal.show('Output', {}, parsedText, () => {
         //     super.perform(state, nextConnection);
         // });
