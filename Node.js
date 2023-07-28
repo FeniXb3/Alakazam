@@ -1,4 +1,5 @@
 import { Connection } from './Connection.js';
+import * as TWEEN from './libs/tween.esm.js';
 
 export class Node {
     static ids = [];
@@ -80,6 +81,51 @@ export class Node {
         return result
     }
 
+    init(current, target, state, nextConnection, callback) {
+        const currentNodeElement = document.querySelector(`[id*=flowchart-${current.id}]`);
+
+        const targetNodeElement = document.querySelector(`[id*=flowchart-${target.id}]`);
+        const nodeWidth = targetNodeElement.getBoundingClientRect().width;
+        const graphWidth = document.querySelector('#theGraph').getAttribute('width');
+        const outputContainerWidth = document.querySelector("#output-container").clientWidth ;
+        const desiredElementhWidth = outputContainerWidth * 0.9;
+
+        const desiredGraphWidth = (desiredElementhWidth / nodeWidth) * graphWidth;
+        // alert(`Nodw width: ${nodeWidth} Graph width: ${graphWidth}`);
+
+        const currentNode = this; 
+        var tween = new TWEEN.Tween({width: graphWidth, nodeElement: currentNodeElement})
+        .to({width: desiredGraphWidth}, 500)
+        .easing(TWEEN.Easing.Exponential.InOut)
+        .onUpdate((tmp) => {
+            console.log(tmp);
+            document.querySelector("#theGraph").setAttribute("width", tmp.width);
+            tmp.nodeElement.scrollIntoView({behavior: "instant", block: "center", inline: "center"});
+        })
+        .onComplete(() => {
+            callback(state, nextConnection);
+            // currentNode.markAsActive();
+            // console.log(`Performing action of ${currentNode.type} node ${currentNode.id}(${currentNode.description})\nCurrent state:`);
+            // console.log(state);
+            // setTimeout(() => {
+            //     currentNode.markAsUsed();
+            //     currentNode.connections.forEach(c => {
+            //         if (!nextConnection || c.description == nextConnection) {
+            //             c.target.perform(state);
+            //         }
+            //     });
+            // }, 500);
+        })
+        .start();
+    }
+
+    animate(time) {
+        const currentNode = this; 
+
+        requestAnimationFrame((value) => {currentNode.animate(value)});
+        TWEEN.update(time);
+    }
+
     perform(state, nextConnection) {
         this.markAsActive();
         console.log(`Performing action of ${this.type} node ${this.id}(${this.description})\nCurrent state:`);
@@ -88,10 +134,15 @@ export class Node {
             this.markAsUsed();
             this.connections.forEach(c => {
                 if (!nextConnection || c.description == nextConnection) {
-                    c.target.perform(state);
+                    this.init(this, c.target, state, nextConnection, (state, nextConnection) => {
+                        c.target.perform(state);
+                    });
+                    this.animate();
                 }
             });
         }, 500);
+        // this.init(state, nextConnection);
+        // this.animate();
     }
 
     refreshDescription() {
@@ -100,15 +151,15 @@ export class Node {
 
     markAsActive() {
         const nodeElement = document.querySelector(`[id*=flowchart-${this.id}]`);
-        const nodeWidth = nodeElement.getBoundingClientRect().width;
-        const graphWidth = document.querySelector('#theGraph').getAttribute('width');
-        const outputContainerWidth = document.querySelector("#output-container").clientWidth ;
-        const desiredElementhWidth = outputContainerWidth * 0.7;
+        // const nodeWidth = nodeElement.getBoundingClientRect().width;
+        // const graphWidth = document.querySelector('#theGraph').getAttribute('width');
+        // const outputContainerWidth = document.querySelector("#output-container").clientWidth ;
+        // const desiredElementhWidth = outputContainerWidth * 0.7;
 
-        const desiredGraphWidth = (desiredElementhWidth / nodeWidth) * graphWidth;
+        // const desiredGraphWidth = (desiredElementhWidth / nodeWidth) * graphWidth;
 
-        document.querySelector("#theGraph").setAttribute("width", desiredGraphWidth);
-        document.querySelector("#zoom-range").value = desiredGraphWidth;
+        // document.querySelector("#theGraph").setAttribute("width", desiredGraphWidth);
+        // document.querySelector("#zoom-range").value = desiredGraphWidth;
 
         nodeElement.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
         nodeElement.classList.add('active-node');
