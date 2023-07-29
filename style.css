@@ -34,7 +34,14 @@ body {
     max-width: 700px;
     /* height: 10vh; */
     margin: auto;
-    overflow: scroll;
+    overflow: hidden;
+    /* position: relative; */
+}
+
+#graph-controls {
+    /* position: absolute; 
+    bottom: 5px;
+    left: 5px; */
 }
 
 /* #output-container::-webkit-scrollbar {
@@ -53,7 +60,7 @@ body {
     margin-right: auto; */
     /* height: 100%; */
     /* width: 2000px; */
-    overflow: scroll;
+    overflow: hidden;
 }
 
 .hidden {

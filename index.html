@@ -41,7 +41,6 @@
                 <button id="reset" class="btn btn-lg btn-danger"><i class="fa-solid fa-window-restore"></i> Reset</button>
                 <button id="run" class="btn btn-lg btn-success"><i class="fa-solid fa-wand-magic-sparkles"></i>
                     Alakazam!</button>
-                <input type="range" min="111" max="10000" value="111" class="slider" id="zoom-range">
             </div>
         </div>
 
@@ -53,6 +52,26 @@
                 <article class="content">
                 </article>
                 <input type="text" id="execution-input" name="execution-input" class="hidden" disabled >
+            </div>
+        </div>
+        <div class="row h-25">
+            <div id="graph-controls" class="col-md-2">
+                <div class="row">
+                    <input type="range" min="111" max="10000" value="111" class="slider" id="zoom-range">
+                </div>
+
+                <div class="row">
+                    <div class="row">
+                        <button id="move-up">⬆</button>
+                    </div>
+                    <div class="row">
+                        <button class="col" id="move-left">⬅</button>
+                        <button class="col" id="move-right">➡</button>
+                    </div>
+                    <div class="row">
+                        <button id="move-down">⬇</button>
+                    </div>
+                </div>
             </div>
         </div>
 
