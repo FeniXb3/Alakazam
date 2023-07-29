@@ -391,7 +391,6 @@ export class Alakazam {
         }
 
         this.finalizeAddingNode(connectionDescription);
-        this.draw();
     }
 
     moveGraph = (byX, byY) => {
