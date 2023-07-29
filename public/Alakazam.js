@@ -19,6 +19,12 @@ export class Alakazam {
         this.alertContainer = document.getElementById('alert-container');
         this.alertElement = document.getElementById('alert');
 
+        this.moveLeftButton = document.getElementById('move-left');
+        this.moveRightButton = document.getElementById('move-right');
+        this.moveUpButton = document.getElementById('move-up');
+        this.moveDownButton = document.getElementById('move-down');
+        // this.moveButtonDownInterval
+
         this.serializeBase64Button = document.getElementById('serialize-base64');
         this.deserializeBase64Button = document.getElementById('deserialize-base64');
         this.serializeJsonButton = document.getElementById('serialize-json');
@@ -384,6 +390,17 @@ export class Alakazam {
         this.draw();
     }
 
+    moveGraph = (byX, byY) => {
+        const multiplier = 10;
+        let viewBoxData = document.querySelector('#theGraph').getAttribute('viewBox');
+        
+        let values = viewBoxData.split(' ').map(v => parseFloat(v))
+        //   alert(values.join(' '))
+        values[0] += byX * multiplier;
+        values[1] += byY * multiplier;
+        document.querySelector('#theGraph').setAttribute('viewBox',values.join(' '));
+    }
+
     setupEventListeners = () => {
         this.connectServerButton.addEventListener('click', () => {
             const address = `wss://minefield.enklawa-tworcza.pl:1338`; 
@@ -492,6 +509,47 @@ export class Alakazam {
             document.querySelector("#theGraph").setAttribute("width", this.value);
         }
 
+        this.moveLeftButton.addEventListener('mousedown', () => {
+            clearInterval(this.moveButtonDownInterval)
+            this.moveButtonDownInterval = setInterval(() => {
+                this.moveGraph(-1, 0);
+            }, 0);
+        });
+        this.moveLeftButton.addEventListener('mouseup', () => {
+            clearInterval(this.moveButtonDownInterval)
+        });
+
+        this.moveRightButton.addEventListener('mousedown', () => {
+            clearInterval(this.moveButtonDownInterval)
+            this.moveButtonDownInterval = setInterval(() => {
+                this.moveGraph(1, 0);
+            }, 0);
+        });
+        this.moveRightButton.addEventListener('mouseup', () => {
+            clearInterval(this.moveButtonDownInterval)
+        });
+
+        this.moveUpButton.addEventListener('mousedown', () => {
+            clearInterval(this.moveButtonDownInterval)
+            this.moveButtonDownInterval = setInterval(() => {
+                this.moveGraph(0, -1);
+            }, 0);
+        });
+        this.moveUpButton.addEventListener('mouseup', () => {
+            clearInterval(this.moveButtonDownInterval)
+        });
+
+        this.moveDownButton.addEventListener('mousedown', () => {
+            clearInterval(this.moveButtonDownInterval)
+            this.moveButtonDownInterval = setInterval(() => {
+                this.moveGraph(0, 1);
+            }, 0);
+        });
+        this.moveDownButton.addEventListener('mouseup', () => {
+            clearInterval(this.moveButtonDownInterval)
+        });
+
+        
         document.addEventListener('keyup', event => {
             if (event.key == "Enter" && event.getModifierState('Control')) {
                 this.flowchart.alakazam();
@@ -602,6 +660,8 @@ export class Alakazam {
         });
 
         this.runButton.addEventListener('click', e => {
+            clearInterval(this.moveButtonDownInterval)
+            document.querySelector('#theGraph').setAttribute('viewBox', this.startingViewBoxData);
             this.flowchart.alakazam();
         });
     }
@@ -663,6 +723,7 @@ export class Alakazam {
         }
 
         document.querySelector("#theGraph").setAttribute("width", this.zoomSlider.value);
+        this.startingViewBoxData = document.querySelector('#theGraph').getAttribute('viewBox');
     }
 
     // https://stackoverflow.com/questions/4777077/removing-elements-by-class-name
