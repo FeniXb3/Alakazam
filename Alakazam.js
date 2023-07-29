@@ -223,8 +223,12 @@ export class Alakazam {
     }
 
     endAddingNode = (nodeType, nodeDescription) => {
-        this.flowchart.addNodeTo(this.currentNodeElement.id, false, nodeDescription, nodeType, this.targetConnectionDescription);
+        const newNode = this.flowchart.addNodeTo(this.currentNodeElement.id, false, nodeDescription, nodeType, this.targetConnectionDescription);
         this.draw();
+
+        if (newNode) {
+            newNode.scrollTo();
+        }
         
         this.targetConnectionDescription = '';
     }
@@ -387,7 +391,6 @@ export class Alakazam {
         }
 
         this.finalizeAddingNode(connectionDescription);
-        this.draw();
     }
 
     moveGraph = (byX, byY) => {
@@ -721,6 +724,23 @@ export class Alakazam {
             }
             this.ws.send(JSON.stringify(broadcastData));
         }
+        
+        document.querySelector("#theGraph").setAttribute("width", this.zoomSlider.value);
+        const nodeElements = document.querySelectorAll(`.node`);
+        let maximumWidth = 0;
+        nodeElements.forEach((element) => {
+            const width = element.getBoundingClientRect().width;
+            if (width > maximumWidth) {
+                maximumWidth = width;
+            }
+        });
+
+        const graphWidth = document.querySelector('#theGraph').getAttribute('width');
+        const outputContainerWidth = document.querySelector("#output-container").clientWidth ;
+        const desiredElementhWidth = outputContainerWidth * 0.9;
+
+        const desiredGraphWidth = (desiredElementhWidth / maximumWidth) * graphWidth;
+        this.zoomSlider.value = desiredGraphWidth;
 
         document.querySelector("#theGraph").setAttribute("width", this.zoomSlider.value);
         this.startingViewBoxData = document.querySelector('#theGraph').getAttribute('viewBox');
