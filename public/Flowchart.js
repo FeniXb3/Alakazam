@@ -86,7 +86,7 @@ export class Flowchart {
         connectionDescription = connectionDescription || '';
 
         if (!currentNode) {
-            return;
+            return null;
         }
 
         const newNode = this.addNode(nodeDescription, nodeType);
@@ -101,6 +101,8 @@ export class Flowchart {
             currentNode.connect(newNode, connectionDescription);
         }
         // this.reconnectNodes(currentNode, newNode, shouldReattachConnected, connectionDescription);
+
+        return newNode;
     }
 
     addAlternateNode(startingMermaidId, nodeDescription, nodeType, connectionDescription) {

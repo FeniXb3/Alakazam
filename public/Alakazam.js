@@ -223,8 +223,12 @@ export class Alakazam {
     }
 
     endAddingNode = (nodeType, nodeDescription) => {
-        this.flowchart.addNodeTo(this.currentNodeElement.id, false, nodeDescription, nodeType, this.targetConnectionDescription);
+        const newNode = this.flowchart.addNodeTo(this.currentNodeElement.id, false, nodeDescription, nodeType, this.targetConnectionDescription);
         this.draw();
+
+        if (newNode) {
+            newNode.scrollTo();
+        }
         
         this.targetConnectionDescription = '';
     }

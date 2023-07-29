@@ -149,18 +149,13 @@ export class Node {
         
     }
 
+    scrollTo() {
+        const nodeElement = document.querySelector(`[id*=flowchart-${this.id}]`);
+        nodeElement.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
+    }
+
     markAsActive() {
         const nodeElement = document.querySelector(`[id*=flowchart-${this.id}]`);
-        // const nodeWidth = nodeElement.getBoundingClientRect().width;
-        // const graphWidth = document.querySelector('#theGraph').getAttribute('width');
-        // const outputContainerWidth = document.querySelector("#output-container").clientWidth ;
-        // const desiredElementhWidth = outputContainerWidth * 0.7;
-
-        // const desiredGraphWidth = (desiredElementhWidth / nodeWidth) * graphWidth;
-
-        // document.querySelector("#theGraph").setAttribute("width", desiredGraphWidth);
-        // document.querySelector("#zoom-range").value = desiredGraphWidth;
-
         nodeElement.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
         nodeElement.classList.add('active-node');
     }
