@@ -48,39 +48,48 @@ body {
 }
 
 #graph-controls {
-    bottom: 0px;
-    background-color: blueviolet
+    bottom: 1rem;
+    left: 1rem;
+}
+
+#graph-controls button {
+    margin: 0.1rem;
+}
+
+#zoom-range {
+    display: none;
 }
 
 #header-menu {
-    top: 0px;
-    background-color: bisque;
+    top: 1rem;
+    /* background-color: bisque; */
 }
 
 #execution-panel {
     /* display: none; */
-    right: 0px;
-    top: 0px;
+    right: 1rem;
+    top: 1rem;
     width: 30%;
-    background-color: aqua;
+    /* background-color: aqua; */
+    font-family: 'Courier New', Courier, monospace;
 }
 
 #serialization-container {
-    bottom: 0px;
-    right: 0px;
+    bottom: 1rem;
+    right: 1rem;
     /* left: 0; 
     right: 0; 
     margin-left: auto; 
     margin-right: auto;
     width: 50%; */
-    background-color: brown;
+    /* background-color: brown; */
 }
 
 #server-container {
     display: none;
     bottom: 0px;
     right: 0px;
-    background-color: coral;
+    /* background-color: coral; */
 }
 
 /* #output-container::-webkit-scrollbar {
@@ -121,6 +130,7 @@ body {
 svg {
     display: block;
     margin: auto;
+    /* background-color: cadetblue; */
 }
 svg div:hover {
     color: blueviolet;
