@@ -25,7 +25,8 @@ export class InputNode extends Node {
         this.tmpNextConnection = nextConnection;
         executionInput.addEventListener('keypress', this.enterListener)
         executionInput.disabled = false;
-        executionInput.classList.remove('hidden');
+        executionInput.parentElement.classList.remove('hidden');
+        executionInput.parentElement.removeAttribute("hidden");
         executionInput.focus();
         
         //TODO: handle stopping the run if user cancelled
@@ -41,7 +42,8 @@ export class InputNode extends Node {
         const value = executionInput.value;
         executionInput.value = '';
         executionInput.disabled = true;
-        executionInput.classList.add('hidden');
+        executionInput.parentElement.classList.add('hidden');
+        executionInput.parentElement.setAttribute("hidden", "");
         
         Alakazam.appendExecutionLog(`> ${value}`);
 
