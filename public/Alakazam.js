@@ -576,7 +576,7 @@ export class Alakazam {
         //     this.tryShowingNodeActionMenu(event);
         // });
 
-        this.workspace.addEventListener('mouseup', event => {
+        this.output.addEventListener('mouseup', event => {
             if (event.button != 0) {
                 return;
             }
