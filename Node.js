@@ -134,10 +134,15 @@ export class Node {
             this.markAsUsed();
             this.connections.forEach(c => {
                 if (!nextConnection || c.description == nextConnection) {
-                    this.init(this, c.target, state, nextConnection, (state, nextConnection) => {
+                    if (this.tweenActiveElement) {
+                        this.init(this, c.target, state, nextConnection, (state, nextConnection) => {
+                            c.target.perform(state);
+                        });
+                        this.animate();
+                    }
+                    else {
                         c.target.perform(state);
-                    });
-                    this.animate();
+                    }
                 }
             });
         }, 500);
