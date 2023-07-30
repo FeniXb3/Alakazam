@@ -24,7 +24,7 @@
 <body>
     <script src="libs/mermaid.min.js"></script>
 
-    <div class="container" id="page-container">
+    <div class="container-fluid" id="page-container">
         <div id="alert-container" class="hidden">
             <div id="alert" class="alert alert-warning" role="alert">
             </div>
@@ -33,6 +33,7 @@
         <div id="node-wheel-menu"></div>
         <div id="decision-wheel-menu"></div>
         <div id="node-type-wheel-menu"></div>
+        <div  id="output"></div>
 
         <div class="row align-items-start" id="header-menu">
             <div class="col">
@@ -43,19 +44,19 @@
                     Alakazam!</button>
             </div>
         </div>
-
-        <div class="row align-items-start" id="workspace">
-            <div class="col-md-9" id="output-container">
-                <div  id="output"></div>
-            </div>
-            <div class="col" id="execution-panel">
-                <article class="content">
-                </article>
-                <input type="text" id="execution-input" name="execution-input" class="hidden" disabled >
-            </div>
+        <div id="execution-panel">
+            <article class="content">
+            </article>
+            <input type="text" id="execution-input" name="execution-input" class="hidden" disabled >
         </div>
-        <div class="row h-25">
-            <div id="graph-controls" class="col-md-2">
+        <div class="row align-items-start" id="workspace">
+            <!-- <div class="col-md-9" id="output-container">
+                <div  id="output"></div>
+            </div> -->
+            
+        </div>
+        <div id="graph-controls" class="row">
+            <div class="col">
                 <div class="row">
                     <input type="range" min="111" max="10000" value="111" class="slider" id="zoom-range">
                 </div>
@@ -71,32 +72,35 @@
                     <div class="row">
                         <button id="move-down">⬇</button>
                     </div>
+                    <div class="row">
+                        <button id="zoom-viewbox">+</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="row align-items-end">
-            <div id="flowchart-code-preview"></div>
-            <div id="serialization-container">
-                <div>
-                    <button id="save-svg" class="btn btn-lg btn-primary"><i class="fa-solid fa-file-image"></i> Save
-                        SVG</button>
-                    <button id="serialize-base64" class="btn btn-lg btn-secondary"><i class="fa-solid fa-download"></i>
-                        Save Zam</button>
-                    <button id="deserialize-base64" class="btn btn-lg btn-secondary"><i class="fa-solid fa-upload"></i>
-                        Load Zam</button>
-                    <a id="sharing-link" class="btn btn-lg btn-primary" href=""><i class="fa-solid fa-share-nodes"></i>
-                        Sharing link</a>
-                    <form>
-                        <input type="file" id="load-zam" accept=".zam" hidden />
-                    </form>
+        <div id="flowchart-code-preview"></div>
+        <div class="row align-items-center" id="serialization-container">
+            <div class="col" >
+                <button id="save-svg" class="btn btn-lg btn-primary"><i class="fa-solid fa-file-image"></i> Save
+                    SVG</button>
+                <button id="serialize-base64" class="btn btn-lg btn-secondary"><i class="fa-solid fa-download"></i>
+                    Save Zam</button>
+                <button id="deserialize-base64" class="btn btn-lg btn-secondary"><i class="fa-solid fa-upload"></i>
+                    Load Zam</button>
+                <a id="sharing-link" class="btn btn-lg btn-primary" href=""><i class="fa-solid fa-share-nodes"></i>
+                    Sharing link</a>
+                <form>
+                    <input type="file" id="load-zam" accept=".zam" hidden />
+                </form>
 
-                    <button id="serialize-json" class="btn btn-secondary" hidden>serialize JSON</button>
-                    <button id="deserialize-json" class="btn btn-secondary" hidden>deserialize JSON</button>
-                </div>
+                <button id="serialize-json" class="btn btn-secondary" hidden>serialize JSON</button>
+                <button id="deserialize-json" class="btn btn-secondary" hidden>deserialize JSON</button>
                 <textarea id="serialized-data" rows="3" cols="30" hidden></textarea>
             </div>
-            <div>
+        </div>
+        <div class="row align-items-end" id="server-container">
+            <div class="col">
                 <!-- <input id="server-address" type="text" name="server-address"/> -->
                 <input id="chamber-name" type="text" name="chamber-name" />
                 <button id="connect-server" class="btn btn-primary">Connect to server</button>

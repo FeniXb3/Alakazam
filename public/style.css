@@ -38,10 +38,49 @@ body {
     /* position: relative; */
 }
 
-#graph-controls {
-    /* position: absolute; 
-    bottom: 5px;
+#graph-controls, #header-menu, #workspace, 
+#execution-panel, #serialization-container, #server-container{
+    position: absolute;
+    /* width: 100%;
+    height: 100%; */
+    /* bottom: 5px;
     left: 5px; */
+}
+
+#graph-controls {
+    bottom: 0px;
+    background-color: blueviolet
+}
+
+#header-menu {
+    top: 0px;
+    background-color: bisque;
+}
+
+#execution-panel {
+    /* display: none; */
+    right: 0px;
+    top: 0px;
+    width: 30%;
+    background-color: aqua;
+}
+
+#serialization-container {
+    bottom: 0px;
+    right: 0px;
+    /* left: 0; 
+    right: 0; 
+    margin-left: auto; 
+    margin-right: auto;
+    width: 50%; */
+    background-color: brown;
+}
+
+#server-container {
+    display: none;
+    bottom: 0px;
+    right: 0px;
+    background-color: coral;
 }
 
 /* #output-container::-webkit-scrollbar {
@@ -54,8 +93,8 @@ body {
   } */
 
 #output {
-    width: 10000px;
-    height: 500px;
+    /* width: 10000px;
+    height: 500px; */
     /* margin-left: auto;
     margin-right: auto; */
     /* height: 100%; */
