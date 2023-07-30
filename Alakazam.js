@@ -173,7 +173,7 @@ export class Alakazam {
             modal.show(titleText, data, '', this.nodeAddingModalCallback);
         });
         
-        this.centerView();
+        // this.centerView();
     }
 
     nodeAddingModalCallback = (content, type) => {
@@ -736,7 +736,7 @@ export class Alakazam {
         });
 
         const graphWidth = document.querySelector('#theGraph').getAttribute('width');
-        const outputContainerWidth = document.querySelector("#output-container").clientWidth ;
+        const outputContainerWidth = document.querySelector('#theGraph').parentElement.clientWidth ;
         const desiredElementhWidth = outputContainerWidth * 0.9;
 
         const desiredGraphWidth = (desiredElementhWidth / maximumWidth) * graphWidth;
