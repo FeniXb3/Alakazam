@@ -44,7 +44,7 @@
                     Alakazam!</button>
             </div>
         </div>
-        <div id="execution-panel">
+        <div id="execution-panel" class="card">
             <article class="content">
             </article>
             <input type="text" id="execution-input" name="execution-input" class="hidden" disabled >
@@ -55,26 +55,25 @@
             </div> -->
             
         </div>
-        <div id="graph-controls" class="row">
-            <div class="col">
-                <div class="row">
-                    <input type="range" min="111" max="10000" value="111" class="slider" id="zoom-range">
-                </div>
+        <div id="graph-controls" class="d-flex justify-content-center flex-nowrap">
+            <div class="">
+                <input type="range" min="111" max="10000" value="111" class="slider" id="zoom-range">
+            </div>
 
-                <div class="row">
-                    <div class="row">
-                        <button id="move-up">⬆</button>
-                    </div>
-                    <div class="row">
-                        <button class="col" id="move-left">⬅</button>
-                        <button class="col" id="move-right">➡</button>
-                    </div>
-                    <div class="row">
-                        <button id="move-down">⬇</button>
-                    </div>
-                    <div class="row">
-                        <button id="zoom-viewbox">+</button>
-                    </div>
+            <div class="">
+                <div class="d-flex justify-content-center flex-nowrap">
+                    <button id="move-up" class="btn btn-square-sm btn-primary"><i class="fa-solid fa-up-long"></i></button>
+                </div>
+                <div class="d-flex justify-content-center flex-nowrap">
+                    <button id="move-left" class="btn btn-square-sm btn-primary"><i class="fa-solid fa-left-long"></i></button>
+                    <button id="move-right" class="btn btn-square-sm btn-primary"><i class="fa-solid fa-right-long"></i></button>
+                </div>
+                <div class="d-flex justify-content-center flex-nowrap">
+                    <button id="move-down" class="btn btn-square-sm btn-primary"><i class="fa-solid fa-down-long"></i></button>
+                </div>
+                <div class="d-flex justify-content-center flex-nowrap">
+                    <button id="zoom-in-viewbox" class="btn btn-square-sm btn-primary"><i class="fa-solid fa-plus"></i></button>
+                    <button id="zoom-out-viewbox" class="btn btn-square-sm btn-primary"><i class="fa-solid fa-minus"></i></button>
                 </div>
             </div>
         </div>

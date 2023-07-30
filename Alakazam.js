@@ -23,6 +23,8 @@ export class Alakazam {
         this.moveRightButton = document.getElementById('move-right');
         this.moveUpButton = document.getElementById('move-up');
         this.moveDownButton = document.getElementById('move-down');
+        this.zoomInViewBoxButton = document.getElementById('zoom-in-viewbox');
+        this.zoomOutViewBoxButton = document.getElementById('zoom-out-viewbox');
         // this.moveButtonDownInterval
 
         this.serializeBase64Button = document.getElementById('serialize-base64');
@@ -404,6 +406,22 @@ export class Alakazam {
         document.querySelector('#theGraph').setAttribute('viewBox',values.join(' '));
     }
 
+    zoomGraphViewBox = (byX, byY) => {
+        const multiplier = 10;
+        let viewBoxData = document.querySelector('#theGraph').getAttribute('viewBox');
+        
+        let values = viewBoxData.split(' ').map(v => parseFloat(v))
+        //   alert(values.join(' '))
+        values[0] -= byX * multiplier/2;
+        values[1] -= byY * multiplier/2;
+        values[2] += byX * multiplier;
+        values[3] += byY * multiplier;
+
+        if (values[2] > 0 && values[3] > 0) {
+            document.querySelector('#theGraph').setAttribute('viewBox',values.join(' '));
+        }
+    }
+
     setupEventListeners = () => {
         this.connectServerButton.addEventListener('click', () => {
             const address = `wss://minefield.enklawa-tworcza.pl:1338`; 
@@ -552,6 +570,26 @@ export class Alakazam {
             clearInterval(this.moveButtonDownInterval)
         });
 
+        this.zoomInViewBoxButton.addEventListener('mousedown', () => {
+            clearInterval(this.moveButtonDownInterval)
+            this.moveButtonDownInterval = setInterval(() => {
+                this.zoomGraphViewBox(-1, -1);
+            }, 0);
+        });
+        this.zoomInViewBoxButton.addEventListener('mouseup', () => {
+            clearInterval(this.moveButtonDownInterval)
+        });
+
+        this.zoomOutViewBoxButton.addEventListener('mousedown', () => {
+            clearInterval(this.moveButtonDownInterval)
+            this.moveButtonDownInterval = setInterval(() => {
+                this.zoomGraphViewBox(1, 1);
+            }, 0);
+        });
+        this.zoomOutViewBoxButton.addEventListener('mouseup', () => {
+            clearInterval(this.moveButtonDownInterval)
+        });
+
         
         document.addEventListener('keyup', event => {
             if (event.key == "Enter" && event.getModifierState('Control')) {
@@ -576,7 +614,7 @@ export class Alakazam {
         //     this.tryShowingNodeActionMenu(event);
         // });
 
-        this.workspace.addEventListener('mouseup', event => {
+        this.output.addEventListener('mouseup', event => {
             if (event.button != 0) {
                 return;
             }
