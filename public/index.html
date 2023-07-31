@@ -37,11 +37,9 @@
 
         <div class="row align-items-start" id="header-menu">
             <div class="col">
-                <button id="load-example" class="btn btn-lg btn-primary"><i class="fa-solid fa-diagram-project"></i> Load
-                    example</button>
-                <button id="reset" class="btn btn-lg btn-danger"><i class="fa-solid fa-window-restore"></i> Reset</button>
-                <button id="run" class="btn btn-lg btn-success"><i class="fa-solid fa-wand-magic-sparkles"></i>
-                    Alakazam!</button>
+                <button id="load-example" class="btn btn-square-sm btn-primary" title="Load example"><i class="fa-solid fa-diagram-project"></i></button>
+                <button id="reset" class="btn btn-square-sm btn-danger" title="Reset"><i class="fa-solid fa-window-restore"></i></button>
+                <button id="run" class="btn btn-square-sm btn-success" title="Alakazam!"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
             </div>
         </div>
         <div id="execution-panel" class="card">
@@ -85,14 +83,10 @@
         <div id="flowchart-code-preview"></div>
         <div class="row align-items-center" id="serialization-container">
             <div class="col" >
-                <button id="save-svg" class="btn btn-lg btn-primary"><i class="fa-solid fa-file-image"></i> Save
-                    SVG</button>
-                <button id="serialize-base64" class="btn btn-lg btn-secondary"><i class="fa-solid fa-download"></i>
-                    Save Zam</button>
-                <button id="deserialize-base64" class="btn btn-lg btn-secondary"><i class="fa-solid fa-upload"></i>
-                    Load Zam</button>
-                <a id="sharing-link" class="btn btn-lg btn-primary" href=""><i class="fa-solid fa-share-nodes"></i>
-                    Sharing link</a>
+                <button id="save-svg" class="btn btn-square-sm btn-primary" title="Save SVG"><i class="fa-solid fa-file-image"></i></button>
+                <button id="serialize-base64" class="btn btn-square-sm btn-secondary" title="Save Zam"><i class="fa-solid fa-download"></i></button>
+                <button id="deserialize-base64" class="btn btn-square-sm btn-secondary" title="Load Zam"><i class="fa-solid fa-upload"></i></button>
+                <a id="sharing-link" class="btn btn-square-sm btn-primary" href="" title="Sharing link"><i class="fa-solid fa-share-nodes"></i></a>
                 <form>
                     <input type="file" id="load-zam" accept=".zam" hidden />
                 </form>
