@@ -766,18 +766,29 @@ export class Alakazam {
         document.querySelector("#theGraph").setAttribute("width", this.zoomSlider.value);
         const nodeElements = document.querySelectorAll(`.node`);
         let maximumWidth = 0;
+        let maximumHeight = 0;
         nodeElements.forEach((element) => {
             const width = element.getBoundingClientRect().width;
             if (width > maximumWidth) {
                 maximumWidth = width;
             }
+
+            const height = element.getBoundingClientRect().height;
+            if (height > maximumHeight) {
+                maximumHeight = height;
+            }
         });
 
         const graphWidth = document.querySelector('#theGraph').getAttribute('width');
-        const outputContainerWidth = document.querySelector('#theGraph').parentElement.clientWidth ;
+        const outputContainerWidth = document.querySelector('#theGraph').parentElement.clientWidth;
+        const outputContainerHeight = document.querySelector('#theGraph').parentElement.clientHeight;
         const desiredElementhWidth = outputContainerWidth * 0.9;
+        const widthMultiplier = (desiredElementhWidth / maximumWidth);
+        const possibleElementHeight = (desiredElementhWidth / maximumWidth) * maximumHeight;
+        const heightLimit = outputContainerHeight / 3;
+        const heightModificator = (possibleElementHeight <= heightLimit) ? 1 : heightLimit/possibleElementHeight;
 
-        const desiredGraphWidth = (desiredElementhWidth / maximumWidth) * graphWidth;
+        const desiredGraphWidth = widthMultiplier * graphWidth * heightModificator;
         this.zoomSlider.value = desiredGraphWidth;
 
         document.querySelector("#theGraph").setAttribute("width", this.zoomSlider.value);
