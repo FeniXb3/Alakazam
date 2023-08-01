@@ -6,6 +6,35 @@ import { Alakazam } from "./Alakazam.js";
 export class Flowchart {
     constructor() {
         this.nodes = [];
+        this.selectedNode = null;
+        this.selectionHistory = [];
+    }
+
+    selectNextNode(direction) {
+        if (!this.selectedNode) {
+            const startingNodes = this.nodes.filter(n => n.type == 'start');
+        
+            this.selectedNode = startingNodes[0];
+            this.selectedNode.markAsSelected();
+        }
+        else if (this.selectedNode.connections.length == 1 || direction == "left") {
+            this.selectionHistory.push(this.selectedNode);
+            this.selectedNode.markAsUnselected();
+            this.selectedNode = this.selectedNode.connections[0].target;
+            this.selectedNode.markAsSelected();
+        }
+        else if (direction == "right") {
+            this.selectionHistory.push(this.selectedNode);
+            this.selectedNode.markAsUnselected();
+            this.selectedNode = this.selectedNode.connections[1].target;
+            this.selectedNode.markAsSelected();
+        }
+    }
+
+    selectPreviousNode() {
+        this.selectedNode.markAsUnselected();
+        this.selectedNode = this.selectionHistory.pop();
+        this.selectedNode.markAsSelected();
     }
 
     addNode(description, type) {

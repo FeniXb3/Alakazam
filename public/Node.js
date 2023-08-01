@@ -160,17 +160,33 @@ export class Node {
     }
 
     markAsActive() {
-        const nodeElement = document.querySelector(`[id*=flowchart-${this.id}]`);
-        nodeElement.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
-        nodeElement.classList.add('active-node');
+        this.markAs('active-node');
     }
 
     markAsUsed() {
-        const nodeElement = document.querySelector(`[id*=flowchart-${this.id}]`);
-        nodeElement.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
-        nodeElement.classList.remove('active-node');
-        nodeElement.classList.add('used-node');
+        this.markAs('used-node').classList.remove('active-node');
     }
+
+    markAsSelected() {
+        this.markAs('selected-element');
+    }
+
+    markAsUnselected() {
+        this.getNodeElement().classList.remove('selected-element');
+    }
+
+    getNodeElement() {
+        return document.querySelector(`[id*=flowchart-${this.id}]`);
+    }
+
+    markAs(roleClass) {
+        const nodeElement = this.getNodeElement();
+        nodeElement.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
+        nodeElement.classList.add(roleClass);
+
+        return nodeElement;
+    }
+
     static highlightLanguage = "csharp";
 
     static getHighlightTagOpening() {

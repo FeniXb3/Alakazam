@@ -161,6 +161,16 @@ svg div:hover {
     stroke: forestgreen !important;
 }
 
+
+#theGraph .selected-element rect, 
+#theGraph .selected-element circle, 
+#theGraph .selected-element ellipse, 
+#theGraph .selected-element polygon,
+#theGraph .selected-element path {
+    fill: rgb(233, 97, 203) !important;
+    stroke: rgb(87, 0, 95) !important;
+}
+
 #theGraph {
     max-width: fit-content !important;
     max-height: fit-content !important;
