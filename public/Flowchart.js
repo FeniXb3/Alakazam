@@ -86,6 +86,10 @@ export class Flowchart {
 
 
     alakazam() {
+        this.isMagicHappening = true;
+        Node.onPerformFinish = () => {
+            this.isMagicHappening = false;
+        };
         const usedElements = document.querySelectorAll('.used-node');
         console.log(usedElements);
         usedElements.forEach(nodeElement => {
