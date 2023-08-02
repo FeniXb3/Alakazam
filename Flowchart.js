@@ -32,9 +32,11 @@ export class Flowchart {
     }
 
     selectPreviousNode() {
-        this.selectedNode.markAsUnselected();
-        this.selectedNode = this.selectionHistory.pop();
-        this.selectedNode.markAsSelected();
+        if (this.selectedNode) {
+            this.selectedNode.markAsUnselected();
+            this.selectedNode = this.selectionHistory.pop();
+            this.selectedNode.markAsSelected();
+        }
     }
 
     addNode(description, type) {
