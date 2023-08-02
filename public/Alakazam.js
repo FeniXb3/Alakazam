@@ -84,8 +84,7 @@ export class Alakazam {
         });
 
         this.nodeMenu.setupHandler(icon.trash, () => {
-            this.removeNode();
-            this.draw();
+            this.handleRemovingNode();
         });
 
         this.nodeMenu.setupHandler(icon.connect, () => {
@@ -612,7 +611,11 @@ export class Alakazam {
                 }
                 else if (this.flowchart.selectedNode) {
                     this.currentNodeElement = this.flowchart.selectedNode.getNodeElement();
-                    if (this.flowchart.selectedNode.type == "decision" && this.targetConnectionDescription == '') {
+                    if (event.key == "Delete") {
+                        this.handleRemovingNode();
+                        // this.flowchart.selectPreviousNode();
+                    }
+                    else if (this.flowchart.selectedNode.type == "decision" && this.targetConnectionDescription == '') {
                         
                         if (event.key == "y") {
                             // this.performDecisionAction('Yes');
@@ -828,6 +831,11 @@ export class Alakazam {
 
         document.querySelector("#theGraph").setAttribute("width", this.zoomSlider.value);
         this.startingViewBoxData = document.querySelector('#theGraph').getAttribute('viewBox');
+    }
+
+    handleRemovingNode() {
+        this.removeNode();
+        this.draw();
     }
 
     alakazam() {
