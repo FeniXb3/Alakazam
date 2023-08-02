@@ -96,8 +96,7 @@ export class Alakazam {
         });
 
         this.nodeMenu.setupHandler(icon.edit, () => {
-            this.editNode();
-            this.draw();
+            this.handleEditingNode();
         });
         
         const decisionMenuConfig = {
@@ -615,6 +614,9 @@ export class Alakazam {
                         this.handleRemovingNode();
                         // this.flowchart.selectPreviousNode();
                     }
+                    else if (event.key == "F2") {
+                        this.handleEditingNode();
+                    }
                     else if (this.flowchart.selectedNode.type == "decision" && this.targetConnectionDescription == '') {
                         
                         if (event.key == "y") {
@@ -831,6 +833,11 @@ export class Alakazam {
 
         document.querySelector("#theGraph").setAttribute("width", this.zoomSlider.value);
         this.startingViewBoxData = document.querySelector('#theGraph').getAttribute('viewBox');
+    }
+
+    handleEditingNode() {
+        this.editNode();
+        this.draw();
     }
 
     handleRemovingNode() {
