@@ -144,35 +144,23 @@ export class Alakazam {
         this.nodeTypeMenu.hide();
         
         this.nodeTypeMenu.setupHandler(icon.bubble, () => {            
-            const titleText = 'Provide text to display';
-            const data = {'data-node-type': 'output'};
-
-            modal.show(titleText, data, '', this.nodeAddingModalCallback);
+            this.handleAddingOutputNode();
         });
         
         this.nodeTypeMenu.setupHandler(icon.import, () => {           
-            const titleText = 'Provide variable name to store input data';
-            const data = {'data-node-type': 'input'};
-
-            modal.show(titleText, data, '', this.nodeAddingModalCallback);
+            this.handleAddingInputNode();
         });
         
         this.nodeTypeMenu.setupHandler(icon.smallgear, () => {           
-            const titleText = 'Provide operation';
-            const data = {'data-node-type': 'operation'};
-
-            modal.show(titleText, data, '', this.nodeAddingModalCallback);
+            this.handleAddingVariableOperationNode();
         });
         
         this.nodeTypeMenu.setupHandler(icon.stop, () => {
-            this.nodeAddingModalCallback('Stop', 'stop');
+            this.handleAddingStopNode();
         });
 
         this.nodeTypeMenu.setupHandler(icon.split, () => {  
-            const titleText = 'Provide condition to be checked';
-            const data = {'data-node-type': 'decision'};
-
-            modal.show(titleText, data, '', this.nodeAddingModalCallback);
+            this.handleAddingDecisionNode();
         });
         
         // this.centerView();
@@ -618,6 +606,35 @@ export class Alakazam {
                 else if (event.key == "ArrowUp") {
                     this.flowchart.selectPreviousNode();
                 }
+                else if (this.flowchart.selectedNode) {
+                    this.currentNodeElement = this.flowchart.selectedNode.getNodeElement();
+                    if (this.flowchart.selectedNode.type == "decision") {
+                        
+                        if (event.key == "y") {
+                            this.performDecisionAction('Yes');
+                        }
+                        else if (event.key == "n") {
+                            this.performDecisionAction('No');
+                        }
+                    }
+                    else {
+                        if (event.key == "i") {
+                            this.handleAddingInputNode();
+                        }
+                        else if (event.key == "o") {
+                            this.handleAddingOutputNode();
+                        }
+                        else if (event.key == "s") {
+                            this.handleAddingStopNode();
+                        }
+                        else if (event.key == "d") {
+                            this.handleAddingDecisionNode();
+                        }
+                        else if (event.key == "v") {
+                            this.handleAddingVariableOperationNode();
+                        }
+                    }
+                }
             }
         });
 
@@ -807,6 +824,38 @@ export class Alakazam {
 
         document.querySelector("#theGraph").setAttribute("width", this.zoomSlider.value);
         this.startingViewBoxData = document.querySelector('#theGraph').getAttribute('viewBox');
+    }
+
+    handleAddingDecisionNode() {
+        const titleText = 'Provide condition to be checked';
+        const data = { 'data-node-type': 'decision' };
+
+        modal.show(titleText, data, '', this.nodeAddingModalCallback);
+    }
+
+    handleAddingOutputNode() {
+        const titleText = 'Provide text to display';
+        const data = { 'data-node-type': 'output' };
+
+        modal.show(titleText, data, '', this.nodeAddingModalCallback);
+    }
+
+    handleAddingStopNode() {
+        this.nodeAddingModalCallback('Stop', 'stop');
+    }
+
+    handleAddingVariableOperationNode() {
+        const titleText = 'Provide operation';
+        const data = { 'data-node-type': 'operation' };
+
+        modal.show(titleText, data, '', this.nodeAddingModalCallback);
+    }
+
+    handleAddingInputNode() {
+        const titleText = 'Provide variable name to store input data';
+        const data = { 'data-node-type': 'input' };
+
+        modal.show(titleText, data, '', this.nodeAddingModalCallback);
     }
 
     // https://stackoverflow.com/questions/4777077/removing-elements-by-class-name
