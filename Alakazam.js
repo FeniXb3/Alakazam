@@ -595,26 +595,32 @@ export class Alakazam {
             }
             else if (!modal.isVisible) {
                 if (event.key == "ArrowDown") {
+                    this.targetConnectionDescription = '';
                     this.flowchart.selectNextNode();
                 }
                 else if (event.key == "ArrowLeft") {
+                    this.targetConnectionDescription = '';
                     this.flowchart.selectNextNode("left");
                 }
                 else if (event.key == "ArrowRight") {
+                    this.targetConnectionDescription = '';
                     this.flowchart.selectNextNode("right");
                 }
                 else if (event.key == "ArrowUp") {
+                    this.targetConnectionDescription = '';
                     this.flowchart.selectPreviousNode();
                 }
                 else if (this.flowchart.selectedNode) {
                     this.currentNodeElement = this.flowchart.selectedNode.getNodeElement();
-                    if (this.flowchart.selectedNode.type == "decision") {
+                    if (this.flowchart.selectedNode.type == "decision" && this.targetConnectionDescription == '') {
                         
                         if (event.key == "y") {
-                            this.performDecisionAction('Yes');
+                            // this.performDecisionAction('Yes');
+                            this.targetConnectionDescription = 'Yes';
                         }
                         else if (event.key == "n") {
-                            this.performDecisionAction('No');
+                            this.targetConnectionDescription = 'No';
+                            // this.performDecisionAction('No');
                         }
                     }
                     else {
