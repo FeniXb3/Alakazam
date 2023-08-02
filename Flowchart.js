@@ -17,6 +17,9 @@ export class Flowchart {
             this.selectedNode = startingNodes[0];
             this.selectedNode.markAsSelected();
         }
+        else if (this.selectedNode.connections.length == 0) {
+            console.log("Cannot select next node - no connection")
+        }
         else if (this.selectedNode.connections.length == 1 || direction == "left") {
             this.selectionHistory.push(this.selectedNode);
             this.selectedNode.markAsUnselected();
@@ -32,7 +35,7 @@ export class Flowchart {
     }
 
     selectPreviousNode() {
-        if (this.selectedNode) {
+        if (this.selectedNode && this.selectionHistory.length > 0) {
             this.selectedNode.markAsUnselected();
             this.selectedNode = this.selectionHistory.pop();
             this.selectedNode.markAsSelected();

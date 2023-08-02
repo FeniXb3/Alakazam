@@ -96,8 +96,7 @@ export class Alakazam {
         });
 
         this.nodeMenu.setupHandler(icon.edit, () => {
-            this.editNode();
-            this.draw();
+            this.handleEditingNode();
         });
         
         const decisionMenuConfig = {
@@ -454,23 +453,11 @@ export class Alakazam {
         });
 
         this.serializeBase64Button.addEventListener('click', () => {
-            modal.show('Provide flowchart Zam file name', {}, `flowchart_${Date.now()}`, fileName => {
-                if (fileName == null) {
-                    return;
-                }
-
-                const serializedContent = this.flowchart.serializeBase64();
-                this.serializedData.value = serializedContent;
-                
-                this.saveLinkHelper = this.saveLinkHelper || document.createElement("a");
-                this.saveLinkHelper.href = window.URL.createObjectURL(new Blob([serializedContent], {type: "text/plain"}));
-                this.saveLinkHelper.download = `${fileName}.zam`;
-                this.saveLinkHelper.click(); 
-            });
+            this.handleSavingZam();
         });
 
         this.deserializeBase64Button.addEventListener('click', () => {
-            this.fileInput.click();
+            this.handleOpeningZam();
         });
 
         this.fileInput.addEventListener('change', (event) => {
@@ -494,23 +481,11 @@ export class Alakazam {
         });
 
         this.loadExampleButton.addEventListener('click', () => {
-            Alakazam.clearExecutionLog();
-            this.flowchart.prepare();
-            this.draw();
-            
-            this.currentNodeElement = this.output.querySelector('.node');
-            this.currentNodeElement.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
-       
-            this.setMenuStartingPosition(this.nodeMenu, this.currentNodeElement);
+            this.handleLoadingExample();
         });
 
         this.resetButton.addEventListener('click', () => {
-            this.flowchart.reset();
-            this.draw();
-    
-            this.currentNodeElement = this.output.querySelector('.node');
-            this.currentNodeElement.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
-            this.setMenuStartingPosition(this.nodeMenu, this.currentNodeElement);
+            this.handleFlowchartReseting();
         });
 
         this.zoomSlider.oninput = function() {
@@ -577,6 +552,30 @@ export class Alakazam {
             clearInterval(this.moveButtonDownInterval)
         });
 
+        document.addEventListener('keydown', event => {
+            if (!event.getModifierState('Shift')) {
+                return;
+            }
+
+            if (event.key == "ArrowDown") {
+                this.moveGraph(0, 1);
+            }
+            else if (event.key == "ArrowLeft") {
+                this.moveGraph(-1, 0);
+            }
+            else if (event.key == "ArrowRight") {
+                this.moveGraph(1, 0);
+            }
+            else if (event.key == "ArrowUp") {
+                this.moveGraph(0, -1);
+            }
+            else if (event.key == "+") {
+                this.zoomGraphViewBox(-1, -1);
+            }
+            else if (event.key == "_") {
+                this.zoomGraphViewBox(1, 1);
+            }
+        });
         
         document.addEventListener('keyup', event => {
             if (event.key == "Enter" && event.getModifierState('Control')) {
@@ -592,7 +591,27 @@ export class Alakazam {
                 this.nodeTypeMenu.hide();
                 this.hideAlert();
             }
-            else if (!modal.isVisible && !this.flowchart.isMagicHappening) {
+            else if (!modal.isVisible && !this.flowchart.isMagicHappening && event.getModifierState('Shift')) {
+                if (event.key == 'L') {
+                    this.handleLoadingExample();
+                }
+                else if (event.key == 'R') {
+                    this.handleFlowchartReseting();
+                }
+                else if (event.key == 'E') {
+                    this.handleSVGExporting();
+                }
+                else if (event.key == 'S') {
+                    this.handleSavingZam();
+                }
+                else if (event.key == 'O') {
+                    this.handleOpeningZam();
+                }
+                else if (event.key == 'H') {
+                    this.sharingLink.click();
+                }
+            }
+            else if (!modal.isVisible && !this.flowchart.isMagicHappening && !event.getModifierState('Shift')) {
                 if (event.key == "ArrowDown") {
                     this.targetConnectionDescription = '';
                     this.flowchart.selectNextNode();
@@ -614,6 +633,9 @@ export class Alakazam {
                     if (event.key == "Delete") {
                         this.handleRemovingNode();
                         // this.flowchart.selectPreviousNode();
+                    }
+                    else if (event.key == "F2") {
+                        this.handleEditingNode();
                     }
                     else if (this.flowchart.selectedNode.type == "decision" && this.targetConnectionDescription == '') {
                         
@@ -731,13 +753,7 @@ export class Alakazam {
         }
 
         this.saveSvgButton.addEventListener('click', event => {
-            modal.show('Choose file name', {}, 'alakazam', fileName => {
-                if (fileName == null) {
-                    return;
-                }
-                this.svgElement = document.getElementById('theGraph');
-                this.saveSvg(this.svgElement, `${fileName}_${Date.now()}.svg`);
-            });
+            this.handleSVGExporting();
         });
 
         this.runButton.addEventListener('click', e => {
@@ -831,6 +847,61 @@ export class Alakazam {
 
         document.querySelector("#theGraph").setAttribute("width", this.zoomSlider.value);
         this.startingViewBoxData = document.querySelector('#theGraph').getAttribute('viewBox');
+    }
+
+    handleOpeningZam() {
+        this.fileInput.click();
+    }
+
+    handleSavingZam() {
+        modal.show('Provide flowchart Zam file name', {}, `flowchart_${Date.now()}`, fileName => {
+            if (fileName == null) {
+                return;
+            }
+
+            const serializedContent = this.flowchart.serializeBase64();
+            this.serializedData.value = serializedContent;
+
+            this.saveLinkHelper = this.saveLinkHelper || document.createElement("a");
+            this.saveLinkHelper.href = window.URL.createObjectURL(new Blob([serializedContent], { type: "text/plain" }));
+            this.saveLinkHelper.download = `${fileName}.zam`;
+            this.saveLinkHelper.click();
+        });
+    }
+
+    handleSVGExporting() {
+        modal.show('Choose file name', {}, 'alakazam', fileName => {
+            if (fileName == null) {
+                return;
+            }
+            this.svgElement = document.getElementById('theGraph');
+            this.saveSvg(this.svgElement, `${fileName}_${Date.now()}.svg`);
+        });
+    }
+
+    handleFlowchartReseting() {
+        this.flowchart.reset();
+        this.draw();
+
+        this.currentNodeElement = this.output.querySelector('.node');
+        this.currentNodeElement.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+        this.setMenuStartingPosition(this.nodeMenu, this.currentNodeElement);
+    }
+
+    handleLoadingExample() {
+        Alakazam.clearExecutionLog();
+        this.flowchart.prepare();
+        this.draw();
+
+        this.currentNodeElement = this.output.querySelector('.node');
+        this.currentNodeElement.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+
+        this.setMenuStartingPosition(this.nodeMenu, this.currentNodeElement);
+    }
+
+    handleEditingNode() {
+        this.editNode();
+        this.draw();
     }
 
     handleRemovingNode() {
