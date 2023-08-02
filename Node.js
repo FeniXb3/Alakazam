@@ -178,7 +178,9 @@ export class Node {
     }
 
     markAsUnselected() {
-        this.getNodeElement().classList.remove('selected-element');
+        if (this.getNodeElement()) {
+            this.getNodeElement().classList.remove('selected-element');
+        }
     }
 
     getNodeElement() {
