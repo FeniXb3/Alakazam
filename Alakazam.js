@@ -581,7 +581,7 @@ export class Alakazam {
         
         document.addEventListener('keyup', event => {
             if (event.key == "Enter" && event.getModifierState('Control')) {
-                this.flowchart.alakazam();
+                this.alakazam();
             }
             else if (event.key == "Escape") {
                 this.isDeciding = false;
@@ -593,7 +593,7 @@ export class Alakazam {
                 this.nodeTypeMenu.hide();
                 this.hideAlert();
             }
-            else if (!modal.isVisible) {
+            else if (!modal.isVisible && !this.flowchart.isMagicHappening) {
                 if (event.key == "ArrowDown") {
                     this.targetConnectionDescription = '';
                     this.flowchart.selectNextNode();
@@ -738,9 +738,7 @@ export class Alakazam {
         });
 
         this.runButton.addEventListener('click', e => {
-            clearInterval(this.moveButtonDownInterval)
-            document.querySelector('#theGraph').setAttribute('viewBox', this.startingViewBoxData);
-            this.flowchart.alakazam();
+            this.alakazam();
         });
     }
 
@@ -830,6 +828,12 @@ export class Alakazam {
 
         document.querySelector("#theGraph").setAttribute("width", this.zoomSlider.value);
         this.startingViewBoxData = document.querySelector('#theGraph').getAttribute('viewBox');
+    }
+
+    alakazam() {
+        clearInterval(this.moveButtonDownInterval);
+        document.querySelector('#theGraph').setAttribute('viewBox', this.startingViewBoxData);
+        this.flowchart.alakazam();
     }
 
     handleAddingDecisionNode() {

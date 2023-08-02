@@ -132,19 +132,25 @@ export class Node {
         console.log(state);
         setTimeout(() => {
             this.markAsUsed();
-            this.connections.forEach(c => {
-                if (!nextConnection || c.description == nextConnection) {
-                    if (this.tweenActiveElement) {
-                        this.init(this, c.target, state, nextConnection, (state, nextConnection) => {
+            if (this.connections.length == 0) {
+                Node.onPerformFinish();
+            }
+            else {
+
+                this.connections.forEach(c => {
+                    if (!nextConnection || c.description == nextConnection) {
+                        if (this.tweenActiveElement) {
+                            this.init(this, c.target, state, nextConnection, (state, nextConnection) => {
+                                c.target.perform(state);
+                            });
+                            this.animate();
+                        }
+                        else {
                             c.target.perform(state);
-                        });
-                        this.animate();
+                        }
                     }
-                    else {
-                        c.target.perform(state);
-                    }
-                }
-            });
+                });
+            }
         }, 500);
         // this.init(state, nextConnection);
         // this.animate();
