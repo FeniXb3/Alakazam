@@ -1,5 +1,6 @@
 class ModalHandler {
     constructor(modalIdentifier, title, label, type) {
+        this.isVisible = false;
         this.container = document.getElementById('modals-container');
         
         this.id = modalIdentifier;
@@ -44,6 +45,7 @@ class ModalHandler {
                     this.currentCallback(content);
                 }
             }
+            this.isVisible = false;
         });
 
         if (form) {
@@ -87,6 +89,7 @@ class ModalHandler {
             this.modal.setAttribute(key, value);
         });
         this.jqueryModal.modal('show');
+        this.isVisible = true;
         // this.modalTrigger.click();
     }
 

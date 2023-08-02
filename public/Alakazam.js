@@ -605,17 +605,19 @@ export class Alakazam {
                 this.nodeTypeMenu.hide();
                 this.hideAlert();
             }
-            else if (event.key == "ArrowDown") {
-                this.flowchart.selectNextNode();
-            }
-            else if (event.key == "ArrowLeft") {
-                this.flowchart.selectNextNode("left");
-            }
-            else if (event.key == "ArrowRight") {
-                this.flowchart.selectNextNode("right");
-            }
-            else if (event.key == "ArrowUp") {
-                this.flowchart.selectPreviousNode();
+            else if (!modal.isVisible) {
+                if (event.key == "ArrowDown") {
+                    this.flowchart.selectNextNode();
+                }
+                else if (event.key == "ArrowLeft") {
+                    this.flowchart.selectNextNode("left");
+                }
+                else if (event.key == "ArrowRight") {
+                    this.flowchart.selectNextNode("right");
+                }
+                else if (event.key == "ArrowUp") {
+                    this.flowchart.selectPreviousNode();
+                }
             }
         });
 
