@@ -76,6 +76,8 @@ export class OperationNode extends Node {
     }
     
     static getDescription(expression) {
-        return `<pre>${Node.getHighlightTagOpening()}${expression}${Node.getHighlightTagClosing()}</pre>`;
+        let opening = Node.highlightLanguage ? '<pre>' : '';
+        let closing = Node.highlightLanguage ? '</pre>' : '';
+        return `${opening}${Node.getHighlightTagOpening()}${expression}${Node.getHighlightTagClosing()}${closing}`;
     }
 }

@@ -38,11 +38,13 @@ export class DecisionNode extends Node {
     }
 
     static getDescription(condition) {
-        return `<pre>${Node.getHighlightTagOpening()}` 
+        let opening = Node.highlightLanguage ? '<pre>' : '';
+        let closing = Node.highlightLanguage ? '</pre>' : '';
+        return `${opening}${Node.getHighlightTagOpening()}` 
             + (condition || '').replaceAll(') OR (', `) ${Node.getHighlightTagClosing()}\n${Node.getHighlightTagOpening()} OR (`)
             .replaceAll(') || (', `) ${Node.getHighlightTagClosing()}\n${Node.getHighlightTagOpening()} || (`)
             .replaceAll(') AND (', `) ${Node.getHighlightTagClosing()}\n${Node.getHighlightTagOpening()} AND (`)
             .replaceAll(') && (', `) ${Node.getHighlightTagClosing()}\n${Node.getHighlightTagOpening()} && (`)
-            + `${Node.getHighlightTagClosing()}</pre>`;
+            + `${Node.getHighlightTagClosing()}${closing}`;
     }
 }
