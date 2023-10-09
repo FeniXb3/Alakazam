@@ -970,7 +970,19 @@ export class Alakazam {
         } else {
             alert("HTTP-Error: " + response.status);
         }
-        var svgData = svgEl.outerHTML.replace('</style>', `${prismStyle}</style>`);
+        let response2 = await fetch('export.css');
+        let myStyle = '';
+        if (response2.ok) {
+            const blockCommentPattern = /\/\*[\s\S]*?\*\//gm
+            myStyle = await response2.text();
+            console.log(myStyle);
+            myStyle = myStyle.replace(blockCommentPattern, '');
+            console.log(myStyle);
+
+        } else {
+            alert("HTTP-Error: " + response2.status);
+        }
+        var svgData = svgEl.outerHTML.replace('</style>', `${prismStyle} ${myStyle}</style>`);
         var preface = '<?xml version="1.0" standalone="no"?>\r\n';
         var svgBlob = new Blob([preface, svgData], { type: "image/svg+xml;charset=utf-8" });
         var svgUrl = URL.createObjectURL(svgBlob);
