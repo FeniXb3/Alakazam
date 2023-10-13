@@ -54,6 +54,16 @@ class ModalHandler {
                 event.preventDefault();
                 this.saveButton.click();
             });
+
+            form.addEventListener('change', (event) => {
+                if (event.target.tagName == "SELECT") {
+                    const target = event.target;
+                    console.log(target);
+                    if (target.classList.contains("data-type")) {
+                        target.parentElement.querySelector('.input-content').innerHTML = this.getInputContentSetterFor(0, target.value)
+                    }
+                }
+            });
         }
 
         this.saveButton.addEventListener('click', () => {
@@ -116,6 +126,9 @@ class ModalHandler {
                             <label for="${this.id}" class="col-form-label">${this.labelText}</label>
                             <input type="text" class="form-control" id="${this.id}">
                         </div>
+                        <div class="form-group" id="content-rows" hidden> 
+                            ${this.getModalRow(0)}
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -157,6 +170,52 @@ class ModalHandler {
         </div>
     </div>
 </div>`;
+    }
+
+    getModalRow = (rowId) => {
+        return `
+        <div>
+
+
+            <div class="input-group" >
+                <select name="data-type-${rowId}" class="custom-select data-type">
+                    <option value="text">text</option>
+                    <option value="number">number</option>
+                    <option value="bool">bool</option>
+                    <option value="variable">variable</option>
+                </select>
+                <div class="input-group input-content" >
+                    ${this.getInputContentSetterFor(rowId, "text")}
+                </div>
+            </div>
+        </div>
+        `;
+    }
+
+    getInputContentSetterFor = (rowId, inputType) => {
+        switch (inputType) {
+            case "text":
+                return `
+                <span class="input-group-text">"</span>
+                <input type="text" name="input-${rowId}" class="form-control">
+                <span class="input-group-text">"</span>`;
+            case "number":
+                return `
+                <input type="number" step="any" name="input-${rowId}" class="form-control" value="0">`;
+            case "bool":
+                return `
+                <input type="checkbox" name="checkbox" value="">
+                `;
+            case "variable":
+                return `
+                <select name="input-${rowId}" class="custom-select variable-name">
+                    <option value="var1">var1</option>
+                    <option value="var2">var2</option>
+                </select>
+                `;
+            default:
+                return "---";
+        }
     }
 }
 

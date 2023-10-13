@@ -39,7 +39,7 @@ body {
 }
 
 #graph-controls, #header-menu, #workspace, 
-#execution-panel, #serialization-container, #server-container{
+#execution-panel, #serialization-container, #server-container, .absolute{
     position: absolute;
     /* width: 100%;
     height: 100%; */
